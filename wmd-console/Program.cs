@@ -10,7 +10,8 @@ namespace wmd.console
             Console.WriteLine("Weapons of Mass Domination");
 
             MenuPrinter menuPrinter = new MenuPrinter();
-            MenuRunner menuRunner = new MenuRunner(menuPrinter);
+            UserInput userInput = new UserInput();
+            MenuRunner menuRunner = new MenuRunner(menuPrinter, userInput);
 
             Menu mainMenu = CreateMainMenu();
 

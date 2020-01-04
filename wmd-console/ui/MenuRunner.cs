@@ -1,12 +1,14 @@
-using System;
+﻿using System;
+using wmd.console.Miscellaneous;
 
 namespace wmd.console.ui
 {
     class MenuRunner
     {
-        public MenuRunner(MenuPrinter menuPrinter)
+        public MenuRunner(MenuPrinter menuPrinter, UserInput userInput)
         {
             MenuPrinter = menuPrinter;
+            UserInput = userInput;
         }
 
         public int ShowMenuAndGetChoice(Menu menu)
@@ -18,24 +20,12 @@ namespace wmd.console.ui
 
         private MenuPrinter MenuPrinter { get; }
 
+        private UserInput UserInput { get; }
+
         private int GetChoice(int maxChoice)
         {
-            int choice = 0;
-            bool result = false;
-
-            while (!result)
-            {
-                Console.Write("Please enter your selection: > ");
-                string input = Console.ReadLine();
-
-                result = int.TryParse(input, out choice);
-                if (result && (choice < 1 || choice > maxChoice))
-                {
-                    result = false;
-                }
-            }
-            
-            return choice;
+            var range = new IntRange(1, maxChoice);
+            return UserInput.GetInteger("Please enter your selection", range);
         }
     }
 }
