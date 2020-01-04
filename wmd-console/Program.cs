@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace wmd_console
+namespace wmd.console
 {
     class Program
     {
