@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using wmd.console.Miscellaneous;
+﻿using WMD.Console.Miscellaneous;
 
-namespace wmd.console.ui
+namespace WMD.Console.UI.Core
 {
     class UserInput
     {
@@ -17,7 +14,7 @@ namespace wmd.console.ui
             while (!result)
             {
                 PrintPrompt(requestText);
-                string input = Console.ReadLine();
+                string input = System.Console.ReadLine();
 
                 result = int.TryParse(input, out number);
                 if (result && !range.ContainsValueInclusive(number))
@@ -32,12 +29,12 @@ namespace wmd.console.ui
         public string GetString(string requestText)
         {
             PrintPrompt(requestText);
-            return Console.ReadLine();
+            return System.Console.ReadLine();
         }
 
         private void PrintPrompt(string requestText)
         {
-            Console.Write($"{requestText}: >");
+            System.Console.Write($"{requestText}: >");
         }
     }
 }

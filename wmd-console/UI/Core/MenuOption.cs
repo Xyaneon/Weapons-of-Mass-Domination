@@ -1,4 +1,4 @@
-namespace wmd.console.ui
+﻿namespace WMD.Console.UI.Core
 {
     class MenuOption
     {

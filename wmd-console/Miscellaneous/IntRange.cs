@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace wmd.console.Miscellaneous
+namespace WMD.Console.Miscellaneous
 {
     class IntRange
     {

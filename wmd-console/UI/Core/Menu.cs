@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace wmd.console.ui
+namespace WMD.Console.UI.Core
 {
     class Menu
     {

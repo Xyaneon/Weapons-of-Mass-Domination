@@ -1,6 +1,4 @@
-using System;
-
-namespace wmd.console.ui
+﻿namespace WMD.Console.UI.Core
 {
     class MenuPrinter
     {
@@ -16,7 +14,7 @@ namespace wmd.console.ui
 
         private void PrintMenuOption(int optionNumber, string optionName)
         {
-            Console.WriteLine($"{optionNumber}.) {optionName}");
+            System.Console.WriteLine($"{optionNumber}.) {optionName}");
         }
     }
 }

@@ -1,19 +1,19 @@
-﻿using System;
-using wmd.console.ui;
+﻿using WMD.Console.UI.Core;
+using WMD.Console.UI.Menus;
 
-namespace wmd.console
+namespace WMD.Console
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Weapons of Mass Domination");
+            System.Console.WriteLine("Weapons of Mass Domination");
 
             MenuPrinter menuPrinter = new MenuPrinter();
             UserInput userInput = new UserInput();
             MenuRunner menuRunner = new MenuRunner(menuPrinter, userInput);
 
-            Menu mainMenu = CreateMainMenu();
+            MainMenu mainMenu = new MainMenu();
 
             int mainMenuChoice = 0;
             while(mainMenuChoice != mainMenu.Options.Count)
@@ -21,15 +21,7 @@ namespace wmd.console
                 mainMenuChoice = menuRunner.ShowMenuAndGetChoice(mainMenu);
             }
 
-            Console.WriteLine("Thanks for playing!");
-        }
-
-        private static Menu CreateMainMenu()
-        {
-            return new Menu(
-                new MenuOption("New single player game"),
-                new MenuOption("Exit")
-                );
+            System.Console.WriteLine("Thanks for playing!");
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using System;
-using wmd.console.Miscellaneous;
+﻿using WMD.Console.Miscellaneous;
 
-namespace wmd.console.ui
+namespace WMD.Console.UI.Core
 {
     class MenuRunner
     {
