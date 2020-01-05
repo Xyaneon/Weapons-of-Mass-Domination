@@ -4,6 +4,7 @@ using System.Text;
 using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 using WMD.Game;
+using WMD.Game.Actions;
 
 namespace WMD.Console
 {
@@ -48,37 +49,32 @@ namespace WMD.Console
             System.Console.WriteLine($"Congratulations, {winningPlayerName}! You won!");
         }
 
-        private void CurrentPlayerSkipsTurn()
+        private Func<GameState, ActionResult> GetPlayerAction()
         {
-            if (CurrentGameState == null)
-            {
-                throw new InvalidOperationException("No game state set to run on.");
-            }
-
-            System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} skipped their turn and wasted a whole day.");
-        }
-
-        private void CurrentPlayerStealsMoney()
-        {
-            if (CurrentGameState == null)
-            {
-                throw new InvalidOperationException("No game state set to run on.");
-            }
-
-            decimal moneyStolen = 200;
-            CurrentGameState.CurrentPlayer.Money += moneyStolen;
-
-            System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} stole {moneyStolen:C}. They now have {CurrentGameState.CurrentPlayer.Money:C}.");
-        }
-
-        private int GetPlayerAction()
-        {
-            MenuPrinter menuPrinter = new MenuPrinter();
-            UserInput userInput = new UserInput();
-            MenuRunner menuRunner = new MenuRunner(menuPrinter, userInput);
+            var menuPrinter = new MenuPrinter<Func<GameState, ActionResult>>();
+            var userInput = new UserInput();
+            var menuRunner = new MenuRunner<Func<GameState, ActionResult>>(menuPrinter, userInput);
 
             var menu = new PlayerActionMenu();
             return menuRunner.ShowMenuAndGetChoice(menu);
+        }
+
+        private static void PrintActionResult(ActionResult actionResult)
+        {
+            if (actionResult.GetType() == typeof(StealMoneyResult))
+            {
+                var stealMoneyResult = (StealMoneyResult)actionResult;
+                System.Console.WriteLine($"{stealMoneyResult.Player.Name} stole {stealMoneyResult.StolenAmount:C}. They now have {stealMoneyResult.Player.Money:C}.");
+            }
+            else if (actionResult.GetType() == typeof(SkipTurnResult))
+            {
+                var skipTurnResult = (SkipTurnResult)actionResult;
+                System.Console.WriteLine($"{skipTurnResult.Player.Name} skipped their turn and wasted a whole day.");
+            }
+            else
+            {
+                System.Console.WriteLine($"ERROR: Unsupported ActionResult type: {actionResult.GetType().FullName}");
+            }
         }
 
         private static void PrintStartOfTurn(GameState gameState)
@@ -104,16 +100,9 @@ namespace WMD.Console
 
             PrintStartOfTurn(CurrentGameState);
 
-            int menuChoice = GetPlayerAction();
-            switch (menuChoice)
-            {
-                case 1:
-                    CurrentPlayerStealsMoney();
-                    break;
-                case 2:
-                    CurrentPlayerSkipsTurn();
-                    break;
-            }
+            Func<GameState, ActionResult> menuChoice = GetPlayerAction();
+            ActionResult actionResult = menuChoice(CurrentGameState);
+            PrintActionResult(actionResult);
         }
     }
 }

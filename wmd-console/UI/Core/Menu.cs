@@ -2,13 +2,13 @@
 
 namespace WMD.Console.UI.Core
 {
-    class Menu
+    class Menu<T>
     {
-        public Menu(params MenuOption[] options)
+        public Menu(params MenuOption<T>[] options)
         {
-            Options = new List<MenuOption>(options).AsReadOnly();
+            Options = new List<MenuOption<T>>(options).AsReadOnly();
         }
 
-        public IReadOnlyList<MenuOption> Options { get; }
+        public IReadOnlyList<MenuOption<T>> Options { get; }
     }
 }

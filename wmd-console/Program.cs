@@ -10,9 +10,9 @@ namespace WMD.Console
         {
             ShowTitle();
 
-            MenuPrinter menuPrinter = new MenuPrinter();
-            UserInput userInput = new UserInput();
-            MenuRunner menuRunner = new MenuRunner(menuPrinter, userInput);
+            var menuPrinter = new MenuPrinter<int>();
+            var userInput = new UserInput();
+            var menuRunner = new MenuRunner<int>(menuPrinter, userInput);
 
             MainMenu mainMenu = new MainMenu();
 

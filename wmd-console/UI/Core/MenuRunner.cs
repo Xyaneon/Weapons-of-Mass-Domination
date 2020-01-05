@@ -2,22 +2,22 @@
 
 namespace WMD.Console.UI.Core
 {
-    class MenuRunner
+    class MenuRunner<T>
     {
-        public MenuRunner(MenuPrinter menuPrinter, UserInput userInput)
+        public MenuRunner(MenuPrinter<T> menuPrinter, UserInput userInput)
         {
             MenuPrinter = menuPrinter;
             UserInput = userInput;
         }
 
-        public int ShowMenuAndGetChoice(Menu menu)
+        public T ShowMenuAndGetChoice(Menu<T> menu)
         {
             int maxChoice = menu.Options.Count;
             MenuPrinter.PrintMenu(menu);
-            return GetChoice(maxChoice);
+            return menu.Options[GetChoice(maxChoice) - 1].SelectionValue;
         }
 
-        private MenuPrinter MenuPrinter { get; }
+        private MenuPrinter<T> MenuPrinter { get; }
 
         private UserInput UserInput { get; }
 
