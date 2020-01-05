@@ -1,23 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using WMD.Console.UI.Core;
 
 namespace WMD.Console.UI.Menus
 {
-    class MainMenu : Menu<int>
+    class MainMenu : Menu<Action>
     {
         public MainMenu() : base(CreateMenuOptions()) { }
 
-        private static MenuOption<int>[] CreateMenuOptions()
+        private static MenuOption<Action>[] CreateMenuOptions()
         {
-            var options = new string[] {
-                "New single player game",
-                "Exit"
+            return new MenuOption<Action>[]
+            {
+                CreateMenuOption("New single player game", MainMenuActions.StartNewSinglePlayerGame),
+                CreateMenuOption("Exit", MainMenuActions.ExitGame)
             };
+        }
 
-            return Enumerable.Range(0, options.Length)
-                .Select(index => new MenuOption<int>(options[index], index + 1))
-                .ToArray();
+        private static MenuOption<Action> CreateMenuOption(string optionName, Action selectionAction)
+        {
+            return new MenuOption<Action>(optionName, selectionAction);
         }
     }
 }

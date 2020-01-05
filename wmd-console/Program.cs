@@ -1,6 +1,6 @@
-﻿using WMD.Console.UI.Core;
+﻿using System;
+using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
-using WMD.Game;
 
 namespace WMD.Console
 {
@@ -10,45 +10,20 @@ namespace WMD.Console
         {
             ShowTitle();
 
-            var menuPrinter = new MenuPrinter<int>();
+            var menuPrinter = new MenuPrinter<Action>();
             var userInput = new UserInput();
-            var menuRunner = new MenuRunner<int>(menuPrinter, userInput);
+            var menuRunner = new MenuRunner<Action>(menuPrinter, userInput);
 
-            MainMenu mainMenu = new MainMenu();
-
-            int mainMenuChoice = 0;
-            while(true)
+            var mainMenu = new MainMenu();
+            while (true)
             {
-                mainMenuChoice = menuRunner.ShowMenuAndGetChoice(mainMenu);
-
-                switch(mainMenuChoice)
-                {
-                    case 1:
-                        StartSinglePlayerGame();
-                        break;
-                    case 2:
-                        ExitGame();
-                        break;
-                }
+                menuRunner.ShowMenuAndGetChoice(mainMenu).Invoke();
             }
-        }
-
-        private static void ExitGame()
-        {
-            System.Console.WriteLine("Thanks for playing!");
-            System.Environment.Exit(0);
         }
 
         private static void ShowTitle()
         {
             System.Console.WriteLine("Weapons of Mass Domination");
-        }
-
-        private static void StartSinglePlayerGame()
-        {
-            GameState gameState = GameSetup.CreateInitialStateForSinglePlayerGame();
-            GameRunner gameRunner = new GameRunner { CurrentGameState = gameState };
-            gameRunner.Run();
         }
     }
 }
