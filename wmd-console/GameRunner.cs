@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WMD.Console.UI.Core;
+using WMD.Console.UI.Menus;
 using WMD.Game;
 
 namespace WMD.Console
@@ -31,7 +33,7 @@ namespace WMD.Console
             while (!CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
             {
                 RunTurn();
-                if (!CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
+                if (!CurrentGameState.GameHasBeenWon(out _))
                 {
                     CurrentGameState.AdvanceToNextTurn();
                 }
@@ -44,6 +46,39 @@ namespace WMD.Console
         private void CongratulateWinningPlayer(string winningPlayerName)
         {
             System.Console.WriteLine($"Congratulations, {winningPlayerName}! You won!");
+        }
+
+        private void CurrentPlayerSkipsTurn()
+        {
+            if (CurrentGameState == null)
+            {
+                throw new InvalidOperationException("No game state set to run on.");
+            }
+
+            System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} skipped their turn and wasted a whole day.");
+        }
+
+        private void CurrentPlayerStealsMoney()
+        {
+            if (CurrentGameState == null)
+            {
+                throw new InvalidOperationException("No game state set to run on.");
+            }
+
+            decimal moneyStolen = 200;
+            CurrentGameState.CurrentPlayer.Money += moneyStolen;
+
+            System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} stole {moneyStolen:C}. They now have {CurrentGameState.CurrentPlayer.Money:C}.");
+        }
+
+        private int GetPlayerAction()
+        {
+            MenuPrinter menuPrinter = new MenuPrinter();
+            UserInput userInput = new UserInput();
+            MenuRunner menuRunner = new MenuRunner(menuPrinter, userInput);
+
+            var menu = new PlayerActionMenu();
+            return menuRunner.ShowMenuAndGetChoice(menu);
         }
 
         private static void PrintStartOfTurn(GameState gameState)
@@ -68,8 +103,17 @@ namespace WMD.Console
             }
 
             PrintStartOfTurn(CurrentGameState);
-            // TODO
-            throw new NotImplementedException();
+
+            int menuChoice = GetPlayerAction();
+            switch (menuChoice)
+            {
+                case 1:
+                    CurrentPlayerStealsMoney();
+                    break;
+                case 2:
+                    CurrentPlayerSkipsTurn();
+                    break;
+            }
         }
     }
 }
