@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 using WMD.Game;
@@ -75,6 +73,7 @@ namespace WMD.Console
             {
                 System.Console.WriteLine($"ERROR: Unsupported ActionResult type: {actionResult.GetType().FullName}");
             }
+            System.Console.WriteLine();
         }
 
         private static void PrintStartOfTurn(GameState gameState)
@@ -89,6 +88,7 @@ namespace WMD.Console
 
             System.Console.WriteLine();
             System.Console.WriteLine(summaryString);
+            System.Console.WriteLine();
         }
 
         private void RunTurn()
