@@ -59,24 +59,20 @@ namespace WMD.Console
 
         private static void PrintActionResult(ActionResult actionResult)
         {
-            if (actionResult.GetType() == typeof(StealMoneyResult))
+            switch (actionResult)
             {
-                var result = (StealMoneyResult)actionResult;
-                System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
-            }
-            else if (actionResult.GetType() == typeof(SkipTurnResult))
-            {
-                var result = (SkipTurnResult)actionResult;
-                System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
-            }
-            else if (actionResult.GetType() == typeof(ResignResult))
-            {
-                var result = (ResignResult)actionResult;
-                System.Console.WriteLine($"{result.Player.Name} resigned.");
-            }
-            else
-            {
-                System.Console.WriteLine($"ERROR: Unsupported ActionResult type: {actionResult.GetType().FullName}");
+                case StealMoneyResult result:
+                    System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
+                    break;
+                case SkipTurnResult result:
+                    System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
+                    break;
+                case ResignResult result:
+                    System.Console.WriteLine($"{result.Player.Name} resigned.");
+                    break;
+                default:
+                    System.Console.WriteLine($"ERROR: Unsupported ActionResult type: {actionResult.GetType().FullName}");
+                    break;
             }
             System.Console.WriteLine();
         }
