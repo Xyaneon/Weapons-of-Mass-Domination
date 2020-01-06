@@ -4,6 +4,7 @@ using System.Linq;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game;
+using WMD.Game.Planets;
 
 namespace WMD.Console
 {
@@ -16,7 +17,7 @@ namespace WMD.Console
             Player humanPlayer = SetUpHumanPlayer(new string[] { });
             int computerPlayerCount = AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1);
             IList<Player> players = CreatePlayerList(humanPlayer, computerPlayerCount);
-            return new GameState(players);
+            return new GameState(players, new Earth());
         }
 
         private static int AskForNumberOfComputerPlayers(bool singlePlayerGame, int maximumAllowed)

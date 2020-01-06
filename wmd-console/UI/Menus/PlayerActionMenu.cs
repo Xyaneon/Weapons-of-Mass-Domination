@@ -14,6 +14,7 @@ namespace WMD.Console.UI.Menus
             return new MenuOption<Func<GameState, ActionResult>>[]
             {
                 CreateMenuOption("Steal money", PlayerActions.CurrentPlayerStealsMoney),
+                CreateMenuOption("Purchase unclaimed land", PlayerActions.CurrentPlayerPurchasesUnclaimedLand),
                 CreateMenuOption("Skip turn", PlayerActions.CurrentPlayerSkipsTurn),
                 CreateMenuOption("Resign", PlayerActions.CurrentPlayerResigns)
             };

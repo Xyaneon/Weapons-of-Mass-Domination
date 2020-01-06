@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Actions
+﻿using System;
+
+namespace WMD.Game.Actions
 {
     /// <summary>
     /// Provides actions a player may take on their turn.
@@ -11,6 +13,16 @@
     /// </remarks>
     public static class PlayerActions
     {
+        /// <summary>
+        /// The action of the current player purchasing unclaimed land.
+        /// </summary>
+        /// <param name="gamestate">The current <see cref="GameState"/> to act on and update.</param>
+        /// <returns>A new <see cref="PurchaseUnclaimedLandResult"/> instance describing the result of the action.</returns>
+        public static PurchaseUnclaimedLandResult CurrentPlayerPurchasesUnclaimedLand(GameState gamestate)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// The action of the current player resigning.
         /// </summary>
