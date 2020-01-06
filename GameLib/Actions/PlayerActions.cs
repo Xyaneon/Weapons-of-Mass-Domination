@@ -12,6 +12,17 @@
     public static class PlayerActions
     {
         /// <summary>
+        /// The action of the current player resigning.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
+        /// <returns>A new <see cref="ResignResult"/> instance describing the result of the action.</returns>
+        public static ResignResult CurrentPlayerResigns(GameState gameState)
+        {
+            gameState.CurrentPlayer.HasResigned = true;
+            return new ResignResult(gameState.CurrentPlayer);
+        }
+
+        /// <summary>
         /// The action of the current player skipping their turn.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>

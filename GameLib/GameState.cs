@@ -59,8 +59,37 @@ namespace WMD.Game
         public bool GameHasBeenWon(out int winningPlayerIndex)
         {
             winningPlayerIndex = -1;
-            // TODO
+
+            if (GameHasOnePlayerLeft(out int remainingPlayerIndex))
+            {
+                winningPlayerIndex = remainingPlayerIndex;
+                return true;
+            }
+
+            // TODO: Additional win conditions.
+
             return false;
+        }
+
+        private bool GameHasOnePlayerLeft(out int remainingPlayerIndex)
+        {
+            remainingPlayerIndex = -1;
+
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (!Players[i].HasResigned)
+                {
+                    if (remainingPlayerIndex >= 0)
+                    {
+                        remainingPlayerIndex = -1;
+                        return false;
+                    }
+
+                    remainingPlayerIndex = i;
+                }
+            }
+
+            return true;
         }
     }
 }

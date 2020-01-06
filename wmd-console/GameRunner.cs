@@ -61,13 +61,18 @@ namespace WMD.Console
         {
             if (actionResult.GetType() == typeof(StealMoneyResult))
             {
-                var stealMoneyResult = (StealMoneyResult)actionResult;
-                System.Console.WriteLine($"{stealMoneyResult.Player.Name} stole {stealMoneyResult.StolenAmount:C}. They now have {stealMoneyResult.Player.Money:C}.");
+                var result = (StealMoneyResult)actionResult;
+                System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
             }
             else if (actionResult.GetType() == typeof(SkipTurnResult))
             {
-                var skipTurnResult = (SkipTurnResult)actionResult;
-                System.Console.WriteLine($"{skipTurnResult.Player.Name} skipped their turn and wasted a whole day.");
+                var result = (SkipTurnResult)actionResult;
+                System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
+            }
+            else if (actionResult.GetType() == typeof(ResignResult))
+            {
+                var result = (ResignResult)actionResult;
+                System.Console.WriteLine($"{result.Player.Name} resigned.");
             }
             else
             {
@@ -100,9 +105,17 @@ namespace WMD.Console
 
             PrintStartOfTurn(CurrentGameState);
 
-            Func<GameState, ActionResult> menuChoice = GetPlayerAction();
-            ActionResult actionResult = menuChoice(CurrentGameState);
-            PrintActionResult(actionResult);
+            if (CurrentGameState.CurrentPlayer.HasResigned)
+            {
+                System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} resigned and cannot take any more actions.");
+                System.Console.WriteLine();
+            }
+            else
+            {
+                Func<GameState, ActionResult> menuChoice = GetPlayerAction();
+                ActionResult actionResult = menuChoice(CurrentGameState);
+                PrintActionResult(actionResult);
+            }
         }
     }
 }

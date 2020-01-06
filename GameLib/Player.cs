@@ -13,7 +13,13 @@
         {
             Name = name;
             Money = 0;
+            HasResigned = false;
         }
+
+        /// <summary>
+        /// Gets or sets whether this player has resigned.
+        /// </summary>
+        public bool HasResigned { get; set; }
 
         /// <summary>
         /// Gets or sets how much money this player has.
