@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Console.UI;
 using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 using WMD.Game;
@@ -19,13 +20,14 @@ namespace WMD.Console
                 throw new InvalidOperationException("No game state set to run on.");
             }
 
-            int winningPlayerIndex = -1;
             string winningPlayerName;
 
+
+            int winningPlayerIndex;
             if (CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
             {
                 winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Name;
-                System.Console.WriteLine($"This game was already won by {winningPlayerName}.");
+                PrintingUtility.PrintGameHasAlreadyBeenWon(winningPlayerName);
                 return;
             }
 
@@ -39,57 +41,17 @@ namespace WMD.Console
             }
 
             winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Name;
-            CongratulateWinningPlayer(winningPlayerName);
+            PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
         }
 
-        private void CongratulateWinningPlayer(string winningPlayerName)
+        private PlayerActionKind GetPlayerActionKind()
         {
-            System.Console.WriteLine($"Congratulations, {winningPlayerName}! You won!");
-        }
-
-        private Func<GameState, ActionResult> GetPlayerAction()
-        {
-            var menuPrinter = new MenuPrinter<Func<GameState, ActionResult>>();
+            var menuPrinter = new MenuPrinter<PlayerActionKind>();
             var userInput = new UserInput();
-            var menuRunner = new MenuRunner<Func<GameState, ActionResult>>(menuPrinter, userInput);
+            var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter, userInput);
 
             var menu = new PlayerActionMenu();
             return menuRunner.ShowMenuAndGetChoice(menu);
-        }
-
-        private static void PrintActionResult(ActionResult actionResult)
-        {
-            switch (actionResult)
-            {
-                case StealMoneyResult result:
-                    System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
-                    break;
-                case SkipTurnResult result:
-                    System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
-                    break;
-                case ResignResult result:
-                    System.Console.WriteLine($"{result.Player.Name} resigned.");
-                    break;
-                default:
-                    System.Console.WriteLine($"ERROR: Unsupported ActionResult type: {actionResult.GetType().FullName}");
-                    break;
-            }
-            System.Console.WriteLine();
-        }
-
-        private static void PrintStartOfTurn(GameState gameState)
-        {
-            Player currentPlayer = gameState.CurrentPlayer;
-            string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string summaryString = string.Format("{0} has {1:C}.", currentPlayer.Name, currentPlayer.Money);
-
-            System.Console.WriteLine();
-            System.Console.WriteLine(headerText);
-            System.Console.WriteLine(new string('=', headerText.Length));
-
-            System.Console.WriteLine();
-            System.Console.WriteLine(summaryString);
-            System.Console.WriteLine();
         }
 
         private void RunTurn()
@@ -99,18 +61,21 @@ namespace WMD.Console
                 throw new InvalidOperationException("No game state set to run on.");
             }
 
-            PrintStartOfTurn(CurrentGameState);
+            PrintingUtility.PrintStartOfTurn(CurrentGameState);
 
             if (CurrentGameState.CurrentPlayer.HasResigned)
             {
-                System.Console.WriteLine($"{CurrentGameState.CurrentPlayer.Name} resigned and cannot take any more actions.");
-                System.Console.WriteLine();
+                PrintingUtility.PrintCurrentPlayerHasResignedAndCannotTakeTurn(CurrentGameState.CurrentPlayer.Name);
             }
             else
             {
-                Func<GameState, ActionResult> menuChoice = GetPlayerAction();
-                ActionResult actionResult = menuChoice(CurrentGameState);
-                PrintActionResult(actionResult);
+                ActionResult? actionResult = null;
+                while (actionResult == null)
+                {
+                    var selectedAction = GetPlayerActionKind();
+                    actionResult = PlayerActionRunner.RunSelectedAction(CurrentGameState, selectedAction);
+                }
+                PrintingUtility.PrintActionResult(actionResult);
             }
         }
     }

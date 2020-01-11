@@ -1,28 +1,26 @@
-﻿using System;
-using WMD.Console.UI.Core;
-using WMD.Game;
+﻿using WMD.Console.UI.Core;
 using WMD.Game.Actions;
 
 namespace WMD.Console.UI.Menus
 {
-    class PlayerActionMenu : Menu<Func<GameState, ActionResult>>
+    class PlayerActionMenu : Menu<PlayerActionKind>
     {
         public PlayerActionMenu() : base(CreateMenuOptions()) { }
 
-        private static MenuOption<Func<GameState, ActionResult>>[] CreateMenuOptions()
+        private static MenuOption<PlayerActionKind>[] CreateMenuOptions()
         {
-            return new MenuOption<Func<GameState, ActionResult>>[]
+            return new MenuOption<PlayerActionKind>[]
             {
-                CreateMenuOption("Steal money", PlayerActions.CurrentPlayerStealsMoney),
-                CreateMenuOption("Purchase unclaimed land", PlayerActions.CurrentPlayerPurchasesUnclaimedLand),
-                CreateMenuOption("Skip turn", PlayerActions.CurrentPlayerSkipsTurn),
-                CreateMenuOption("Resign", PlayerActions.CurrentPlayerResigns)
+                CreateMenuOption("Steal money", PlayerActionKind.StealMoney),
+                CreateMenuOption("Purchase unclaimed land", PlayerActionKind.PurchaseUnclaimedLand),
+                CreateMenuOption("Skip turn", PlayerActionKind.Skip),
+                CreateMenuOption("Resign", PlayerActionKind.Resign)
             };
         }
 
-        private static MenuOption<Func<GameState, ActionResult>> CreateMenuOption(string optionName, Func<GameState, ActionResult> func)
+        private static MenuOption<PlayerActionKind> CreateMenuOption(string optionName, PlayerActionKind value)
         {
-            return new MenuOption<Func<GameState, ActionResult>>(optionName, func);
+            return new MenuOption<PlayerActionKind>(optionName, value);
         }
     }
 }

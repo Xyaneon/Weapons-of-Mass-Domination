@@ -61,6 +61,16 @@ namespace WMD.Game
         }
 
         /// <summary>
+        /// Calculates the current price per square kilometer of unclaimed land.
+        /// </summary>
+        /// <returns>The current price per square kilometer of unclaimed land.</returns>
+        public decimal CalculateUnclaimedLandPurchasePrice()
+        {
+            // TODO: Implement a better pricing function which takes factors like scarcity of remaining land into account.
+            return 200;
+        }
+
+        /// <summary>
         /// Determines whether the game has been won yet.
         /// </summary>
         /// <param name="winningPlayerIndex">An output parameter indicating the index of the winning <see cref="Player"/> if the game has been won yet.</param>
