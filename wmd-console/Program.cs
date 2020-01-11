@@ -11,8 +11,7 @@ namespace WMD.Console
             ShowTitle();
 
             var menuPrinter = new MenuPrinter<Action>();
-            var userInput = new UserInput();
-            var menuRunner = new MenuRunner<Action>(menuPrinter, userInput);
+            var menuRunner = new MenuRunner<Action>(menuPrinter);
 
             var mainMenu = new MainMenu();
             while (true)

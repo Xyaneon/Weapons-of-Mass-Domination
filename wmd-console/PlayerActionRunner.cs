@@ -19,7 +19,7 @@ namespace WMD.Console
         private static PurchaseUnclaimedLandResult? RunPurchaseUnclaimedLand(GameState gameState)
         {
             var input = ActionInputRetrieval.GetPurchaseUnclaimedLandInput(gameState);
-            return PlayerActions.CurrentPlayerPurchasesUnclaimedLand(gameState, input);
+            return input != null ? PlayerActions.CurrentPlayerPurchasesUnclaimedLand(gameState, input) : null;
         }
 
         private static ResignResult? RunResign(GameState gameState)

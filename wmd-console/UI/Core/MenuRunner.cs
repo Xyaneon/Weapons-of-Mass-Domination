@@ -4,10 +4,9 @@ namespace WMD.Console.UI.Core
 {
     class MenuRunner<T>
     {
-        public MenuRunner(MenuPrinter<T> menuPrinter, UserInput userInput)
+        public MenuRunner(MenuPrinter<T> menuPrinter)
         {
             MenuPrinter = menuPrinter;
-            UserInput = userInput;
         }
 
         public T ShowMenuAndGetChoice(Menu<T> menu)
@@ -18,8 +17,6 @@ namespace WMD.Console.UI.Core
         }
 
         private MenuPrinter<T> MenuPrinter { get; }
-
-        private UserInput UserInput { get; }
 
         private int GetChoice(int maxChoice)
         {

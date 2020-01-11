@@ -47,8 +47,7 @@ namespace WMD.Console
         private PlayerActionKind GetPlayerActionKind()
         {
             var menuPrinter = new MenuPrinter<PlayerActionKind>();
-            var userInput = new UserInput();
-            var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter, userInput);
+            var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter);
 
             var menu = new PlayerActionMenu();
             return menuRunner.ShowMenuAndGetChoice(menu);

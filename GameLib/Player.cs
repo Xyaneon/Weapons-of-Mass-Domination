@@ -13,6 +13,7 @@
         {
             Name = name;
             Money = 0;
+            Land = 0;
             HasResigned = false;
         }
 

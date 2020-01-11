@@ -2,11 +2,9 @@
 
 namespace WMD.Console.UI.Core
 {
-    class UserInput
+    static class UserInput
     {
-        public UserInput() { }
-
-        public int GetInteger(string requestText, IntRange range)
+        public static int GetInteger(string requestText, IntRange range)
         {
             int number = 0;
             bool result = false;
@@ -26,13 +24,13 @@ namespace WMD.Console.UI.Core
             return number;
         }
 
-        public string GetString(string requestText)
+        public static string GetString(string requestText)
         {
             PrintPrompt(requestText);
             return System.Console.ReadLine();
         }
 
-        private void PrintPrompt(string requestText)
+        private static void PrintPrompt(string requestText)
         {
             System.Console.Write($"{requestText}: >");
         }

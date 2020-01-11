@@ -27,7 +27,6 @@ namespace WMD.Console
                 return 0;
             }
 
-            var userInput = new UserInput();
             string requestText;
             IntRange allowedRange;
 
@@ -42,17 +41,16 @@ namespace WMD.Console
                 allowedRange = new IntRange(0, maximumAllowed);
             }
 
-            return userInput.GetInteger(requestText, allowedRange);
+            return UserInput.GetInteger(requestText, allowedRange);
         }
 
         private static Player SetUpHumanPlayer(ICollection<string> takenNames)
         {
             string name;
-            var userInput = new UserInput();
 
             while(true)
             {
-                name = userInput.GetString("Please enter your name");
+                name = UserInput.GetString("Please enter your name");
                 if (!takenNames.Contains(name))
                 {
                     break;

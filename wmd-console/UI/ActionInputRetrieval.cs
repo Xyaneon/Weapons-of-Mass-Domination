@@ -1,4 +1,6 @@
 ﻿using System;
+using WMD.Console.Miscellaneous;
+using WMD.Console.UI.Core;
 using WMD.Game;
 using WMD.Game.Actions;
 
@@ -6,10 +8,33 @@ namespace WMD.Console.UI
 {
     static class ActionInputRetrieval
     {
-        public static PurchaseUnclaimedLandInput GetPurchaseUnclaimedLandInput(GameState gameState)
+        private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
+
+        public static PurchaseUnclaimedLandInput? GetPurchaseUnclaimedLandInput(GameState gameState)
         {
-            // TODO: Collect more input.
-            throw new NotImplementedException();
+            if (gameState.Planet.UnclaimedLandArea < 1)
+            {
+                PrintingUtility.PrintNoUnclaimedLandLeftToPurchase();
+                return null;
+            }
+
+            PrintingUtility.PrintCurrentUnclaimedLand(gameState);
+            int maxPurchaseableArea = CalculateMaxPurchaseableArea(gameState);
+            if (maxPurchaseableArea < 1)
+            {
+                PrintingUtility.PrintInsufficientFundsForAnyLandPurchase();
+                return null;
+            }
+
+            var allowedPurchaseAmounts = new IntRange(0, maxPurchaseableArea);
+            string prompt = $"{UnclaimedLandPurchasePrompt} ({allowedPurchaseAmounts.Minimum} to {allowedPurchaseAmounts.Maximum})";
+            int areaToPurchase = UserInput.GetInteger(prompt, allowedPurchaseAmounts);
+            if (areaToPurchase < 1)
+            {
+                return null;
+            }
+
+            return new PurchaseUnclaimedLandInput(areaToPurchase);
         }
 
         public static ResignInput GetResignInput(GameState gameState) => new ResignInput();
@@ -20,6 +45,13 @@ namespace WMD.Console.UI
         {
             // TODO: Collect more input.
             return new StealMoneyInput();
+        }
+
+        private static int CalculateMaxPurchaseableArea(GameState gameState)
+        {
+            decimal availableFunds = gameState.CurrentPlayer.Money;
+            decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
+            return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
         }
     }
 }
