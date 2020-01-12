@@ -75,6 +75,8 @@ namespace WMD.Console
                     actionResult = PlayerActionRunner.RunSelectedAction(CurrentGameState, selectedAction);
                 }
                 PrintingUtility.PrintActionResult(actionResult);
+                PrintingUtility.PrintEndOfTurn();
+                UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
             }
         }
     }

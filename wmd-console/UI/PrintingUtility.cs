@@ -45,6 +45,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine($"There are {gameState.Planet.UnclaimedLandArea:N0} km² of unclaimed land left, priced at {pricePerSquareKilometer:C} each.");
         }
 
+        public static void PrintEndOfTurn()
+        {
+            System.Console.WriteLine("The turn has ended. Press any key to continue...");
+        }
+
         public static void PrintGameHasAlreadyBeenWon(string playerName)
         {
             System.Console.WriteLine($"This game was already won by {playerName}.");
@@ -67,6 +72,7 @@ namespace WMD.Console.UI
             string summaryString = $"{currentPlayer.Name} has {currentPlayer.Money:C} and controls {currentPlayer.Land:N0} km².";
             summaryString += $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled.";
 
+            System.Console.Clear();
             System.Console.WriteLine();
             System.Console.WriteLine(headerText);
             System.Console.WriteLine(new string('=', headerText.Length));

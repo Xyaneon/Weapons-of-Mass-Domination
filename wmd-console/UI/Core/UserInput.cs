@@ -47,6 +47,11 @@ namespace WMD.Console.UI.Core
             return System.Console.ReadLine();
         }
 
+        public static void WaitForPlayerAcknowledgementOfTurnEnd()
+        {
+            System.Console.ReadKey();
+        }
+
         private static void PrintPrompt(string requestText)
         {
             System.Console.Write($"{requestText}: >");
