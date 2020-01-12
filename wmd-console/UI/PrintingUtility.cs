@@ -16,7 +16,7 @@ namespace WMD.Console.UI
             switch (actionResult)
             {
                 case PurchaseUnclaimedLandResult result:
-                    System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased} km² of land for {result.TotalPurchasePrice:C}.");
+                    System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
                     break;
                 case ResignResult result:
                     System.Console.WriteLine($"{result.Player.Name} resigned.");
@@ -42,7 +42,7 @@ namespace WMD.Console.UI
         public static void PrintCurrentUnclaimedLand(GameState gameState)
         {
             decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
-            System.Console.WriteLine($"There are {gameState.Planet.UnclaimedLandArea} km² of unclaimed land left, priced at {pricePerSquareKilometer:C} each.");
+            System.Console.WriteLine($"There are {gameState.Planet.UnclaimedLandArea:N0} km² of unclaimed land left, priced at {pricePerSquareKilometer:C} each.");
         }
 
         public static void PrintGameHasAlreadyBeenWon(string playerName)
@@ -64,7 +64,8 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string summaryString = string.Format("{0} has {1:C}.", currentPlayer.Name, currentPlayer.Money);
+            string summaryString = $"{currentPlayer.Name} has {currentPlayer.Money:C} and controls {currentPlayer.Land:N0} km².";
+            summaryString += $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled.";
 
             System.Console.WriteLine();
             System.Console.WriteLine(headerText);
