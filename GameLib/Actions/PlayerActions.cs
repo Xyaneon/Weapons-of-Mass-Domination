@@ -8,6 +8,16 @@ namespace WMD.Game.Actions
     public static class PlayerActions
     {
         /// <summary>
+        /// Initializes static members of the <see cref="PlayerActions"/> class.
+        /// </summary>
+        static PlayerActions()
+        {
+            _random = new Random();
+        }
+
+        private static readonly Random _random;
+
+        /// <summary>
         /// The action of the current player hiring minions.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
@@ -80,7 +90,7 @@ namespace WMD.Game.Actions
         /// <returns>A new <see cref="StealMoneyResult"/> instance describing the result of the action.</returns>
         public static StealMoneyResult CurrentPlayerStealsMoney(GameState gameState, StealMoneyInput input)
         {
-            decimal moneyStolen = 200;
+            decimal moneyStolen = 200 + _random.Next(101) * gameState.CurrentPlayer.Minions;
             gameState.CurrentPlayer.Money += moneyStolen;
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);
