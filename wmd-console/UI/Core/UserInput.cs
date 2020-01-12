@@ -8,7 +8,7 @@ namespace WMD.Console.UI.Core
         {
             while (true)
             {
-                string response = GetString($"{requestText} (Y[es]/n[o]").ToLower();
+                string response = GetString($"{requestText} (Y[es]/n[o])").ToLower();
                 switch (response)
                 {
                     case "y":
