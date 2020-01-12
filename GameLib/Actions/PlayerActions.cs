@@ -8,11 +8,30 @@ namespace WMD.Game.Actions
     public static class PlayerActions
     {
         /// <summary>
+        /// The action of the current player hiring minions.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
+        /// <param name="input">The additional input data for the action.</param>
+        /// <returns>A new <see cref="HireMinionsResult"/> instance describing the result of the action.</returns>
+        public static HireMinionsResult CurrentPlayerHiresMinions(GameState gameState, HireMinionsInput input)
+        {
+            // TODO: Introduce variance for how many minions actually get hired.
+            int minionsHired = input.OpenPositionsOffered;
+            gameState.CurrentPlayer.Minions += minionsHired;
+            return new HireMinionsResult(gameState.CurrentPlayer, gameState, minionsHired);
+        }
+
+        /// <summary>
         /// The action of the current player purchasing unclaimed land.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
         /// <param name="input">The additional input data for the action.</param>
         /// <returns>A new <see cref="PurchaseUnclaimedLandResult"/> instance describing the result of the action.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// The current player does not have enough money to purchase the requested amount of land.
+        /// -or-
+        /// There is not enough unclaimed land left to satisfy the current player's requested amount to purchase.
+        /// </exception>
         public static PurchaseUnclaimedLandResult CurrentPlayerPurchasesUnclaimedLand(GameState gameState, PurchaseUnclaimedLandInput input)
         {
             decimal totalPurchasePrice = gameState.CalculateUnclaimedLandPurchasePrice() * input.AreaToPurchase;

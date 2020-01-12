@@ -6,20 +6,24 @@
     public enum PlayerActionKind
     {
         /// <summary>
-        /// Indicates that the current player is skipping their turn.
+        /// Indicates that the current player is hiring minions.
         /// </summary>
-        Skip,
+        HireMinions,
+        /// <summary>
+        /// Indicates that the current player is purchasing unclaimed land.
+        /// </summary>
+        PurchaseUnclaimedLand,
         /// <summary>
         /// Indicates that the current player is resigning.
         /// </summary>
         Resign,
         /// <summary>
+        /// Indicates that the current player is skipping their turn.
+        /// </summary>
+        Skip,
+        /// <summary>
         /// Indicates that the current player is stealing money.
         /// </summary>
-        StealMoney,
-        /// <summary>
-        /// Indicates that the current player is purchasing unclaimed land.
-        /// </summary>
-        PurchaseUnclaimedLand
+        StealMoney
     }
 }

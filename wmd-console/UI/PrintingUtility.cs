@@ -15,6 +15,9 @@ namespace WMD.Console.UI
         {
             switch (actionResult)
             {
+                case HireMinionsResult result:
+                    System.Console.WriteLine($"{result.Player.Name} managed to hire {result.MinionsHired:N0} new minions.");
+                    break;
                 case PurchaseUnclaimedLandResult result:
                     System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
                     break;
@@ -69,7 +72,7 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string summaryString = $"{currentPlayer.Name} has {currentPlayer.Money:C} and controls {currentPlayer.Land:N0} km².";
+            string summaryString = $"{currentPlayer.Name} has {currentPlayer.Money:C}, {currentPlayer.Minions:N0} minion(s) and {currentPlayer.Land:N0} km² of land.";
             summaryString += $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled.";
 
             System.Console.Clear();

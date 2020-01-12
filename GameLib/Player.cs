@@ -11,10 +11,11 @@
         /// <param name="name">The player's name.</param>
         public Player(string name)
         {
-            Name = name;
-            Money = 0;
-            Land = 0;
             HasResigned = false;
+            Land = 0;
+            Minions = 0;
+            Money = 0;
+            Name = name;
         }
 
         /// <summary>
@@ -26,6 +27,11 @@
         /// The amount of land this player controls, in square kilometers.
         /// </summary>
         public int Land { get; set; }
+
+        /// <summary>
+        /// The number of minions this player has.
+        /// </summary>
+        public int Minions { get; set; }
 
         /// <summary>
         /// Gets or sets how much money this player has.

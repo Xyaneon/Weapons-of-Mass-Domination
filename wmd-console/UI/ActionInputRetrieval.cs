@@ -10,6 +10,15 @@ namespace WMD.Console.UI
     {
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
+        public static HireMinionsInput? GetHireMinionsInput(GameState gameState)
+        {
+            // TODO: Add more control over the hiring process.
+            int openPositionsToOffer = 10;
+            return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
+                ? new HireMinionsInput(openPositionsToOffer)
+                : null;
+        }
+
         public static PurchaseUnclaimedLandInput? GetPurchaseUnclaimedLandInput(GameState gameState)
         {
             if (gameState.Planet.UnclaimedLandArea < 1)
