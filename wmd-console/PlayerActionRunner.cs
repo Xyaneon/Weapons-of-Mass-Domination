@@ -12,6 +12,7 @@ namespace WMD.Console
             PlayerActionKind.HireMinions => RunHireMinions(gameState),
             PlayerActionKind.PurchaseUnclaimedLand => RunPurchaseUnclaimedLand(gameState),
             PlayerActionKind.Resign => RunResign(gameState),
+            PlayerActionKind.SellLand => RunSellLand(gameState),
             PlayerActionKind.Skip => RunSkipTurn(gameState),
             PlayerActionKind.StealMoney => RunStealMoney(gameState),
             _ => throw new InvalidEnumArgumentException($"Unrecognized player action selected.")
@@ -33,6 +34,12 @@ namespace WMD.Console
         {
             var input = ActionInputRetrieval.GetResignInput(gameState);
             return PlayerActions.CurrentPlayerResigns(gameState, input);
+        }
+
+        private static SellLandResult? RunSellLand(GameState gameState)
+        {
+            var input = ActionInputRetrieval.GetSellLandInput(gameState);
+            return input != null ? PlayerActions.CurrentPlayerSellsLand(gameState, input) : null;
         }
 
         private static SkipTurnResult? RunSkipTurn(GameState gameState)

@@ -78,6 +78,29 @@ namespace WMD.Game.Actions
         }
 
         /// <summary>
+        /// The action of the current player selling land they control.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
+        /// <param name="input">The additional input data for the action.</param>
+        /// <returns>A new <see cref="SellLandResult"/> instance describing the result of the action.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <paramref name="input"/> specifies more land to sell than the current player actually has.
+        /// </exception>
+        public static SellLandResult CurrentPlayerSellsLand(GameState gameState, SellLandInput input)
+        {
+            if (input.AreaToSell > gameState.CurrentPlayer.Land)
+            {
+                throw new InvalidOperationException("The current player has less land than they want to sell.");
+            }
+
+            decimal totalSalePrice = gameState.CalculateUnclaimedLandPurchasePrice() * input.AreaToSell;
+            gameState.HavePlayerGiveUpLand(gameState.CurrentPlayerIndex, input.AreaToSell);
+            gameState.CurrentPlayer.Money += totalSalePrice;
+
+            return new SellLandResult(gameState.CurrentPlayer, gameState, input.AreaToSell, totalSalePrice);
+        }
+
+        /// <summary>
         /// The action of the current player skipping their turn.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>

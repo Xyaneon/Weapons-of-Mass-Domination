@@ -25,6 +25,9 @@ namespace WMD.Console.UI
                 case ResignResult result:
                     System.Console.WriteLine($"{result.Player.Name} resigned.");
                     break;
+                case SellLandResult result:
+                    System.Console.WriteLine($"{result.Player.Name} sold {result.LandAreaSold:N0} km² of land for {result.TotalSalePrice:C}.");
+                    break;
                 case SkipTurnResult result:
                     System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
                     break;
@@ -62,6 +65,11 @@ namespace WMD.Console.UI
         public static void PrintInsufficientFundsForAnyLandPurchase()
         {
             System.Console.WriteLine("You do not have enough money to purchase any unclaimed land.");
+        }
+
+        public static void PrintNoLandToSell()
+        {
+            System.Console.WriteLine("You don't have any land to sell.");
         }
 
         public static void PrintNoUnclaimedLandLeftToPurchase()

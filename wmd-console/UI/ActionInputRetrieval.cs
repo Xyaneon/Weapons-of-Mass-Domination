@@ -52,6 +52,30 @@ namespace WMD.Console.UI
 
         public static ResignInput GetResignInput(GameState gameState) => new ResignInput();
 
+        public static SellLandInput? GetSellLandInput(GameState gameState)
+        {
+            if (gameState.CurrentPlayer.Land <= 0)
+            {
+                PrintingUtility.PrintNoLandToSell();
+                return null;
+            }
+
+            decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
+            var allowedSaleAmounts = new IntRange(0, gameState.CurrentPlayer.Land);
+            string prompt = $"Land is currently selling at {pricePerSquareKilometer:C}/km². How much do you want to sell? ({allowedSaleAmounts.Minimum} to {allowedSaleAmounts.Maximum})";
+            int areaToSell = UserInput.GetInteger(prompt, allowedSaleAmounts);
+            if (areaToSell <= 0)
+            {
+                return null;
+            }
+
+            decimal totalSalePrice = areaToSell * pricePerSquareKilometer;
+            string confirmationPrompt = $"This transaction will earn you {totalSalePrice:C}. Proceed?";
+            return UserInput.GetConfirmation(confirmationPrompt)
+                ? new SellLandInput(areaToSell)
+                : null;
+        }
+
         public static SkipTurnInput GetSkipTurnInput(GameState gameState) => new SkipTurnInput();
 
         public static StealMoneyInput GetStealMoneyInput(GameState gameState)

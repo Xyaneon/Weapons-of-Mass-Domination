@@ -3,7 +3,7 @@
 namespace WMD.Game.Actions
 {
     /// <summary>
-    /// Input for <see cref="PurchaseUnclaimedLandAction"/>.
+    /// Additional input data for purchasing unclaimed land.
     /// </summary>
     public class PurchaseUnclaimedLandInput : ActionInput
     {

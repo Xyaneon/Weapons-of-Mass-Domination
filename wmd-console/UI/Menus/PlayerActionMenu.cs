@@ -13,6 +13,7 @@ namespace WMD.Console.UI.Menus
             {
                 CreateMenuOption("Steal money", PlayerActionKind.StealMoney),
                 CreateMenuOption("Purchase unclaimed land", PlayerActionKind.PurchaseUnclaimedLand),
+                CreateMenuOption("Sell land", PlayerActionKind.SellLand),
                 CreateMenuOption("Hire minions", PlayerActionKind.HireMinions),
                 CreateMenuOption("Skip turn", PlayerActionKind.Skip),
                 CreateMenuOption("Resign", PlayerActionKind.Resign)

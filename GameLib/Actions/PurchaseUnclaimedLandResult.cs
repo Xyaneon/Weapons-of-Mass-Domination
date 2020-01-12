@@ -1,5 +1,8 @@
 ﻿namespace WMD.Game.Actions
 {
+    /// <summary>
+    /// Represents the result of purchasing unclaimed land.
+    /// </summary>
     public class PurchaseUnclaimedLandResult : ActionResult
     {
         /// <summary>

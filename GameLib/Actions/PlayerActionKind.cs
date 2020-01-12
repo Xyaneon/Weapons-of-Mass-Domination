@@ -18,6 +18,10 @@
         /// </summary>
         Resign,
         /// <summary>
+        /// Indicates that the current player is selling some of the land they control.
+        /// </summary>
+        SellLand,
+        /// <summary>
         /// Indicates that the current player is skipping their turn.
         /// </summary>
         Skip,
