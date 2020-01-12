@@ -54,6 +54,14 @@ namespace WMD.Game.Planets
         }
 
         /// <summary>
+        /// Gets the percentage of land still unclaimed as a number between 0 and 1.
+        /// </summary>
+        public double PercentageOfLandStillUnclaimed
+        {
+            get => UnclaimedLandArea / (double)TotalLandArea;
+        }
+
+        /// <summary>
         /// Gets the total land area in square kilometers.
         /// </summary>
         public int TotalLandArea { get; }

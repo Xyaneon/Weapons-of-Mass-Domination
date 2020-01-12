@@ -9,6 +9,9 @@ namespace WMD.Game
     /// </summary>
     public class GameState
     {
+        private const decimal LandBasePrice = 200;
+        private const decimal MaxLandPriceIncreaseFromScarcity = 1000000;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GameState"/> class.
         /// </summary>
@@ -66,8 +69,9 @@ namespace WMD.Game
         /// <returns>The current price per square kilometer of unclaimed land.</returns>
         public decimal CalculateUnclaimedLandPurchasePrice()
         {
-            // TODO: Implement a better pricing function which takes factors like scarcity of remaining land into account.
-            return 200;
+            double percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
+            decimal priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
+            return LandBasePrice + priceIncreaseFromScarcity;
         }
 
         /// <summary>
