@@ -53,6 +53,7 @@ namespace WMD.Game.Actions
             try
             {
                 gameState.GiveUnclaimedLandToPlayer(gameState.CurrentPlayerIndex, input.AreaToPurchase);
+                gameState.CurrentPlayer.Money -= totalPurchasePrice;
             }
             catch (ArgumentOutOfRangeException)
             {
