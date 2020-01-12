@@ -72,15 +72,20 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string summaryString = $"{currentPlayer.Name} has {currentPlayer.Money:C}, {currentPlayer.Minions:N0} minion(s) and {currentPlayer.Land:N0} km² of land.";
-            summaryString += $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled.";
+            string statsString = $"Money: {currentPlayer.Money:C} | Minions: {currentPlayer.Minions:N0} | Land: {currentPlayer.Land:N0} km²";
+            string summaryString = $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({gameState.Planet.PercentageOfLandStillUnclaimed:P2}).";
+
+            string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";
+            string bottomLine = "╚" + new string('═', headerText.Length + 2) + "╝";
 
             System.Console.Clear();
             System.Console.WriteLine();
-            System.Console.WriteLine(headerText);
-            System.Console.WriteLine(new string('=', headerText.Length));
+            System.Console.WriteLine(topLine);
+            System.Console.WriteLine($"║ {headerText} ║");
+            System.Console.WriteLine(bottomLine);
 
             System.Console.WriteLine();
+            System.Console.WriteLine(statsString);
             System.Console.WriteLine(summaryString);
             System.Console.WriteLine();
         }

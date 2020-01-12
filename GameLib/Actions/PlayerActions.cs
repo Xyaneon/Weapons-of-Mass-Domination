@@ -7,6 +7,8 @@ namespace WMD.Game.Actions
     /// </summary>
     public static class PlayerActions
     {
+        private const decimal BaseMoneyStealAmount = 200;
+
         /// <summary>
         /// Initializes static members of the <see cref="PlayerActions"/> class.
         /// </summary>
@@ -91,7 +93,9 @@ namespace WMD.Game.Actions
         /// <returns>A new <see cref="StealMoneyResult"/> instance describing the result of the action.</returns>
         public static StealMoneyResult CurrentPlayerStealsMoney(GameState gameState, StealMoneyInput input)
         {
-            decimal moneyStolen = 200 + _random.Next(101) * gameState.CurrentPlayer.Minions;
+            decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 *_random.NextDouble(), 2);
+            decimal moneyStolenByMinions = gameState.CurrentPlayer.Minions * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
+            decimal moneyStolen = moneyStolenByPlayer + moneyStolenByMinions;
             gameState.CurrentPlayer.Money += moneyStolen;
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);
