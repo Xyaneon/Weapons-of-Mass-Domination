@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Console.Miscellaneous;
 using WMD.Game;
 using WMD.Game.Actions;
 
@@ -73,6 +74,7 @@ namespace WMD.Console.UI
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
             string statsString = $"Money: {currentPlayer.Money:C} | Minions: {currentPlayer.Minions:N0} | Land: {currentPlayer.Land:N0} km²";
+            string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.Land)}.";
             string summaryString = $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({gameState.Planet.PercentageOfLandStillUnclaimed:P2}).";
 
             string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";
@@ -86,6 +88,7 @@ namespace WMD.Console.UI
 
             System.Console.WriteLine();
             System.Console.WriteLine(statsString);
+            System.Console.WriteLine(landAreaComparisonString);
             System.Console.WriteLine(summaryString);
             System.Console.WriteLine();
         }
