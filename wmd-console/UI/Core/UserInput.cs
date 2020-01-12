@@ -4,6 +4,23 @@ namespace WMD.Console.UI.Core
 {
     static class UserInput
     {
+        public static bool GetConfirmation(string requestText)
+        {
+            while (true)
+            {
+                string response = GetString($"{requestText} (Y[es]/n[o]").ToLower();
+                switch (response)
+                {
+                    case "y":
+                    case "yes":
+                        return true;
+                    case "n":
+                    case "no":
+                        return false;
+                }
+            }
+        }
+
         public static int GetInteger(string requestText, IntRange range)
         {
             int number = 0;

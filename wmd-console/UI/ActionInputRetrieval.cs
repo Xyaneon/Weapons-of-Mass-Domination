@@ -34,7 +34,11 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            return new PurchaseUnclaimedLandInput(areaToPurchase);
+            decimal totalPurchasePrice = areaToPurchase * gameState.CalculateUnclaimedLandPurchasePrice();
+            string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
+            return UserInput.GetConfirmation(confirmationPrompt)
+                ? new PurchaseUnclaimedLandInput(areaToPurchase)
+                : null;
         }
 
         public static ResignInput GetResignInput(GameState gameState) => new ResignInput();
