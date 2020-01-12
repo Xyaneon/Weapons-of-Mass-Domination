@@ -85,7 +85,14 @@ namespace WMD.Game
                 return true;
             }
 
-            // TODO: Additional win conditions.
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].Land == Planet.TotalLandArea)
+                {
+                    winningPlayerIndex = i;
+                    return true;
+                }
+            }
 
             return false;
         }
