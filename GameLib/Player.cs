@@ -16,6 +16,7 @@
             Minions = 0;
             Money = 0;
             Name = name;
+            SecretBase = null;
         }
 
         /// <summary>
@@ -42,5 +43,14 @@
         /// Gets this player's name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets or sets this player's secret base.
+        /// </summary>
+        /// <remarks>
+        /// The value of this property is <see langword="null"/> if the player
+        /// does not have a base.
+        /// </remarks>
+        public SecretBase SecretBase { get; set; }
     }
 }
