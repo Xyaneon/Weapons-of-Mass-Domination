@@ -24,7 +24,7 @@ namespace WMD.Game
         public int Level
         {
             get => _level;
-            set
+            internal set
             {
                 if (value < 1)
                 {

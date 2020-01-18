@@ -54,7 +54,7 @@ namespace WMD.Game.Actions
 
             try
             {
-                gameState.GiveUnclaimedLandToPlayer(gameState.CurrentPlayerIndex, input.AreaToPurchase);
+                GameStateUpdater.GiveUnclaimedLandToPlayer(gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
                 gameState.CurrentPlayer.Money -= totalPurchasePrice;
             }
             catch (ArgumentOutOfRangeException)
@@ -94,7 +94,7 @@ namespace WMD.Game.Actions
             }
 
             decimal totalSalePrice = gameState.CalculateUnclaimedLandPurchasePrice() * input.AreaToSell;
-            gameState.HavePlayerGiveUpLand(gameState.CurrentPlayerIndex, input.AreaToSell);
+            GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
             gameState.CurrentPlayer.Money += totalSalePrice;
 
             return new SellLandResult(gameState.CurrentPlayer, gameState, input.AreaToSell, totalSalePrice);

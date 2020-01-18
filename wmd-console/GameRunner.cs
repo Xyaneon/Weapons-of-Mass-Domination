@@ -36,7 +36,7 @@ namespace WMD.Console
                 RunTurn();
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
-                    CurrentGameState.AdvanceToNextTurn();
+                    GameStateUpdater.AdvanceToNextTurn(CurrentGameState);
                 }
             }
 
