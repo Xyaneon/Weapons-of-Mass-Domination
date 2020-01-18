@@ -46,7 +46,7 @@ namespace WMD.Game.Actions
         /// </exception>
         public static PurchaseUnclaimedLandResult CurrentPlayerPurchasesUnclaimedLand(GameState gameState, PurchaseUnclaimedLandInput input)
         {
-            decimal totalPurchasePrice = gameState.CalculateUnclaimedLandPurchasePrice() * input.AreaToPurchase;
+            decimal totalPurchasePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToPurchase;
             if (totalPurchasePrice > gameState.CurrentPlayer.Money)
             {
                 throw new InvalidOperationException("The current player does not have enough money to purchase the requested amount of land.");
@@ -93,7 +93,7 @@ namespace WMD.Game.Actions
                 throw new InvalidOperationException("The current player has less land than they want to sell.");
             }
 
-            decimal totalSalePrice = gameState.CalculateUnclaimedLandPurchasePrice() * input.AreaToSell;
+            decimal totalSalePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToSell;
             GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
             gameState.CurrentPlayer.Money += totalSalePrice;
 

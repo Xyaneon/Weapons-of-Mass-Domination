@@ -49,14 +49,16 @@ namespace WMD.Game
         public Planet Planet { get; }
 
         /// <summary>
-        /// Calculates the current price per square kilometer of unclaimed land.
+        /// Gets the current price per square kilometer of unclaimed land.
         /// </summary>
-        /// <returns>The current price per square kilometer of unclaimed land.</returns>
-        public decimal CalculateUnclaimedLandPurchasePrice()
+        public decimal UnclaimedLandPurchasePrice
         {
-            double percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
-            decimal priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
-            return LandBasePrice + priceIncreaseFromScarcity;
+            get
+            {
+                double percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
+                decimal priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
+                return LandBasePrice + priceIncreaseFromScarcity;
+            }
         }
 
         /// <summary>

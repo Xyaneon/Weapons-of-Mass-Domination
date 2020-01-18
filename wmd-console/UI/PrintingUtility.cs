@@ -48,7 +48,7 @@ namespace WMD.Console.UI
 
         public static void PrintCurrentUnclaimedLand(GameState gameState)
         {
-            decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
+            decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             System.Console.WriteLine($"There are {gameState.Planet.UnclaimedLandArea:N0} km² of unclaimed land left, priced at {pricePerSquareKilometer:C} each.");
         }
 

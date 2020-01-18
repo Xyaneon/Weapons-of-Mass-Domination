@@ -43,7 +43,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal totalPurchasePrice = areaToPurchase * gameState.CalculateUnclaimedLandPurchasePrice();
+            decimal totalPurchasePrice = areaToPurchase * gameState.UnclaimedLandPurchasePrice;
             string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new PurchaseUnclaimedLandInput(areaToPurchase)
@@ -60,7 +60,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
+            decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             var allowedSaleAmounts = new IntRange(0, gameState.CurrentPlayer.Land);
             string prompt = $"Land is currently selling at {pricePerSquareKilometer:C}/km². How much do you want to sell? ({allowedSaleAmounts.Minimum} to {allowedSaleAmounts.Maximum})";
             int areaToSell = UserInput.GetInteger(prompt, allowedSaleAmounts);
@@ -87,7 +87,7 @@ namespace WMD.Console.UI
         private static int CalculateMaxPurchaseableArea(GameState gameState)
         {
             decimal availableFunds = gameState.CurrentPlayer.Money;
-            decimal pricePerSquareKilometer = gameState.CalculateUnclaimedLandPurchasePrice();
+            decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
         }
     }
