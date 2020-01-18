@@ -28,6 +28,10 @@
         /// <summary>
         /// Indicates that the current player is stealing money.
         /// </summary>
-        StealMoney
+        StealMoney,
+        /// <summary>
+        /// Indicates that the current player is upgrading their secret base.
+        /// </summary>
+        UpgradeSecretBase
     }
 }

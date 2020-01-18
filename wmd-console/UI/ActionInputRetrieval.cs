@@ -84,6 +84,34 @@ namespace WMD.Console.UI
             return new StealMoneyInput();
         }
 
+        public static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
+        {
+            SecretBase secretBase = gameState.CurrentPlayer.SecretBase;
+            decimal upgradePrice = SecretBase.CalculateUpgradePrice(secretBase);
+
+            if (upgradePrice > gameState.CurrentPlayer.Money)
+            {
+                if (secretBase != null)
+                {
+                    PrintingUtility.PrintInsufficientFundsForUpgradingSecretBase(upgradePrice);
+                }
+                else
+                {
+                    PrintingUtility.PrintInsufficientFundsForBuildingSecretBase(upgradePrice);
+                }
+
+                return null;
+            }
+
+            string prompt = secretBase != null
+                ? $"You can upgrade your secret base to Level {secretBase.Level + 1:N0} for {upgradePrice:C}. Proceed?"
+                : $"You can build your very own secret base for {upgradePrice:C}. Proceed?";
+
+            return UserInput.GetConfirmation(prompt)
+                ? new UpgradeSecretBaseInput()
+                : null;
+        }
+
         private static int CalculateMaxPurchaseableArea(GameState gameState)
         {
             decimal availableFunds = gameState.CurrentPlayer.Money;

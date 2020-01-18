@@ -34,6 +34,16 @@ namespace WMD.Console.UI
                 case StealMoneyResult result:
                     System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
                     break;
+                case UpgradeSecretBaseResult result:
+                    if (result.NewLevel == 1)
+                    {
+                        System.Console.WriteLine($"{result.Player.Name} built their own secret base for {result.UpgradePrice:C}.");
+                    }
+                    else
+                    {
+                        System.Console.WriteLine($"{result.Player.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
+                    }
+                    break;
                 default:
                     throw new ArgumentException($"Unsupported ActionResult type: {actionResult.GetType().FullName}");
             }
@@ -67,6 +77,16 @@ namespace WMD.Console.UI
             System.Console.WriteLine("You do not have enough money to purchase any unclaimed land.");
         }
 
+        public static void PrintInsufficientFundsForBuildingSecretBase(decimal cost)
+        {
+            System.Console.WriteLine($"You do not have enough money to build a secret base ({cost:C} needed).");
+        }
+
+        public static void PrintInsufficientFundsForUpgradingSecretBase(decimal cost)
+        {
+            System.Console.WriteLine($"You do not have enough money to upgrade your secret base ({cost:C} needed).");
+        }
+
         public static void PrintNoLandToSell()
         {
             System.Console.WriteLine("You don't have any land to sell.");
@@ -83,6 +103,9 @@ namespace WMD.Console.UI
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
             string statsString = $"Money: {currentPlayer.Money:C} | Minions: {currentPlayer.Minions:N0} | Land: {currentPlayer.Land:N0} km²";
             string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.Land)}.";
+            string secretBaseString = currentPlayer.SecretBase == null
+                ? "You do not have your own secret base yet."
+                : $"Your secret base is at Level {currentPlayer.SecretBase.Level:N0}.";
             string summaryString = $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({gameState.Planet.PercentageOfLandStillUnclaimed:P2}).";
 
             string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";
@@ -97,6 +120,7 @@ namespace WMD.Console.UI
             System.Console.WriteLine();
             System.Console.WriteLine(statsString);
             System.Console.WriteLine(landAreaComparisonString);
+            System.Console.WriteLine(secretBaseString);
             System.Console.WriteLine(summaryString);
             System.Console.WriteLine();
         }

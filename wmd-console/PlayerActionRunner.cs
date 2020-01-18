@@ -15,6 +15,7 @@ namespace WMD.Console
             PlayerActionKind.SellLand => RunSellLand(gameState),
             PlayerActionKind.Skip => RunSkipTurn(gameState),
             PlayerActionKind.StealMoney => RunStealMoney(gameState),
+            PlayerActionKind.UpgradeSecretBase => RunUpgradeSecretBase(gameState),
             _ => throw new InvalidEnumArgumentException($"Unrecognized player action selected.")
         };
 
@@ -52,6 +53,12 @@ namespace WMD.Console
         {
             var input = ActionInputRetrieval.GetStealMoneyInput(gameState);
             return PlayerActions.CurrentPlayerStealsMoney(gameState, input);
+        }
+
+        private static UpgradeSecretBaseResult? RunUpgradeSecretBase(GameState gameState)
+        {
+            var input = ActionInputRetrieval.GetUpgradeSecretBaseInput(gameState);
+            return input != null ? PlayerActions.CurrentPlayerUpgradesTheirSecretBase(gameState, input) : null;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace WMD.Console.UI.Menus
                 CreateMenuOption("Purchase unclaimed land", PlayerActionKind.PurchaseUnclaimedLand),
                 CreateMenuOption("Sell land", PlayerActionKind.SellLand),
                 CreateMenuOption("Hire minions", PlayerActionKind.HireMinions),
+                CreateMenuOption("Build/upgrade your secret base", PlayerActionKind.UpgradeSecretBase),
                 CreateMenuOption("Skip turn", PlayerActionKind.Skip),
                 CreateMenuOption("Resign", PlayerActionKind.Resign)
             };

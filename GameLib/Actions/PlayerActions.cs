@@ -123,5 +123,37 @@ namespace WMD.Game.Actions
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);
         }
+
+        /// <summary>
+        /// The action of the current player upgrading their secret base.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
+        /// <param name="input">The additional input data for the action.</param>
+        /// <returns>A new <see cref="UpgradeSecretBaseResult"/> instance describing the result of the action.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// The current player does not have enough money to upgrade their secret base.
+        /// </exception>
+        public static UpgradeSecretBaseResult CurrentPlayerUpgradesTheirSecretBase(GameState gameState, UpgradeSecretBaseInput input)
+        {
+            decimal upgradePrice = SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.SecretBase);
+
+            if (upgradePrice > gameState.CurrentPlayer.Money)
+            {
+                throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
+            }
+
+            if (gameState.CurrentPlayer.SecretBase == null)
+            {
+                gameState.CurrentPlayer.SecretBase = new SecretBase();
+            }
+            else
+            {
+                gameState.CurrentPlayer.SecretBase.Level++;
+            }
+            int newLevel = gameState.CurrentPlayer.SecretBase.Level;
+            gameState.CurrentPlayer.Money -= upgradePrice;
+
+            return new UpgradeSecretBaseResult(gameState.CurrentPlayer, gameState, newLevel, upgradePrice);
+        }
     }
 }

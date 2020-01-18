@@ -8,6 +8,16 @@ namespace WMD.Game
     public class SecretBase
     {
         /// <summary>
+        /// The price to pay for building a new secret base.
+        /// </summary>
+        public const decimal SecretBaseBuildPrice = 500;
+
+        /// <summary>
+        /// The multiplier used for calculating subsequent secret base upgrades.
+        /// </summary>
+        public const decimal SecretBaseUpgradeFactor = 100;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SecretBase"/> class.
         /// </summary>
         public SecretBase()
@@ -35,5 +45,15 @@ namespace WMD.Game
         }
 
         private int _level;
+
+        /// <summary>
+        /// Calculates the price of upgrading the provided <see cref="SecretBase"/>.
+        /// </summary>
+        /// <param name="secretBase">The <see cref="SecretBase"/> which could be upgraded (or built if <see langword="null"/>).</param>
+        /// <returns>The price of upgrading the secret base.</returns>
+        public static decimal CalculateUpgradePrice(SecretBase secretBase)
+        {
+            return secretBase?.Level * SecretBaseUpgradeFactor ?? SecretBaseBuildPrice;
+        }
     }
 }
