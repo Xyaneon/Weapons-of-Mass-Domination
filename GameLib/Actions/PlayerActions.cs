@@ -20,17 +20,17 @@ namespace WMD.Game.Actions
         private static readonly Random _random;
 
         /// <summary>
-        /// The action of the current player hiring minions.
+        /// The action of the current player hiring henchmen.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
         /// <param name="input">The additional input data for the action.</param>
-        /// <returns>A new <see cref="HireMinionsResult"/> instance describing the result of the action.</returns>
-        public static HireMinionsResult CurrentPlayerHiresMinions(GameState gameState, HireMinionsInput input)
+        /// <returns>A new <see cref="HireHenchmenResult"/> instance describing the result of the action.</returns>
+        public static HireHenchmenResult CurrentPlayerHiresHenchmen(GameState gameState, HireHenchmenInput input)
         {
-            // TODO: Introduce variance for how many minions actually get hired.
-            int minionsHired = input.OpenPositionsOffered;
-            gameState.CurrentPlayer.Minions += minionsHired;
-            return new HireMinionsResult(gameState.CurrentPlayer, gameState, minionsHired);
+            // TODO: Introduce variance for how many henchmen actually get hired.
+            int henchmenHired = input.OpenPositionsOffered;
+            gameState.CurrentPlayer.Henchmen += henchmenHired;
+            return new HireHenchmenResult(gameState.CurrentPlayer, gameState, henchmenHired);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace WMD.Game.Actions
         public static StealMoneyResult CurrentPlayerStealsMoney(GameState gameState, StealMoneyInput input)
         {
             decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 *_random.NextDouble(), 2);
-            decimal moneyStolenByMinions = gameState.CurrentPlayer.Minions * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
-            decimal moneyStolen = moneyStolenByPlayer + moneyStolenByMinions;
+            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.Henchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
+            decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
             gameState.CurrentPlayer.Money += moneyStolen;
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);

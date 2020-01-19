@@ -3,18 +3,18 @@
 namespace WMD.Game.Actions
 {
     /// <summary>
-    /// Additional input data for the hire minions action.
+    /// Additional input data for the hire henchmen action.
     /// </summary>
-    public class HireMinionsInput : ActionInput
+    public class HireHenchmenInput : ActionInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HireMinionsInput"/> class.
+        /// Initializes a new instance of the <see cref="HireHenchmenInput"/> class.
         /// </summary>
         /// <param name="openPositionsOffered">The number of open positions to offer.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="openPositionsOffered"/> is less than one.
         /// </exception>
-        public HireMinionsInput(int openPositionsOffered) : base()
+        public HireHenchmenInput(int openPositionsOffered) : base()
         {
             if (openPositionsOffered < 1)
             {

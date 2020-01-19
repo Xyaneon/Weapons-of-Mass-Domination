@@ -9,7 +9,7 @@ namespace WMD.Console
     {
         public static ActionResult? RunSelectedAction(GameState gameState, PlayerActionKind selectedAction) => selectedAction switch
         {
-            PlayerActionKind.HireMinions => RunHireMinions(gameState),
+            PlayerActionKind.HireHenchmen => RunHireHenchmen(gameState),
             PlayerActionKind.PurchaseUnclaimedLand => RunPurchaseUnclaimedLand(gameState),
             PlayerActionKind.Resign => RunResign(gameState),
             PlayerActionKind.SellLand => RunSellLand(gameState),
@@ -19,10 +19,10 @@ namespace WMD.Console
             _ => throw new InvalidEnumArgumentException($"Unrecognized player action selected.")
         };
 
-        private static HireMinionsResult? RunHireMinions(GameState gameState)
+        private static HireHenchmenResult? RunHireHenchmen(GameState gameState)
         {
-            var input = ActionInputRetrieval.GetHireMinionsInput(gameState);
-            return input != null ? PlayerActions.CurrentPlayerHiresMinions(gameState, input) : null;
+            var input = ActionInputRetrieval.GetHireHenchmenInput(gameState);
+            return input != null ? PlayerActions.CurrentPlayerHiresHenchmen(gameState, input) : null;
         }
 
         private static PurchaseUnclaimedLandResult? RunPurchaseUnclaimedLand(GameState gameState)

@@ -6,9 +6,9 @@
     public enum PlayerActionKind
     {
         /// <summary>
-        /// Indicates that the current player is hiring minions.
+        /// Indicates that the current player is hiring henchmen.
         /// </summary>
-        HireMinions,
+        HireHenchmen,
         /// <summary>
         /// Indicates that the current player is purchasing unclaimed land.
         /// </summary>

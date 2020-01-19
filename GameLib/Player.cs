@@ -15,7 +15,7 @@
             Color = color;
             HasResigned = false;
             Land = 0;
-            Minions = 0;
+            Henchmen = 0;
             Money = 0;
             Name = name;
             SecretBase = null;
@@ -37,9 +37,9 @@
         public int Land { get; internal set; }
 
         /// <summary>
-        /// The number of minions this player has.
+        /// The number of henchmen this player has.
         /// </summary>
-        public int Minions { get; internal set; }
+        public int Henchmen { get; internal set; }
 
         /// <summary>
         /// Gets how much money this player has.

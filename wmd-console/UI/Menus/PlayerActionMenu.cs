@@ -14,7 +14,7 @@ namespace WMD.Console.UI.Menus
                 CreateMenuOption("Steal money", PlayerActionKind.StealMoney),
                 CreateMenuOption("Purchase unclaimed land", PlayerActionKind.PurchaseUnclaimedLand),
                 CreateMenuOption("Sell land", PlayerActionKind.SellLand),
-                CreateMenuOption("Hire minions", PlayerActionKind.HireMinions),
+                CreateMenuOption("Hire henchmen", PlayerActionKind.HireHenchmen),
                 CreateMenuOption("Build/upgrade your secret base", PlayerActionKind.UpgradeSecretBase),
                 CreateMenuOption("Skip turn", PlayerActionKind.Skip),
                 CreateMenuOption("Resign", PlayerActionKind.Resign)

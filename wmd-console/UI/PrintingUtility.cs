@@ -17,8 +17,8 @@ namespace WMD.Console.UI
         {
             switch (actionResult)
             {
-                case HireMinionsResult result:
-                    System.Console.WriteLine($"{result.Player.Name} managed to hire {result.MinionsHired:N0} new minions.");
+                case HireHenchmenResult result:
+                    System.Console.WriteLine($"{result.Player.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
                     break;
                 case PurchaseUnclaimedLandResult result:
                     System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
@@ -102,7 +102,7 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string statsString = $"Money: {currentPlayer.Money:C} | Minions: {currentPlayer.Minions:N0} | Land: {currentPlayer.Land:N0} km²";
+            string statsString = $"Money: {currentPlayer.Money:C} | Henchmen: {currentPlayer.Henchmen:N0} | Land: {currentPlayer.Land:N0} km²";
             string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.Land)}.";
             string secretBaseString = currentPlayer.SecretBase == null
                 ? "You do not have your own secret base yet."

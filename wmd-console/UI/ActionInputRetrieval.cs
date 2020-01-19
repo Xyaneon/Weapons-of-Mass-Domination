@@ -10,12 +10,12 @@ namespace WMD.Console.UI
     {
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
-        public static HireMinionsInput? GetHireMinionsInput(GameState gameState)
+        public static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
         {
             // TODO: Add more control over the hiring process.
             int openPositionsToOffer = 10;
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
-                ? new HireMinionsInput(openPositionsToOffer)
+                ? new HireHenchmenInput(openPositionsToOffer)
                 : null;
         }
 
