@@ -66,7 +66,7 @@ namespace WMD.Game
             }
 
             gameState.Planet.UnclaimedLandArea -= area;
-            gameState.Players[playerIndex].Land += area;
+            gameState.Players[playerIndex].State.Land += area;
         }
 
         /// <summary>
@@ -96,13 +96,13 @@ namespace WMD.Game
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of land to have a player give up cannot be negative.");
             }
 
-            if (area > gameState.Players[playerIndex].Land)
+            if (area > gameState.Players[playerIndex].State.Land)
             {
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of land to have a player give up cannot exceed the actual amount they have.");
             }
 
             gameState.Planet.UnclaimedLandArea += area;
-            gameState.Players[playerIndex].Land -= area;
+            gameState.Players[playerIndex].State.Land -= area;
         }
 
         private static void AdvanceToNextRound(GameState gameState)

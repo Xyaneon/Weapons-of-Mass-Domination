@@ -62,7 +62,7 @@ namespace WMD.Console
 
             PrintingUtility.PrintStartOfTurn(CurrentGameState);
 
-            if (CurrentGameState.CurrentPlayer.HasResigned)
+            if (CurrentGameState.CurrentPlayer.State.HasResigned)
             {
                 PrintingUtility.PrintCurrentPlayerHasResignedAndCannotTakeTurn(CurrentGameState.CurrentPlayer.Name);
             }

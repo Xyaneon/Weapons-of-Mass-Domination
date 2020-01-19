@@ -5,6 +5,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game;
 using WMD.Game.Planets;
+using WMD.Game.Players;
 
 namespace WMD.Console
 {

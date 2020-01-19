@@ -54,14 +54,14 @@ namespace WMD.Console.UI
 
         public static SellLandInput? GetSellLandInput(GameState gameState)
         {
-            if (gameState.CurrentPlayer.Land <= 0)
+            if (gameState.CurrentPlayer.State.Land <= 0)
             {
                 PrintingUtility.PrintNoLandToSell();
                 return null;
             }
 
             decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
-            var allowedSaleAmounts = new IntRange(0, gameState.CurrentPlayer.Land);
+            var allowedSaleAmounts = new IntRange(0, gameState.CurrentPlayer.State.Land);
             string prompt = $"Land is currently selling at {pricePerSquareKilometer:C}/km². How much do you want to sell? ({allowedSaleAmounts.Minimum} to {allowedSaleAmounts.Maximum})";
             int areaToSell = UserInput.GetInteger(prompt, allowedSaleAmounts);
             if (areaToSell <= 0)
@@ -86,10 +86,10 @@ namespace WMD.Console.UI
 
         public static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
         {
-            SecretBase secretBase = gameState.CurrentPlayer.SecretBase;
+            SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
             decimal upgradePrice = SecretBase.CalculateUpgradePrice(secretBase);
 
-            if (upgradePrice > gameState.CurrentPlayer.Money)
+            if (upgradePrice > gameState.CurrentPlayer.State.Money)
             {
                 if (secretBase != null)
                 {
@@ -114,7 +114,7 @@ namespace WMD.Console.UI
 
         private static int CalculateMaxPurchaseableArea(GameState gameState)
         {
-            decimal availableFunds = gameState.CurrentPlayer.Money;
+            decimal availableFunds = gameState.CurrentPlayer.State.Money;
             decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
         }

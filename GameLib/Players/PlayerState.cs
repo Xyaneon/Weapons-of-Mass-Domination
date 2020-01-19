@@ -1,30 +1,21 @@
-﻿namespace WMD.Game
+﻿namespace WMD.Game.Players
 {
     /// <summary>
-    /// Represents a player.
+    /// Holds current state for an individual <see cref="Player"/>.
     /// </summary>
-    public class Player
+    public class PlayerState
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// Initializes a new instance of the <see cref="PlayerState"/> class.
         /// </summary>
-        /// <param name="name">The player's name.</param>
-        /// <param name="color">The player's color as a <see cref="PlayerColor"/> value.</param>
-        public Player(string name, PlayerColor color)
+        public PlayerState()
         {
-            Color = color;
             HasResigned = false;
             Land = 0;
             Henchmen = 0;
             Money = 0;
-            Name = name;
             SecretBase = null;
         }
-
-        /// <summary>
-        /// Gets this player's color as a <see cref="PlayerColor"/> value.
-        /// </summary>
-        public PlayerColor Color { get; }
 
         /// <summary>
         /// Gets whether this player has resigned.
@@ -45,11 +36,6 @@
         /// Gets how much money this player has.
         /// </summary>
         public decimal Money { get; internal set; }
-
-        /// <summary>
-        /// Gets this player's name.
-        /// </summary>
-        public string Name { get; }
 
         /// <summary>
         /// Gets this player's secret base.

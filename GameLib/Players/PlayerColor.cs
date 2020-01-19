@@ -1,4 +1,4 @@
-﻿namespace WMD.Game
+﻿namespace WMD.Game.Players
 {
     /// <summary>
     /// Indicates a player's color.

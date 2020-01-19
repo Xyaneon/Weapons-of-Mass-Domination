@@ -3,6 +3,7 @@ using System.ComponentModel;
 using WMD.Console.Miscellaneous;
 using WMD.Game;
 using WMD.Game.Actions;
+using WMD.Game.Players;
 
 namespace WMD.Console.UI
 {
@@ -33,7 +34,7 @@ namespace WMD.Console.UI
                     System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
                     break;
                 case StealMoneyResult result:
-                    System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.Money:C}.");
+                    System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.State.Money:C}.");
                     break;
                 case UpgradeSecretBaseResult result:
                     if (result.NewLevel == 1)
@@ -102,11 +103,11 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string statsString = $"Money: {currentPlayer.Money:C} | Henchmen: {currentPlayer.Henchmen:N0} | Land: {currentPlayer.Land:N0} km²";
-            string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.Land)}.";
-            string secretBaseString = currentPlayer.SecretBase == null
+            string statsString = $"Money: {currentPlayer.State.Money:C} | Henchmen: {currentPlayer.State.Henchmen:N0} | Land: {currentPlayer.State.Land:N0} km²";
+            string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.State.Land)}.";
+            string secretBaseString = currentPlayer.State.SecretBase == null
                 ? "You do not have your own secret base yet."
-                : $"Your secret base is at Level {currentPlayer.SecretBase.Level:N0}.";
+                : $"Your secret base is at Level {currentPlayer.State.SecretBase.Level:N0}.";
             string summaryString = $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({gameState.Planet.PercentageOfLandStillUnclaimed:P2}).";
 
             string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";

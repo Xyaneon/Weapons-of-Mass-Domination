@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Actions
+﻿using WMD.Game.Players;
+
+namespace WMD.Game.Actions
 {
     /// <summary>
     /// Represents the result of a player stealing money.

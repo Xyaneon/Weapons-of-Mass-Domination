@@ -29,7 +29,7 @@ namespace WMD.Game.Actions
         {
             // TODO: Introduce variance for how many henchmen actually get hired.
             int henchmenHired = input.OpenPositionsOffered;
-            gameState.CurrentPlayer.Henchmen += henchmenHired;
+            gameState.CurrentPlayer.State.Henchmen += henchmenHired;
             return new HireHenchmenResult(gameState.CurrentPlayer, gameState, henchmenHired);
         }
 
@@ -47,7 +47,7 @@ namespace WMD.Game.Actions
         public static PurchaseUnclaimedLandResult CurrentPlayerPurchasesUnclaimedLand(GameState gameState, PurchaseUnclaimedLandInput input)
         {
             decimal totalPurchasePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToPurchase;
-            if (totalPurchasePrice > gameState.CurrentPlayer.Money)
+            if (totalPurchasePrice > gameState.CurrentPlayer.State.Money)
             {
                 throw new InvalidOperationException("The current player does not have enough money to purchase the requested amount of land.");
             }
@@ -55,7 +55,7 @@ namespace WMD.Game.Actions
             try
             {
                 GameStateUpdater.GiveUnclaimedLandToPlayer(gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
-                gameState.CurrentPlayer.Money -= totalPurchasePrice;
+                gameState.CurrentPlayer.State.Money -= totalPurchasePrice;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -73,7 +73,7 @@ namespace WMD.Game.Actions
         /// <returns>A new <see cref="ResignResult"/> instance describing the result of the action.</returns>
         public static ResignResult CurrentPlayerResigns(GameState gameState, ResignInput input)
         {
-            gameState.CurrentPlayer.HasResigned = true;
+            gameState.CurrentPlayer.State.HasResigned = true;
             return new ResignResult(gameState.CurrentPlayer, gameState);
         }
 
@@ -88,14 +88,14 @@ namespace WMD.Game.Actions
         /// </exception>
         public static SellLandResult CurrentPlayerSellsLand(GameState gameState, SellLandInput input)
         {
-            if (input.AreaToSell > gameState.CurrentPlayer.Land)
+            if (input.AreaToSell > gameState.CurrentPlayer.State.Land)
             {
                 throw new InvalidOperationException("The current player has less land than they want to sell.");
             }
 
             decimal totalSalePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToSell;
             GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
-            gameState.CurrentPlayer.Money += totalSalePrice;
+            gameState.CurrentPlayer.State.Money += totalSalePrice;
 
             return new SellLandResult(gameState.CurrentPlayer, gameState, input.AreaToSell, totalSalePrice);
         }
@@ -117,9 +117,9 @@ namespace WMD.Game.Actions
         public static StealMoneyResult CurrentPlayerStealsMoney(GameState gameState, StealMoneyInput input)
         {
             decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 *_random.NextDouble(), 2);
-            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.Henchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
+            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.Henchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
-            gameState.CurrentPlayer.Money += moneyStolen;
+            gameState.CurrentPlayer.State.Money += moneyStolen;
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);
         }
@@ -135,23 +135,23 @@ namespace WMD.Game.Actions
         /// </exception>
         public static UpgradeSecretBaseResult CurrentPlayerUpgradesTheirSecretBase(GameState gameState, UpgradeSecretBaseInput input)
         {
-            decimal upgradePrice = SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.SecretBase);
+            decimal upgradePrice = SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.State.SecretBase);
 
-            if (upgradePrice > gameState.CurrentPlayer.Money)
+            if (upgradePrice > gameState.CurrentPlayer.State.Money)
             {
                 throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
             }
 
-            if (gameState.CurrentPlayer.SecretBase == null)
+            if (gameState.CurrentPlayer.State.SecretBase == null)
             {
-                gameState.CurrentPlayer.SecretBase = new SecretBase();
+                gameState.CurrentPlayer.State.SecretBase = new SecretBase();
             }
             else
             {
-                gameState.CurrentPlayer.SecretBase.Level++;
+                gameState.CurrentPlayer.State.SecretBase.Level++;
             }
-            int newLevel = gameState.CurrentPlayer.SecretBase.Level;
-            gameState.CurrentPlayer.Money -= upgradePrice;
+            int newLevel = gameState.CurrentPlayer.State.SecretBase.Level;
+            gameState.CurrentPlayer.State.Money -= upgradePrice;
 
             return new UpgradeSecretBaseResult(gameState.CurrentPlayer, gameState, newLevel, upgradePrice);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WMD.Game.Planets;
+using WMD.Game.Players;
 
 namespace WMD.Game
 {
@@ -78,7 +79,7 @@ namespace WMD.Game
 
             for (int i = 0; i < Players.Count; i++)
             {
-                if (Players[i].Land == Planet.TotalLandArea)
+                if (Players[i].State.Land == Planet.TotalLandArea)
                 {
                     winningPlayerIndex = i;
                     return true;
@@ -94,7 +95,7 @@ namespace WMD.Game
 
             for (int i = 0; i < Players.Count; i++)
             {
-                if (!Players[i].HasResigned)
+                if (!Players[i].State.HasResigned)
                 {
                     if (remainingPlayerIndex >= 0)
                     {
