@@ -22,6 +22,8 @@ namespace WMD.Game
         {
             Players = new List<Player>(players).AsReadOnly();
             Planet = planet;
+            CurrentRound = 1;
+            CurrentPlayerIndex = 0;
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace WMD.Game
         /// <summary>
         /// Gets the current game round.
         /// </summary>
-        public int CurrentRound { get; internal set; } = 1;
+        public int CurrentRound { get; internal set; }
 
         /// <summary>
         /// Gets the current <see cref="Player"/> whose turn it is.
@@ -42,7 +44,7 @@ namespace WMD.Game
         /// <summary>
         /// Gets the index of the current <see cref="Player"/> whose turn it is.
         /// </summary>
-        public int CurrentPlayerIndex { get; internal set; } = 0;
+        public int CurrentPlayerIndex { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="Planet"/> where this game is taking place.

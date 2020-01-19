@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using WMD.Game.Rounds;
 
 namespace WMD.Game
 {
@@ -10,13 +12,16 @@ namespace WMD.Game
         private const string ArgumentNull_GameState = "The game state to update cannot be null.";
 
         /// <summary>
-        /// Advances the game to the next turn.
+        /// Advances the game to the next turn. If a new round starts, a <see cref="RoundUpdateResult"/> will be returned.
         /// </summary>
         /// <param name="gameState">The <see cref="GameState"/> to update.</param>
+        /// <returns>
+        /// A new <see cref="RoundUpdateResult"/> if the game has advanced to the next round; otherwise, <see langword="null"/>.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="gameState"/> is <see langword="null"/>.
         /// </exception>
-        public static void AdvanceToNextTurn(GameState gameState)
+        public static RoundUpdateResult AdvanceToNextTurn(GameState gameState)
         {
             if (gameState == null)
             {
@@ -29,8 +34,10 @@ namespace WMD.Game
 
             if (gameState.CurrentPlayerIndex == 0)
             {
-                AdvanceToNextRound(gameState);
+                return AdvanceToNextRound(gameState);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -105,9 +112,44 @@ namespace WMD.Game
             gameState.Players[playerIndex].State.Land -= area;
         }
 
-        private static void AdvanceToNextRound(GameState gameState)
+        private static RoundUpdateResult AdvanceToNextRound(GameState gameState)
         {
+            var henchmenPayments = gameState.Players
+                .Where(player => player.State.Henchmen > 0)
+                .Select(player => new PlayerHenchmenPaid(player));
+
+            var result = new RoundUpdateResult(gameState.CurrentRound, henchmenPayments);
+            ApplyRoundUpdates(gameState, result);
             gameState.CurrentRound++;
+
+            return result;
+        }
+
+        private static void ApplyRoundUpdates(GameState gameState, RoundUpdateResult roundUpdates)
+        {
+            try
+            {
+                foreach (RoundUpdateResultItem roundUpdate in roundUpdates.Items)
+                {
+                    ApplyRoundUpdateItem(gameState, roundUpdate);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException("The provided round update result contained an invalid item.", nameof(roundUpdates), ex);
+            }
+        }
+
+        private static void ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate)
+        {
+            switch (roundUpdate)
+            {
+                case PlayerHenchmenPaid playerHenchmenPaid:
+                    playerHenchmenPaid.Player.State.Money -= playerHenchmenPaid.TotalPaidAmount;
+                    break;
+                default:
+                    throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");
+            }
         }
     }
 }

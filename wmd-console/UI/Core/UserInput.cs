@@ -47,6 +47,11 @@ namespace WMD.Console.UI.Core
             return System.Console.ReadLine();
         }
 
+        public static void WaitForPlayerAcknowledgementOfRoundEnd()
+        {
+            System.Console.ReadKey();
+        }
+
         public static void WaitForPlayerAcknowledgementOfTurnEnd()
         {
             System.Console.ReadKey();

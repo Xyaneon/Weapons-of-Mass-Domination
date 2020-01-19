@@ -4,6 +4,7 @@ using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 using WMD.Game;
 using WMD.Game.Actions;
+using WMD.Game.Rounds;
 
 namespace WMD.Console
 {
@@ -36,7 +37,13 @@ namespace WMD.Console
                 RunTurn();
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
-                    GameStateUpdater.AdvanceToNextTurn(CurrentGameState);
+                    RoundUpdateResult? roundUpdate = GameStateUpdater.AdvanceToNextTurn(CurrentGameState);
+
+                    if (roundUpdate != null)
+                    {
+                        PrintingUtility.PrintEndOfRound(roundUpdate);
+                        UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
+                    }
                 }
             }
 

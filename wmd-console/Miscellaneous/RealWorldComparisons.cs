@@ -242,7 +242,7 @@ namespace WMD.Console.Miscellaneous
                 "a cardboard box by the side of the freeway",
                 "a back alleyway",
                 "a dilapidated house",
-                "a dumspter behind your nearest fast food restaurant",
+                "a dumpster behind your nearest fast food restaurant",
                 "a school playground",
                 "a teepee",
                 "an outhouse",

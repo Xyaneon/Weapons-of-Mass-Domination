@@ -4,6 +4,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Game;
 using WMD.Game.Actions;
 using WMD.Game.Players;
+using WMD.Game.Rounds;
 
 namespace WMD.Console.UI
 {
@@ -67,6 +68,30 @@ namespace WMD.Console.UI
         public static void PrintEndOfTurn()
         {
             System.Console.WriteLine("The turn has ended. Press any key to continue...");
+        }
+
+        public static void PrintEndOfRound(RoundUpdateResult roundUpdate)
+        {
+            System.Console.Clear();
+            string headerText = $"End of Day {roundUpdate.RoundWhichEnded:N0}";
+            System.Console.WriteLine(headerText);
+            System.Console.WriteLine(new string('=', headerText.Length));
+            System.Console.WriteLine();
+
+            if (roundUpdate.Items.Count == 0)
+            {
+                System.Console.WriteLine("Nothing noteworthy happened today.");
+                System.Console.WriteLine();
+            }
+            else
+            {
+                foreach (RoundUpdateResultItem item in roundUpdate.Items)
+                {
+                    PrintEndOfRoundItem(item);
+                }
+            }
+            
+            System.Console.WriteLine("The day has ended. Press any key to continue...");
         }
 
         public static void PrintGameHasAlreadyBeenWon(string playerName)
@@ -141,6 +166,19 @@ namespace WMD.Console.UI
                 PlayerColor.Yellow => ConsoleColor.DarkYellow,
                 _ => throw new InvalidEnumArgumentException(nameof(color), (int)color, typeof(PlayerColor))
             };
+        }
+
+        private static void PrintEndOfRoundItem(RoundUpdateResultItem item)
+        {
+            switch (item)
+            {
+                case PlayerHenchmenPaid playerHenchmenPaid:
+                    System.Console.WriteLine($"{playerHenchmenPaid.Player.Name} paid each of their {playerHenchmenPaid.NumberOfHenchmenPaid:N0} henchmen their daily pay of {playerHenchmenPaid.DailyPayRate:C}, for a total of {playerHenchmenPaid.TotalPaidAmount:C}.");
+                    break;
+                default:
+                    throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}.");
+            }
+            System.Console.WriteLine();
         }
     }
 }
