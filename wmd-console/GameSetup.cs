@@ -12,6 +12,8 @@ namespace WMD.Console
     {
         private const int MaximumNumberOfPlayers = 4;
 
+        private static PlayerColor _nextAvailableColor = 0;
+
         public static GameState CreateInitialStateForSinglePlayerGame()
         {
             Player humanPlayer = SetUpHumanPlayer(new string[] { });
@@ -57,7 +59,7 @@ namespace WMD.Console
                 }
             }
 
-            return new Player(name);
+            return new Player(name, GetNextAvailableColor());
         }
 
         private static IList<Player> CreatePlayerList(Player humanPlayer, int computerPlayerCount)
@@ -75,8 +77,15 @@ namespace WMD.Console
         private static IList<Player> CreateComputerPlayers(int computerPlayerCount)
         {
             return Enumerable.Range(1, computerPlayerCount)
-                .Select(playerNumber => new Player($"CPU {playerNumber}"))
+                .Select(playerNumber => new Player($"CPU {playerNumber}", GetNextAvailableColor()))
                 .ToList();
+        }
+
+        private static PlayerColor GetNextAvailableColor()
+        {
+            PlayerColor color = _nextAvailableColor;
+            _nextAvailableColor++;
+            return color;
         }
     }
 }

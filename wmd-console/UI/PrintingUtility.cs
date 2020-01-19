@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using WMD.Console.Miscellaneous;
 using WMD.Game;
 using WMD.Game.Actions;
@@ -114,7 +115,11 @@ namespace WMD.Console.UI
             System.Console.Clear();
             System.Console.WriteLine();
             System.Console.WriteLine(topLine);
-            System.Console.WriteLine($"║ {headerText} ║");
+            System.Console.Write("║");
+            System.Console.BackgroundColor = ConvertPlayerColorToConsoleColor(gameState.CurrentPlayer.Color);
+            System.Console.Write($" {headerText} ");
+            System.Console.ResetColor();
+            System.Console.WriteLine("║");
             System.Console.WriteLine(bottomLine);
 
             System.Console.WriteLine();
@@ -123,6 +128,18 @@ namespace WMD.Console.UI
             System.Console.WriteLine(secretBaseString);
             System.Console.WriteLine(summaryString);
             System.Console.WriteLine();
+        }
+
+        private static ConsoleColor ConvertPlayerColorToConsoleColor(PlayerColor color)
+        {
+            return color switch
+            {
+                PlayerColor.Red => ConsoleColor.DarkRed,
+                PlayerColor.Green => ConsoleColor.DarkGreen,
+                PlayerColor.Blue => ConsoleColor.DarkBlue,
+                PlayerColor.Yellow => ConsoleColor.DarkYellow,
+                _ => throw new InvalidEnumArgumentException(nameof(color), (int)color, typeof(PlayerColor))
+            };
         }
     }
 }
