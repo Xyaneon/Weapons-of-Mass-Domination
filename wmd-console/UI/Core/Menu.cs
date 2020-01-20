@@ -92,21 +92,31 @@ namespace WMD.Console.UI.Core
             while (!HasClosed)
             {
                 int menuLines = PrintActivePageAndGetNumberOfLines();
-                ConsoleKeyInfo pressedKey = System.Console.ReadKey();
-                switch (pressedKey.Key)
+
+                bool keyRecognized = false;
+
+                while (!keyRecognized)
                 {
-                    case ConsoleKey.UpArrow:
-                        ClearCurrentMenuView(menuLines);
-                        ActivePage.MoveSelectionUp();
-                        break;
-                    case ConsoleKey.DownArrow:
-                        ClearCurrentMenuView(menuLines);
-                        ActivePage.MoveSelectionDown();
-                        break;
-                    case ConsoleKey.Enter:
-                        ClearCurrentMenuView(menuLines);
-                        ActivePage.ActivateSelection();
-                        break;
+                    ConsoleKeyInfo pressedKey = System.Console.ReadKey();
+
+                    switch (pressedKey.Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            keyRecognized = true;
+                            ClearCurrentMenuView(menuLines);
+                            ActivePage.MoveSelectionUp();
+                            break;
+                        case ConsoleKey.DownArrow:
+                            keyRecognized = true;
+                            ClearCurrentMenuView(menuLines);
+                            ActivePage.MoveSelectionDown();
+                            break;
+                        case ConsoleKey.Enter:
+                            keyRecognized = true;
+                            ClearCurrentMenuView(menuLines);
+                            ActivePage.ActivateSelection();
+                            break;
+                    } 
                 }
             }
             System.Console.CursorVisible = cursorWasVisible;
