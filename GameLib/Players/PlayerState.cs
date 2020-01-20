@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Players
+﻿using WMD.Game.Henchmen;
+
+namespace WMD.Game.Players
 {
     /// <summary>
     /// Holds current state for an individual <see cref="Player"/>.
@@ -12,9 +14,9 @@
         {
             HasResigned = false;
             Land = 0;
-            Henchmen = 0;
             Money = 0;
             SecretBase = null;
+            WorkforceState = new WorkforceState();
         }
 
         /// <summary>
@@ -26,11 +28,6 @@
         /// The amount of land this player controls, in square kilometers.
         /// </summary>
         public int Land { get; internal set; }
-
-        /// <summary>
-        /// The number of henchmen this player has.
-        /// </summary>
-        public int Henchmen { get; internal set; }
 
         /// <summary>
         /// Gets how much money this player has.
@@ -45,5 +42,10 @@
         /// does not have a base.
         /// </remarks>
         public SecretBase SecretBase { get; internal set; }
+
+        /// <summary>
+        /// Gets this player's current workforce state.
+        /// </summary>
+        public WorkforceState WorkforceState { get; internal set; }
     }
 }

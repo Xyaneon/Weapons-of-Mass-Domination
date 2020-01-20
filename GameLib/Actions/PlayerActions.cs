@@ -29,7 +29,7 @@ namespace WMD.Game.Actions
         {
             // TODO: Introduce variance for how many henchmen actually get hired.
             int henchmenHired = input.OpenPositionsOffered;
-            gameState.CurrentPlayer.State.Henchmen += henchmenHired;
+            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen += henchmenHired;
             return new HireHenchmenResult(gameState.CurrentPlayer, gameState, henchmenHired);
         }
 
@@ -117,7 +117,7 @@ namespace WMD.Game.Actions
         public static StealMoneyResult CurrentPlayerStealsMoney(GameState gameState, StealMoneyInput input)
         {
             decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 *_random.NextDouble(), 2);
-            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.Henchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
+            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
             gameState.CurrentPlayer.State.Money += moneyStolen;
 

@@ -128,7 +128,7 @@ namespace WMD.Console.UI
         {
             Player currentPlayer = gameState.CurrentPlayer;
             string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string statsString = $"Money: {currentPlayer.State.Money:C} | Henchmen: {currentPlayer.State.Henchmen:N0} | Land: {currentPlayer.State.Land:N0} km²";
+            string statsString = $"Money: {currentPlayer.State.Money:C} | Henchmen: {currentPlayer.State.WorkforceState.NumberOfHenchmen:N0} | Land: {currentPlayer.State.Land:N0} km²";
             string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.State.Land)}.";
             string secretBaseString = currentPlayer.State.SecretBase == null
                 ? "You do not have your own secret base yet."

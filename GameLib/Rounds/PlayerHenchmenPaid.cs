@@ -22,8 +22,8 @@ namespace WMD.Game.Rounds
                 throw new ArgumentNullException(nameof(player), "The player who paid their henchmen cannot be null.");
             }
 
-            DailyPayRate = 7;
-            NumberOfHenchmenPaid = player.State.Henchmen;
+            DailyPayRate = player.State.WorkforceState.DailyPayRate;
+            NumberOfHenchmenPaid = player.State.WorkforceState.NumberOfHenchmen;
             Player = player;
         }
 

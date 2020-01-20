@@ -145,7 +145,7 @@ namespace WMD.Game
                     playerHenchmenPaid.Player.State.Money -= playerHenchmenPaid.TotalPaidAmount;
                     break;
                 case PlayerHenchmenQuit playerHenchmenQuit:
-                    playerHenchmenQuit.Player.State.Henchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;
+                    playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;
                     break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");
@@ -155,12 +155,12 @@ namespace WMD.Game
         private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState)
         {
             var henchmenPayments = gameState.Players
-                .Where(player => player.State.Henchmen > 0)
+                .Where(player => player.State.WorkforceState.NumberOfHenchmen > 0)
                 .Select(player => new PlayerHenchmenPaid(player));
 
             var henchmenQuittings = gameState.Players
-                .Where(player => player.State.Money <= 0 && player.State.Henchmen > 0)
-                .Select(player => new PlayerHenchmenQuit(player, player.State.Henchmen));
+                .Where(player => player.State.Money <= 0 && player.State.WorkforceState.NumberOfHenchmen > 0)
+                .Select(player => new PlayerHenchmenQuit(player, player.State.WorkforceState.NumberOfHenchmen));
 
             var allUpdates = new List<RoundUpdateResultItem>()
                 .Concat(henchmenPayments)
