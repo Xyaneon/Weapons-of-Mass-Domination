@@ -8,12 +8,13 @@ namespace WMD.Console.UI
 {
     static class ActionInputRetrieval
     {
+        private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
         public static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
         {
-            // TODO: Add more control over the hiring process.
-            int openPositionsToOffer = 10;
+            var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
+            int openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
                 ? new HireHenchmenInput(openPositionsToOffer)
                 : null;
