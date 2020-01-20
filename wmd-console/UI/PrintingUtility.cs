@@ -175,6 +175,9 @@ namespace WMD.Console.UI
                 case PlayerHenchmenPaid playerHenchmenPaid:
                     System.Console.WriteLine($"{playerHenchmenPaid.Player.Name} paid each of their {playerHenchmenPaid.NumberOfHenchmenPaid:N0} henchmen their daily pay of {playerHenchmenPaid.DailyPayRate:C}, for a total of {playerHenchmenPaid.TotalPaidAmount:C}.");
                     break;
+                case PlayerHenchmenQuit playerHenchmenQuit:
+                    System.Console.WriteLine($"{playerHenchmenQuit.NumberOfHenchmenQuit:N0} of {playerHenchmenQuit.Player.Name}'s henchmen quit.");
+                    break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}.");
             }

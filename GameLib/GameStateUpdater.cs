@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WMD.Game.Rounds;
 
@@ -114,11 +115,7 @@ namespace WMD.Game
 
         private static RoundUpdateResult AdvanceToNextRound(GameState gameState)
         {
-            var henchmenPayments = gameState.Players
-                .Where(player => player.State.Henchmen > 0)
-                .Select(player => new PlayerHenchmenPaid(player));
-
-            var result = new RoundUpdateResult(gameState.CurrentRound, henchmenPayments);
+            RoundUpdateResult result = CreateRoundUpdateResult(gameState);
             ApplyRoundUpdates(gameState, result);
             gameState.CurrentRound++;
 
@@ -147,9 +144,29 @@ namespace WMD.Game
                 case PlayerHenchmenPaid playerHenchmenPaid:
                     playerHenchmenPaid.Player.State.Money -= playerHenchmenPaid.TotalPaidAmount;
                     break;
+                case PlayerHenchmenQuit playerHenchmenQuit:
+                    playerHenchmenQuit.Player.State.Henchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;
+                    break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");
             }
+        }
+
+        private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState)
+        {
+            var henchmenPayments = gameState.Players
+                .Where(player => player.State.Henchmen > 0)
+                .Select(player => new PlayerHenchmenPaid(player));
+
+            var henchmenQuittings = gameState.Players
+                .Where(player => player.State.Money <= 0 && player.State.Henchmen > 0)
+                .Select(player => new PlayerHenchmenQuit(player, player.State.Henchmen));
+
+            var allUpdates = new List<RoundUpdateResultItem>()
+                .Concat(henchmenPayments)
+                .Concat(henchmenQuittings);
+
+            return new RoundUpdateResult(gameState.CurrentRound, allUpdates);
         }
     }
 }
