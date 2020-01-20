@@ -71,7 +71,7 @@ namespace WMD.Console.UI.Core
         {
             if (!Pages.Contains(page))
             {
-                throw new ArgumentException("The provided page was not found in this menu presenter.", nameof(page));
+                throw new ArgumentException("The provided page was not found in this menu.", nameof(page));
             }
 
             _history.Push(ActivePage);
@@ -82,7 +82,7 @@ namespace WMD.Console.UI.Core
         {
             if (Pages.Count < 1)
             {
-                throw new InvalidOperationException("Cannot run a menu presenter with no pages.");
+                throw new InvalidOperationException("Cannot run a menu with no pages.");
             }
 
             ActivePage = InitialPage ?? Pages.First();

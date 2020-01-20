@@ -33,7 +33,7 @@ namespace WMD.Console.UI.Menus
             var mainActionItems = new MenuItem[]
             {
                 new MenuItem("Steal money", () => menu.SetResultAndClose(PlayerActionKind.StealMoney)),
-                new MenuItem("Land management", () => menu.NavigateTo(landActionsPage)),
+                new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(PlayerActionKind.HireHenchmen)),
                 new MenuItem("Build/upgrade your secret base", () => menu.SetResultAndClose(PlayerActionKind.UpgradeSecretBase)),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(PlayerActionKind.Skip)),
