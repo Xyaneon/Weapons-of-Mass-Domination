@@ -53,11 +53,15 @@ namespace WMD.Console
 
         private PlayerActionKind GetPlayerActionKind()
         {
-            var menuPrinter = new MenuPrinter<PlayerActionKind>();
-            var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter);
+            //var menuPrinter = new MenuPrinter<PlayerActionKind>();
+            //var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter);
 
-            var menu = GameMenuFactory.CreatePlayerActionMenu();
-            return menuRunner.ShowMenuAndGetChoice(menu);
+            //var menu = GameMenuFactory.CreatePlayerActionMenu();
+            //return menuRunner.ShowMenuAndGetChoice(menu);
+
+            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
+            actionMenu.Run();
+            return (PlayerActionKind)actionMenu.Result;
         }
 
         private void RunTurn()

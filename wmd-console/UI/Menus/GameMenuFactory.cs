@@ -6,31 +6,42 @@ namespace WMD.Console.UI.Menus
 {
     static class GameMenuFactory
     {
-        public static Menu<Action> CreateMainMenu()
+        public static Menu CreateMainMenu()
         {
-            var options = new MenuOption<Action>[]
+            var mainMenuItems = new MenuItem[]
             {
-                new MenuOption<Action>("New single player game", MainMenuActions.StartNewSinglePlayerGame),
-                new MenuOption<Action>("Exit", MainMenuActions.ExitGame)
+                new MenuItem("New single player game", MainMenuActions.StartNewSinglePlayerGame),
+                new MenuItem("Exit", MainMenuActions.ExitGame)
             };
 
-            return new Menu<Action>(options);
+            return new Menu().AddPage("Main menu", mainMenuItems);
         }
 
-        public static Menu<PlayerActionKind> CreatePlayerActionMenu()
+        public static Menu CreatePlayerActionMenu()
         {
-            var options = new MenuOption<PlayerActionKind>[]
+            var menu = new Menu();
+
+            var landActionItems = new MenuItem[]
             {
-                new MenuOption<PlayerActionKind>("Steal money", PlayerActionKind.StealMoney),
-                new MenuOption<PlayerActionKind>("Purchase unclaimed land", PlayerActionKind.PurchaseUnclaimedLand),
-                new MenuOption<PlayerActionKind>("Sell land", PlayerActionKind.SellLand),
-                new MenuOption<PlayerActionKind>("Hire henchmen", PlayerActionKind.HireHenchmen),
-                new MenuOption<PlayerActionKind>("Build/upgrade your secret base", PlayerActionKind.UpgradeSecretBase),
-                new MenuOption<PlayerActionKind>("Skip turn", PlayerActionKind.Skip),
-                new MenuOption<PlayerActionKind>("Resign", PlayerActionKind.Resign)
+                new MenuItem("Purchase unclaimed land", () => menu.SetResultAndClose(PlayerActionKind.PurchaseUnclaimedLand)),
+                new MenuItem("Sell land", () => menu.SetResultAndClose(PlayerActionKind.SellLand)),
+                new MenuItem("Back", () => menu.NavigateBack())
             };
 
-            return new Menu<PlayerActionKind>(options);
+            var landActionsPage = new MenuPage(menu, "Land", landActionItems);
+
+            var mainActionItems = new MenuItem[]
+            {
+                new MenuItem("Steal money", () => menu.SetResultAndClose(PlayerActionKind.StealMoney)),
+                new MenuItem("Land management", () => menu.NavigateTo(landActionsPage)),
+                new MenuItem("Hire henchmen", () => menu.SetResultAndClose(PlayerActionKind.HireHenchmen)),
+                new MenuItem("Build/upgrade your secret base", () => menu.SetResultAndClose(PlayerActionKind.UpgradeSecretBase)),
+                new MenuItem("Skip turn", () => menu.SetResultAndClose(PlayerActionKind.Skip)),
+                new MenuItem("Resign", () => menu.SetResultAndClose(PlayerActionKind.Resign))
+            };
+
+            menu.AddPage("Actions", mainActionItems).AddPage(landActionsPage);
+            return menu;
         }
     }
 }
