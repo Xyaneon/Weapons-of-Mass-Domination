@@ -14,7 +14,7 @@ namespace WMD.Console.UI.Menus
         public static void StartNewSinglePlayerGame()
         {
             GameState gameState = GameSetup.CreateInitialStateForSinglePlayerGame();
-            GameRunner gameRunner = new GameRunner { CurrentGameState = gameState };
+            var gameRunner = new GameRunner(gameState);
             gameRunner.Run();
         }
     }
