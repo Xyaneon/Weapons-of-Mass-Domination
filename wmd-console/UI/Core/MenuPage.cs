@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace WMD.Console.UI.Core
 {
     class MenuPage
     {
-        public MenuPage(Menu? presenter, string title, params MenuItem[] menuItems)
+        public MenuPage(Menu? menu, string title, params MenuItem[] menuItems)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -19,7 +18,7 @@ namespace WMD.Console.UI.Core
                 throw new ArgumentException("The menu page must have at least one menu item.", nameof(menuItems));
             }
 
-            Presenter = presenter;
+            Menu = menu;
             Title = title;
             MenuItems = new List<MenuItem>(menuItems).AsReadOnly();
             HighlightedMenuItem = menuItems.First();
@@ -31,7 +30,7 @@ namespace WMD.Console.UI.Core
 
         public IReadOnlyList<MenuItem> MenuItems { get; }
 
-        public Menu? Presenter { get; set; }
+        public Menu? Menu { get; set; }
 
         public int HighlightedMenuItemIndex
         {

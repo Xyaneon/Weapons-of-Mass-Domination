@@ -48,7 +48,7 @@ namespace WMD.Console.UI.Core
 
         public Menu AddPage(MenuPage page)
         {
-            page.Presenter = this;
+            page.Menu = this;
             _pages.Add(page);
             return this;
         }
