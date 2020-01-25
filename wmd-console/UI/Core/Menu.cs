@@ -7,6 +7,8 @@ namespace WMD.Console.UI.Core
 {
     class Menu
     {
+        private const string BreadcrumbsSeparator = " > ";
+
         public Menu(string? title = null)
         {
             Title = title;
@@ -130,6 +132,11 @@ namespace WMD.Console.UI.Core
             System.Console.ForegroundColor = HighlightForegroundColor;
         }
 
+        private string BuildBreadcrumbsString()
+        {
+            return string.Join(BreadcrumbsSeparator, _history.Select(x => x.Title).Reverse());
+        }
+
         private void ClearCurrentLine()
         {
             int currentCursorTop = System.Console.CursorTop;
@@ -154,10 +161,11 @@ namespace WMD.Console.UI.Core
 
         private int PrintActivePageAndGetNumberOfLines()
         {
+            string breadcrumbs = BuildBreadcrumbsString();
             var headerLines = new List<string>(new string[]
             {
-                ActivePage.Title,
-                new string('-', ActivePage.Title.Length)
+                breadcrumbs,
+                new string('-', breadcrumbs.Length)
             });
 
             headerLines.ForEach(x => System.Console.WriteLine(x));
