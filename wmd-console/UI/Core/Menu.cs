@@ -162,32 +162,46 @@ namespace WMD.Console.UI.Core
         private int PrintActivePageAndGetNumberOfLines()
         {
             string breadcrumbs = BuildBreadcrumbsString();
+            int breadcrumbsWidth = breadcrumbs.Length;
+            int menuItemWidth = ActivePage.MenuItems.Select(x => x.Text.Length).Max();
+            int totalContentWidth = Math.Max(breadcrumbsWidth, menuItemWidth);
+            int borderLinesCount = 3;
+
             var headerLines = new List<string>(new string[]
             {
-                breadcrumbs,
-                new string('-', breadcrumbs.Length)
+                breadcrumbs
             });
 
-            headerLines.ForEach(x => System.Console.WriteLine(x));
+            string topBorderLine = "╔" + new string('═', totalContentWidth + 2) + "╗";
+            string middleBorderLine = "╠" + new string('═', totalContentWidth + 2) + "╣";
+            string bottomBorderLine = "╚" + new string('═', totalContentWidth + 2) + "╝";
 
-            int menuItemWidth = ActivePage.MenuItems.Select(x => x.Text.Length).Max();
+            System.Console.WriteLine(topBorderLine);
+
+            headerLines.ForEach(x => System.Console.WriteLine($"║ {x.PadRight(totalContentWidth, ' ')} ║"));
+
+            System.Console.WriteLine(middleBorderLine);
 
             for (int i = 0; i < ActivePage.MenuItems.Count; i++)
             {
-                PrintMenuItem(ActivePage.MenuItems[i], menuItemWidth, i == ActivePage.HighlightedMenuItemIndex);
+                PrintMenuItem(ActivePage.MenuItems[i], totalContentWidth, i == ActivePage.HighlightedMenuItemIndex);
             }
 
-            return headerLines.Count + ActivePage.MenuItems.Count;
+            System.Console.WriteLine(bottomBorderLine);
+
+            return borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
         }
 
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)
         {
+            System.Console.Write("║");
             if (isHighlighted)
             {
                 ActivateHighlightColors();
             }
-            System.Console.WriteLine($"{menuItem.Text.PadRight(width, ' ')}");
+            System.Console.Write($" {menuItem.Text.PadRight(width, ' ')} ");
             System.Console.ResetColor();
+            System.Console.WriteLine("║");
         }
     }
 }
