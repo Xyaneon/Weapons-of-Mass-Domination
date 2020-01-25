@@ -18,9 +18,7 @@ namespace WMD.Console.UI.Core
             Result = null;
         }
 
-        public MenuPage? ActivePage { get; private set; }
-
-        public MenuPage? InitialPage { get; }
+        public MenuPage ActivePage { get => _history.Peek(); }
 
         public bool HasClosed { get; private set; }
 
@@ -58,13 +56,12 @@ namespace WMD.Console.UI.Core
 
         public void NavigateBack()
         {
-            if (_history.Count < 1)
+            if (_history.Count <= 1)
             {
                 throw new InvalidOperationException("There are no pages left in the history to navigate back to.");
             }
 
-            MenuPage pageToNavigateBackTo = _history.Pop();
-            NavigateTo(pageToNavigateBackTo);
+            _history.Pop();
         }
 
         public void NavigateTo(MenuPage page)
@@ -74,8 +71,7 @@ namespace WMD.Console.UI.Core
                 throw new ArgumentException("The provided page was not found in this menu.", nameof(page));
             }
 
-            _history.Push(ActivePage);
-            ActivePage = page;
+            _history.Push(page);
         }
 
         public void Run()
@@ -85,7 +81,7 @@ namespace WMD.Console.UI.Core
                 throw new InvalidOperationException("Cannot run a menu with no pages.");
             }
 
-            ActivePage = InitialPage ?? Pages.First();
+            NavigateTo(Pages.First());
 
             bool cursorWasVisible = System.Console.CursorVisible;
             System.Console.CursorVisible = false;
