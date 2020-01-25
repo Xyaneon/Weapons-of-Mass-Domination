@@ -10,15 +10,6 @@ namespace WMD.Console
         {
             ShowTitle();
 
-            //var menuPrinter = new MenuPrinter<Action>();
-            //var menuRunner = new MenuRunner<Action>(menuPrinter);
-
-            //var mainMenu = GameMenuFactory.CreateMainMenu();
-            //while (true)
-            //{
-            //    menuRunner.ShowMenuAndGetChoice(mainMenu).Invoke();
-            //}
-
             Menu mainMenu = GameMenuFactory.CreateMainMenu();
             mainMenu.Run();
         }
