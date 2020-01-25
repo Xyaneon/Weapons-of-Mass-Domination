@@ -34,8 +34,10 @@ namespace WMD.Console.UI.Core
 
         public object? Result { get; private set; }
 
+        private int _height;
         private Stack<MenuPage> _history;
         private List<MenuPage> _pages;
+        private int _width;
 
         public Menu AddPage(string title, params MenuItem[] menuItems)
         {
@@ -87,32 +89,45 @@ namespace WMD.Console.UI.Core
 
             bool cursorWasVisible = System.Console.CursorVisible;
             System.Console.CursorVisible = false;
+
             while (!HasClosed)
             {
-                int menuLines = PrintActivePageAndGetNumberOfLines();
+                PrintActivePageAndUpdateSize();
 
                 bool keyRecognized = false;
 
                 while (!keyRecognized)
                 {
-                    ConsoleKeyInfo pressedKey = System.Console.ReadKey();
+                    ConsoleKeyInfo pressedKey = System.Console.ReadKey(true);
 
                     switch (pressedKey.Key)
                     {
                         case ConsoleKey.UpArrow:
                             keyRecognized = true;
-                            ClearCurrentMenuView(menuLines);
+                            ClearCurrentMenuView();
                             ActivePage.MoveSelectionUp();
                             break;
                         case ConsoleKey.DownArrow:
                             keyRecognized = true;
-                            ClearCurrentMenuView(menuLines);
+                            ClearCurrentMenuView();
                             ActivePage.MoveSelectionDown();
                             break;
                         case ConsoleKey.Enter:
                             keyRecognized = true;
-                            ClearCurrentMenuView(menuLines);
+                            ClearCurrentMenuView();
                             ActivePage.ActivateSelection();
+                            break;
+                        case ConsoleKey.Escape:
+                            keyRecognized = true;
+                            ClearCurrentMenuView();
+                            if (_history.Count >= 2)
+                            {
+                                NavigateBack();
+                            }
+                            else
+                            {
+                                System.Console.Beep();
+                            }
                             break;
                     } 
                 }
@@ -145,9 +160,9 @@ namespace WMD.Console.UI.Core
             System.Console.SetCursorPosition(0, currentCursorTop);
         }
 
-        private void ClearCurrentMenuView(int menuLines)
+        private void ClearCurrentMenuView()
         {
-            for (int i = 0; i < menuLines; i++)
+            for (int i = 0; i < _height; i++)
             {
                 MoveCursorUp();
                 ClearCurrentLine();
@@ -159,7 +174,7 @@ namespace WMD.Console.UI.Core
             System.Console.SetCursorPosition(System.Console.CursorLeft, System.Console.CursorTop - 1);
         }
 
-        private int PrintActivePageAndGetNumberOfLines()
+        private void PrintActivePageAndUpdateSize()
         {
             string breadcrumbs = BuildBreadcrumbsString();
             int breadcrumbsWidth = breadcrumbs.Length;
@@ -171,6 +186,9 @@ namespace WMD.Console.UI.Core
             {
                 breadcrumbs
             });
+
+            _width = totalContentWidth + 4;
+            _height = borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
 
             string topBorderLine = "╔" + new string('═', totalContentWidth + 2) + "╗";
             string middleBorderLine = "╠" + new string('═', totalContentWidth + 2) + "╣";
@@ -188,8 +206,6 @@ namespace WMD.Console.UI.Core
             }
 
             System.Console.WriteLine(bottomBorderLine);
-
-            return borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
         }
 
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)
