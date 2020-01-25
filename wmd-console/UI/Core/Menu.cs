@@ -158,8 +158,13 @@ namespace WMD.Console.UI.Core
 
         private int PrintActivePageAndGetNumberOfLines()
         {
-            System.Console.WriteLine(ActivePage.Title);
-            System.Console.WriteLine(new string('-', ActivePage.Title.Length));
+            var headerLines = new List<string>(new string[]
+            {
+                ActivePage.Title,
+                new string('-', ActivePage.Title.Length)
+            });
+
+            headerLines.ForEach(x => System.Console.WriteLine(x));
 
             int menuItemWidth = ActivePage.MenuItems.Select(x => x.Text.Length).Max();
 
@@ -168,7 +173,7 @@ namespace WMD.Console.UI.Core
                 PrintMenuItem(ActivePage.MenuItems[i], menuItemWidth, i == ActivePage.HighlightedMenuItemIndex);
             }
 
-            return 2 + ActivePage.MenuItems.Count;
+            return headerLines.Count + ActivePage.MenuItems.Count;
         }
 
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)

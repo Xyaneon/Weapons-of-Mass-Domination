@@ -10,17 +10,15 @@ namespace WMD.Console
 {
     class GameRunner
     {
-        public GameRunner() { }
+        public GameRunner(GameState initialGameState)
+        {
+            CurrentGameState = initialGameState;
+        }
 
-        public GameState? CurrentGameState { get; set; }
+        public GameState CurrentGameState { get; private set; }
 
         public void Run()
         {
-            if (CurrentGameState == null)
-            {
-                throw new InvalidOperationException("No game state set to run on.");
-            }
-
             string winningPlayerName;
 
 
@@ -42,7 +40,7 @@ namespace WMD.Console
                     if (roundUpdate != null)
                     {
                         PrintingUtility.PrintEndOfRound(roundUpdate);
-                        UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
+                        UserInput.WaitForPlayerAcknowledgementOfRoundEnd();
                     }
                 }
             }
@@ -53,24 +51,20 @@ namespace WMD.Console
 
         private PlayerActionKind GetPlayerActionKind()
         {
-            //var menuPrinter = new MenuPrinter<PlayerActionKind>();
-            //var menuRunner = new MenuRunner<PlayerActionKind>(menuPrinter);
-
-            //var menu = GameMenuFactory.CreatePlayerActionMenu();
-            //return menuRunner.ShowMenuAndGetChoice(menu);
-
             Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
             actionMenu.Run();
-            return (PlayerActionKind)actionMenu.Result;
+            if (actionMenu.Result != null)
+            {
+                return (PlayerActionKind)actionMenu.Result;
+            }
+            else
+            {
+                throw new InvalidOperationException($"No {typeof(PlayerActionKind).Name} result value found on action selection menu (this is a bug).");
+            }
         }
 
         private void RunTurn()
         {
-            if (CurrentGameState == null)
-            {
-                throw new InvalidOperationException("No game state set to run on.");
-            }
-
             PrintingUtility.PrintStartOfTurn(CurrentGameState);
 
             if (CurrentGameState.CurrentPlayer.State.HasResigned)
