@@ -1,14 +1,14 @@
-﻿namespace WMD.Game.Actions
+﻿namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the input for a player action.
     /// This class cannot be instantiated.
     /// </summary>
-    public abstract class ActionInput
+    public abstract class CommandInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActionInput"/> class.
+        /// Initializes a new instance of the <see cref="CommandInput"/> class.
         /// </summary>
-        public ActionInput() { }
+        public CommandInput() { }
     }
 }

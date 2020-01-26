@@ -2,7 +2,7 @@
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 
 namespace WMD.Console.UI
 {

@@ -1,11 +1,11 @@
 ﻿using WMD.Game.Players;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of the <see cref="ResignAction"/>.
     /// </summary>
-    public class ResignResult : ActionResult
+    public class ResignResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResignResult"/> class.

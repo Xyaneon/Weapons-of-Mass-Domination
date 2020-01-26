@@ -1,9 +1,9 @@
-﻿namespace WMD.Game.Actions
+﻿namespace WMD.Game.Commands
 {
     /// <summary>
     /// Additional input data for the upgrade secret base action.
     /// </summary>
-    public class UpgradeSecretBaseInput : ActionInput
+    public class UpgradeSecretBaseInput : CommandInput
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpgradeSecretBaseInput"/> class.

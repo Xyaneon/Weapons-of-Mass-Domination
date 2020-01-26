@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Provides actions a player may take on their turn.

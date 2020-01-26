@@ -3,7 +3,7 @@ using WMD.Console.UI;
 using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 using WMD.Game;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 using WMD.Game.Rounds;
 
 namespace WMD.Console
@@ -73,7 +73,7 @@ namespace WMD.Console
             }
             else
             {
-                ActionResult? actionResult = null;
+                CommandResult? actionResult = null;
                 while (actionResult == null)
                 {
                     var selectedAction = GetPlayerActionKind();

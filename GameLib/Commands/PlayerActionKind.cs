@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.Actions
+﻿namespace WMD.Game.Commands
 {
     /// <summary>
     /// Indicates which kind of action the player wants to take.

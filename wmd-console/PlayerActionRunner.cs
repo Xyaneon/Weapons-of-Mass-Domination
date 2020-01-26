@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel;
 using WMD.Console.UI;
 using WMD.Game;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 
 namespace WMD.Console
 {
     static class PlayerActionRunner
     {
-        public static ActionResult? RunSelectedAction(GameState gameState, PlayerActionKind selectedAction) => selectedAction switch
+        public static CommandResult? RunSelectedAction(GameState gameState, PlayerActionKind selectedAction) => selectedAction switch
         {
             PlayerActionKind.BuildSecretBase => RunBuildSecretBase(gameState),
             PlayerActionKind.HireHenchmen => RunHireHenchmen(gameState),
