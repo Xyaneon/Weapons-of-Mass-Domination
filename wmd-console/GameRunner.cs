@@ -65,7 +65,7 @@ namespace WMD.Console
 
         private void RunTurn()
         {
-            PrintingUtility.PrintStartOfTurn(CurrentGameState);
+            StartOfTurnPrinter.PrintStartOfTurn(CurrentGameState);
 
             if (CurrentGameState.CurrentPlayer.State.HasResigned)
             {
@@ -79,7 +79,7 @@ namespace WMD.Console
                     var selectedAction = GetPlayerActionKind();
                     actionResult = PlayerActionRunner.RunSelectedAction(CurrentGameState, selectedAction);
                 }
-                PrintingUtility.PrintActionResult(actionResult);
+                ActionResultPrinter.PrintActionResult(actionResult);
                 PrintingUtility.PrintEndOfTurn();
                 UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
             }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using WMD.Console.Miscellaneous;
 using WMD.Game;
-using WMD.Game.Actions;
-using WMD.Game.Players;
 using WMD.Game.Rounds;
 
 namespace WMD.Console.UI
@@ -13,40 +9,6 @@ namespace WMD.Console.UI
         public static void CongratulateWinningPlayer(string playerName)
         {
             System.Console.WriteLine($"Congratulations, {playerName}! You won!");
-        }
-
-        public static void PrintActionResult(ActionResult actionResult)
-        {
-            switch (actionResult)
-            {
-                case BuildSecretBaseResult result:
-                    System.Console.WriteLine($"{result.Player.Name} built their own secret base for {result.BuildPrice:C}.");
-                    break;
-                case HireHenchmenResult result:
-                    System.Console.WriteLine($"{result.Player.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
-                    break;
-                case PurchaseUnclaimedLandResult result:
-                    System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
-                    break;
-                case ResignResult result:
-                    System.Console.WriteLine($"{result.Player.Name} resigned.");
-                    break;
-                case SellLandResult result:
-                    System.Console.WriteLine($"{result.Player.Name} sold {result.LandAreaSold:N0} km² of land for {result.TotalSalePrice:C}.");
-                    break;
-                case SkipTurnResult result:
-                    System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
-                    break;
-                case StealMoneyResult result:
-                    System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.State.Money:C}.");
-                    break;
-                case UpgradeSecretBaseResult result:
-                    System.Console.WriteLine($"{result.Player.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
-                    break;
-                default:
-                    throw new ArgumentException($"Unsupported {typeof(ActionResult).Name} type: {actionResult.GetType().FullName}");
-            }
-            System.Console.WriteLine();
         }
 
         public static void PrintAlreadyHaveASecretBase()
@@ -128,50 +90,6 @@ namespace WMD.Console.UI
         public static void PrintNoUnclaimedLandLeftToPurchase()
         {
             System.Console.WriteLine("There is no unclaimed land left to purchase.");
-        }
-
-        public static void PrintStartOfTurn(GameState gameState)
-        {
-            Player currentPlayer = gameState.CurrentPlayer;
-            string headerText = $"{currentPlayer.Name}'s turn (Day {gameState.CurrentRound})";
-            string statsString = $"Money: {currentPlayer.State.Money:C} | Henchmen: {currentPlayer.State.WorkforceState.NumberOfHenchmen:N0} | Land: {currentPlayer.State.Land:N0} km²";
-            string landAreaComparisonString = $"You control a land area comparable to {RealWorldComparisons.GetComparableRealWorldLocationByLandAreaInSquareKilometers(currentPlayer.State.Land)}.";
-            string secretBaseString = currentPlayer.State.SecretBase == null
-                ? "You do not have your own secret base yet."
-                : $"Your secret base is at Level {currentPlayer.State.SecretBase.Level:N0}.";
-            string summaryString = $"\n{gameState.Planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({gameState.Planet.PercentageOfLandStillUnclaimed:P2}).";
-
-            string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";
-            string bottomLine = "╚" + new string('═', headerText.Length + 2) + "╝";
-
-            System.Console.Clear();
-            System.Console.WriteLine();
-            System.Console.WriteLine(topLine);
-            System.Console.Write("║");
-            System.Console.BackgroundColor = ConvertPlayerColorToConsoleColor(gameState.CurrentPlayer.Color);
-            System.Console.Write($" {headerText} ");
-            System.Console.ResetColor();
-            System.Console.WriteLine("║");
-            System.Console.WriteLine(bottomLine);
-
-            System.Console.WriteLine();
-            System.Console.WriteLine(statsString);
-            System.Console.WriteLine(landAreaComparisonString);
-            System.Console.WriteLine(secretBaseString);
-            System.Console.WriteLine(summaryString);
-            System.Console.WriteLine();
-        }
-
-        private static ConsoleColor ConvertPlayerColorToConsoleColor(PlayerColor color)
-        {
-            return color switch
-            {
-                PlayerColor.Red => ConsoleColor.DarkRed,
-                PlayerColor.Green => ConsoleColor.DarkGreen,
-                PlayerColor.Blue => ConsoleColor.DarkBlue,
-                PlayerColor.Yellow => ConsoleColor.DarkYellow,
-                _ => throw new InvalidEnumArgumentException(nameof(color), (int)color, typeof(PlayerColor))
-            };
         }
 
         private static void PrintEndOfRoundItem(RoundUpdateResultItem item)
