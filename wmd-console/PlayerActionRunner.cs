@@ -9,6 +9,7 @@ namespace WMD.Console
     {
         public static ActionResult? RunSelectedAction(GameState gameState, PlayerActionKind selectedAction) => selectedAction switch
         {
+            PlayerActionKind.BuildSecretBase => RunBuildSecretBase(gameState),
             PlayerActionKind.HireHenchmen => RunHireHenchmen(gameState),
             PlayerActionKind.PurchaseUnclaimedLand => RunPurchaseUnclaimedLand(gameState),
             PlayerActionKind.Resign => RunResign(gameState),
@@ -16,8 +17,14 @@ namespace WMD.Console
             PlayerActionKind.Skip => RunSkipTurn(gameState),
             PlayerActionKind.StealMoney => RunStealMoney(gameState),
             PlayerActionKind.UpgradeSecretBase => RunUpgradeSecretBase(gameState),
-            _ => throw new InvalidEnumArgumentException($"Unrecognized player action selected.")
+            _ => throw new InvalidEnumArgumentException(nameof(selectedAction), (int)selectedAction, typeof(PlayerActionKind))
         };
+
+        private static BuildSecretBaseResult? RunBuildSecretBase(GameState gameState)
+        {
+            var input = ActionInputRetrieval.GetBuildSecretBaseInput(gameState);
+            return input != null ? PlayerActions.CurrentPlayerBuildsASecretBase(gameState, input) : null;
+        }
 
         private static HireHenchmenResult? RunHireHenchmen(GameState gameState)
         {

@@ -20,6 +20,40 @@ namespace WMD.Game.Actions
         private static readonly Random _random;
 
         /// <summary>
+        /// The action of the current player building a secret base.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>
+        /// <param name="input">The additional input data for the action.</param>
+        /// <returns>A new <see cref="BuildSecretBaseResult"/> instance describing the result of the action.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// The current player does not have enough money to build a secret base.
+        /// -or-
+        /// The current player already has a secret base.
+        /// </exception>
+        public static BuildSecretBaseResult CurrentPlayerBuildsASecretBase(GameState gameState, BuildSecretBaseInput input)
+        {
+            const decimal buildPrice = SecretBase.SecretBaseBuildPrice;
+
+            if (buildPrice > gameState.CurrentPlayer.State.Money)
+            {
+                throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
+            }
+
+            if (gameState.CurrentPlayer.State.SecretBase == null)
+            {
+                gameState.CurrentPlayer.State.SecretBase = new SecretBase();
+            }
+            else
+            {
+                throw new InvalidOperationException("The current player already has a secret base.");
+            }
+
+            gameState.CurrentPlayer.State.Money -= buildPrice;
+
+            return new BuildSecretBaseResult(gameState.CurrentPlayer, gameState, buildPrice);
+        }
+
+        /// <summary>
         /// The action of the current player hiring henchmen.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/> to act on and update.</param>

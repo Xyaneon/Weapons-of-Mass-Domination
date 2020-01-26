@@ -11,6 +11,30 @@ namespace WMD.Console.UI
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
+        public static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
+        {
+            SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
+            decimal buildPrice = SecretBase.SecretBaseBuildPrice;
+
+            if (secretBase != null)
+            {
+                PrintingUtility.PrintAlreadyHaveASecretBase();
+                return null;
+            }
+
+            if (buildPrice > gameState.CurrentPlayer.State.Money)
+            {
+                PrintingUtility.PrintInsufficientFundsForBuildingSecretBase(buildPrice);
+                return null;
+            }
+
+            string prompt = $"You can build your very own secret base for {buildPrice:C}. Proceed?";
+
+            return UserInput.GetConfirmation(prompt)
+                ? new BuildSecretBaseInput()
+                : null;
+        }
+
         public static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
         {
             var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
@@ -88,25 +112,22 @@ namespace WMD.Console.UI
         public static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
         {
             SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
+
+            if (secretBase == null)
+            {
+                PrintingUtility.PrintDoNotHaveASecretBase();
+                return null;
+            }
+
             decimal upgradePrice = SecretBase.CalculateUpgradePrice(secretBase);
 
             if (upgradePrice > gameState.CurrentPlayer.State.Money)
             {
-                if (secretBase != null)
-                {
-                    PrintingUtility.PrintInsufficientFundsForUpgradingSecretBase(upgradePrice);
-                }
-                else
-                {
-                    PrintingUtility.PrintInsufficientFundsForBuildingSecretBase(upgradePrice);
-                }
-
+                PrintingUtility.PrintInsufficientFundsForBuildingSecretBase(upgradePrice);
                 return null;
             }
 
-            string prompt = secretBase != null
-                ? $"You can upgrade your secret base to Level {secretBase.Level + 1:N0} for {upgradePrice:C}. Proceed?"
-                : $"You can build your very own secret base for {upgradePrice:C}. Proceed?";
+            string prompt = $"You can upgrade your secret base to Level {secretBase.Level + 1:N0} for {upgradePrice:C}. Proceed?";
 
             return UserInput.GetConfirmation(prompt)
                 ? new UpgradeSecretBaseInput()

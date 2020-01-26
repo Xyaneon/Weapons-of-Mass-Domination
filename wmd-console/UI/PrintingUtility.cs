@@ -19,6 +19,9 @@ namespace WMD.Console.UI
         {
             switch (actionResult)
             {
+                case BuildSecretBaseResult result:
+                    System.Console.WriteLine($"{result.Player.Name} built their own secret base for {result.BuildPrice:C}.");
+                    break;
                 case HireHenchmenResult result:
                     System.Console.WriteLine($"{result.Player.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
                     break;
@@ -38,19 +41,17 @@ namespace WMD.Console.UI
                     System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.State.Money:C}.");
                     break;
                 case UpgradeSecretBaseResult result:
-                    if (result.NewLevel == 1)
-                    {
-                        System.Console.WriteLine($"{result.Player.Name} built their own secret base for {result.UpgradePrice:C}.");
-                    }
-                    else
-                    {
-                        System.Console.WriteLine($"{result.Player.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
-                    }
+                    System.Console.WriteLine($"{result.Player.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
                     break;
                 default:
-                    throw new ArgumentException($"Unsupported ActionResult type: {actionResult.GetType().FullName}");
+                    throw new ArgumentException($"Unsupported {typeof(ActionResult).Name} type: {actionResult.GetType().FullName}");
             }
             System.Console.WriteLine();
+        }
+
+        public static void PrintAlreadyHaveASecretBase()
+        {
+            System.Console.WriteLine("You already have a secret base. Maybe you should try upgrading it instead?");
         }
 
         public static void PrintCurrentPlayerHasResignedAndCannotTakeTurn(string playerName)
@@ -63,6 +64,11 @@ namespace WMD.Console.UI
         {
             decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             System.Console.WriteLine($"There are {gameState.Planet.UnclaimedLandArea:N0} km² of unclaimed land left, priced at {pricePerSquareKilometer:C} each.");
+        }
+
+        public static void PrintDoNotHaveASecretBase()
+        {
+            System.Console.WriteLine("You don't have a secret base. Maybe you should try building one?");
         }
 
         public static void PrintEndOfTurn()

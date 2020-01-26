@@ -6,6 +6,10 @@
     public enum PlayerActionKind
     {
         /// <summary>
+        /// Indicates that the current player is building a secret base.
+        /// </summary>
+        BuildSecretBase,
+        /// <summary>
         /// Indicates that the current player is hiring henchmen.
         /// </summary>
         HireHenchmen,
