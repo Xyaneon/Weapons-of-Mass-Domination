@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game;
@@ -6,12 +7,38 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI
 {
-    static class ActionInputRetrieval
+    static class CommandInputRetrieval
     {
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
-        public static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
+        static CommandInputRetrieval()
+        {
+            _inputDict = new Dictionary<Type, Func<GameState, CommandInput?>>
+            {
+                { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
+                { typeof(HireHenchmenInput), GetHireHenchmenInput },
+                { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
+                { typeof(ResignInput), GetResignInput },
+                { typeof(SellLandInput), GetSellLandInput },
+                { typeof(SkipTurnInput), GetSkipTurnInput },
+                { typeof(StealMoneyInput), GetStealMoneyInput },
+                { typeof(UpgradeSecretBaseInput), GetUpgradeSecretBaseInput },
+            };
+        }
+
+        private static IReadOnlyDictionary<Type, Func<GameState, CommandInput?>> _inputDict;
+
+        public static CommandInput? GetCommandInput(GameState gameState, Type commandInputType)
+        {
+            if (!_inputDict.TryGetValue(commandInputType, out var commandFunction))
+            {
+                throw new ArgumentException("Command input type not recognized.", nameof(commandInputType));
+            }
+            return commandFunction.Invoke(gameState);
+        }
+
+        private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
         {
             SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
             decimal buildPrice = SecretBase.SecretBaseBuildPrice;
@@ -35,7 +62,7 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        public static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
+        private static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
         {
             var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
             int openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
@@ -44,7 +71,7 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        public static PurchaseUnclaimedLandInput? GetPurchaseUnclaimedLandInput(GameState gameState)
+        private static PurchaseUnclaimedLandInput? GetPurchaseUnclaimedLandInput(GameState gameState)
         {
             if (gameState.Planet.UnclaimedLandArea < 1)
             {
@@ -75,9 +102,9 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        public static ResignInput GetResignInput(GameState gameState) => new ResignInput();
+        private static ResignInput GetResignInput(GameState gameState) => new ResignInput();
 
-        public static SellLandInput? GetSellLandInput(GameState gameState)
+        private static SellLandInput? GetSellLandInput(GameState gameState)
         {
             if (gameState.CurrentPlayer.State.Land <= 0)
             {
@@ -101,15 +128,15 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        public static SkipTurnInput GetSkipTurnInput(GameState gameState) => new SkipTurnInput();
+        private static SkipTurnInput GetSkipTurnInput(GameState gameState) => new SkipTurnInput();
 
-        public static StealMoneyInput GetStealMoneyInput(GameState gameState)
+        private static StealMoneyInput GetStealMoneyInput(GameState gameState)
         {
             // TODO: Collect more input.
             return new StealMoneyInput();
         }
 
-        public static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
+        private static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
         {
             SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
 

@@ -92,6 +92,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine("There is no unclaimed land left to purchase.");
         }
 
+        public static void PrintTitle()
+        {
+            System.Console.WriteLine("Weapons of Mass Domination");
+        }
+
         private static void PrintEndOfRoundItem(RoundUpdateResultItem item)
         {
             switch (item)

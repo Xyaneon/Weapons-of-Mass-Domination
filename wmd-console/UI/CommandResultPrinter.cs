@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI
 {
-    static class ActionResultPrinter
+    static class CommandResultPrinter
     {
         public static void PrintActionResult(CommandResult actionResult)
         {
