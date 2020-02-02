@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player purchasing unclaimed land.
     /// </summary>
-    public class PurchaseUnclaimedLandCommand : IGameCommand<PurchaseUnclaimedLandInput, PurchaseUnclaimedLandResult>
+    public class PurchaseUnclaimedLandCommand : GameCommand<PurchaseUnclaimedLandInput, PurchaseUnclaimedLandResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, PurchaseUnclaimedLandInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, PurchaseUnclaimedLandInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return !(CurrentPlayerHasInsufficientFunds(gameState, input) || NotEnoughLandToSatisfyPurchaseAmount(gameState, input));
         }
 
-        public PurchaseUnclaimedLandResult Execute(GameState gameState, PurchaseUnclaimedLandInput input)
+        public override PurchaseUnclaimedLandResult Execute(GameState gameState, PurchaseUnclaimedLandInput input)
         {
             if (gameState == null)
             {

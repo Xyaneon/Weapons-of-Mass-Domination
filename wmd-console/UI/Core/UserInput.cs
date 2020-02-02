@@ -7,18 +7,18 @@ namespace WMD.Console.UI.Core
 {
     static class UserInput
     {
-        public static IGameCommand<CommandInput, CommandResult> GetCommand()
+        public static IGameCommand GetCommand()
         {
             Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
             actionMenu.Run();
             if (actionMenu.Result != null)
             {
-                var command = (IGameCommand<CommandInput, CommandResult>)actionMenu.Result;
+                var command = (IGameCommand)actionMenu.Result;
                 return command;
             }
             else
             {
-                throw new InvalidOperationException($"No {typeof(IGameCommand<CommandInput, CommandResult>).Name} result value found on action selection menu (this is a bug).");
+                throw new InvalidOperationException($"No {typeof(IGameCommand).Name} result value found on action selection menu (this is a bug).");
             }
         }
 

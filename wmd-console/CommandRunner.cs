@@ -7,9 +7,14 @@ namespace WMD.Console
 {
     static class CommandRunner
     {
-        public static CommandResult? RunSelectedAction(GameState gameState, IGameCommand<CommandInput, CommandResult> command)
+        public static CommandResult? RunSelectedAction(GameState gameState, IGameCommand command)
         {
-            Type inputType = command.GetType().GenericTypeArguments[0];
+            Type? baseCommandType = command.GetType().BaseType;
+            if (baseCommandType == null)
+            {
+                throw new ArgumentException($"The supplied command does not inherit from {typeof(GameCommand<,>).Name}.", nameof(command));
+            }
+            Type inputType = baseCommandType.GenericTypeArguments[0];
             CommandInput? retrievedInput = CommandInputRetrieval.GetCommandInput(gameState, inputType);
 
             if (retrievedInput == null)
@@ -17,7 +22,7 @@ namespace WMD.Console
                 return null;
             }
 
-            return command.Execute(gameState, retrievedInput);
+            return (CommandResult)command.Execute(gameState, retrievedInput);
         }
     }
 }

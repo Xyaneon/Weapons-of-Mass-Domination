@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player resigning.
     /// </summary>
-    public class ResignCommand : IGameCommand<ResignInput, ResignResult>
+    public class ResignCommand : GameCommand<ResignInput, ResignResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, ResignInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, ResignInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public ResignResult Execute(GameState gameState, ResignInput input)
+        public override ResignResult Execute(GameState gameState, ResignInput input)
         {
             if (gameState == null)
             {

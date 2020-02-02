@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player hiring henchmen.
     /// </summary>
-    public class HireHenchmenCommand : IGameCommand<HireHenchmenInput, HireHenchmenResult>
+    public class HireHenchmenCommand : GameCommand<HireHenchmenInput, HireHenchmenResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, HireHenchmenInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, HireHenchmenInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public HireHenchmenResult Execute(GameState gameState, HireHenchmenInput input)
+        public override HireHenchmenResult Execute(GameState gameState, HireHenchmenInput input)
         {
             if (gameState == null)
             {

@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player upgrading their secret base.
     /// </summary>
-    public class UpgradeSecretBaseCommand : IGameCommand<UpgradeSecretBaseInput, UpgradeSecretBaseResult>
+    public class UpgradeSecretBaseCommand : GameCommand<UpgradeSecretBaseInput, UpgradeSecretBaseResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return !CurrentPlayerDoesNotHaveASecretBase(gameState);
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, UpgradeSecretBaseInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, UpgradeSecretBaseInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return !(CurrentPlayerDoesNotHaveASecretBase(gameState) || CurrentPlayerDoesNotHaveEnoughMoney(gameState));
         }
 
-        public UpgradeSecretBaseResult Execute(GameState gameState, UpgradeSecretBaseInput input)
+        public override UpgradeSecretBaseResult Execute(GameState gameState, UpgradeSecretBaseInput input)
         {
             if (gameState == null)
             {

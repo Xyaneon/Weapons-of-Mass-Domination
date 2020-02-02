@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player building a secret base.
     /// </summary>
-    public class BuildSecretBaseCommand : IGameCommand<BuildSecretBaseInput, BuildSecretBaseResult>
+    public class BuildSecretBaseCommand : GameCommand<BuildSecretBaseInput, BuildSecretBaseResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return !(CurrentPlayerDoesNotHaveEnoughMoney(gameState) || CurrentPlayerAlreadyHasASecretBase(gameState));
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, BuildSecretBaseInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, BuildSecretBaseInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return CanExecuteForState(gameState);
         }
 
-        public BuildSecretBaseResult Execute(GameState gameState, BuildSecretBaseInput input)
+        public override BuildSecretBaseResult Execute(GameState gameState, BuildSecretBaseInput input)
         {
             if (gameState == null)
             {

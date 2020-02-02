@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player skipping their turn.
     /// </summary>
-    public class SkipTurnCommand : IGameCommand<SkipTurnInput, SkipTurnResult>
+    public class SkipTurnCommand : GameCommand<SkipTurnInput, SkipTurnResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, SkipTurnInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, SkipTurnInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return true;
         }
 
-        public SkipTurnResult Execute(GameState gameState, SkipTurnInput input)
+        public override SkipTurnResult Execute(GameState gameState, SkipTurnInput input)
         {
             if (gameState == null)
             {

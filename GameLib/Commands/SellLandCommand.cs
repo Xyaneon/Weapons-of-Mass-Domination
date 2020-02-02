@@ -5,9 +5,9 @@ namespace WMD.Game.Commands
     /// <summary>
     /// The command for the current player selling land they control.
     /// </summary>
-    public class SellLandCommand : IGameCommand<SellLandInput, SellLandResult>
+    public class SellLandCommand : GameCommand<SellLandInput, SellLandResult>
     {
-        public bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
             {
@@ -17,7 +17,7 @@ namespace WMD.Game.Commands
             return !CurrentPlayerHasNoLandToSell(gameState);
         }
 
-        public bool CanExecuteForStateAndInput(GameState gameState, SellLandInput input)
+        public override bool CanExecuteForStateAndInput(GameState gameState, SellLandInput input)
         {
             if (gameState == null)
             {
@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             return !(CurrentPlayerHasNoLandToSell(gameState) || CurrentPlayerDoesNotHaveEnoughLandToSellForInput(gameState, input));
         }
 
-        public SellLandResult Execute(GameState gameState, SellLandInput input)
+        public override SellLandResult Execute(GameState gameState, SellLandInput input)
         {
             if (gameState == null)
             {
