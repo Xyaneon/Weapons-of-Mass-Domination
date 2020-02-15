@@ -5,7 +5,7 @@ namespace WMD.Console.UI
 {
     static class CommandResultPrinter
     {
-        public static void PrintActionResult(CommandResult actionResult)
+        public static void PrintCommandResult(CommandResult actionResult)
         {
             switch (actionResult)
             {

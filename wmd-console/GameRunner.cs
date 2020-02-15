@@ -57,13 +57,13 @@ namespace WMD.Console
             }
             else
             {
-                CommandResult? actionResult = null;
-                while (actionResult == null)
+                CommandResult? commandResult = null;
+                while (commandResult == null)
                 {
                     var command = UserInput.GetCommand();
-                    actionResult = CommandRunner.RunSelectedAction(CurrentGameState, command);
+                    commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
                 }
-                CommandResultPrinter.PrintActionResult(actionResult);
+                CommandResultPrinter.PrintCommandResult(commandResult);
                 PrintingUtility.PrintEndOfTurn();
                 UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
             }

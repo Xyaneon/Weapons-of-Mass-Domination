@@ -7,7 +7,7 @@ namespace WMD.Console
 {
     static class CommandRunner
     {
-        public static CommandResult? RunSelectedAction(GameState gameState, IGameCommand command)
+        public static CommandResult? RunSelectedCommand(GameState gameState, IGameCommand command)
         {
             Type? baseCommandType = command.GetType().BaseType;
             if (baseCommandType == null)

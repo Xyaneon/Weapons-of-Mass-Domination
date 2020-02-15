@@ -66,6 +66,11 @@ namespace WMD.Console.UI
         {
             var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
             int openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
+            if (openPositionsToOffer <= 0)
+            {
+                PrintingUtility.PrintNoPositionsToOffer();
+                return null;
+            }
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
                 ? new HireHenchmenInput(openPositionsToOffer)
                 : null;

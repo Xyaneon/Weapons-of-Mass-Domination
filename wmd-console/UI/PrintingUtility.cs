@@ -87,6 +87,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine("You don't have any land to sell.");
         }
 
+        public static void PrintNoPositionsToOffer()
+        {
+            System.Console.WriteLine("You apparently changed your mind.");
+        }
+
         public static void PrintNoUnclaimedLandLeftToPurchase()
         {
             System.Console.WriteLine("There is no unclaimed land left to purchase.");
