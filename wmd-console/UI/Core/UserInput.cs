@@ -1,9 +1,27 @@
-﻿using WMD.Console.Miscellaneous;
+﻿using System;
+using WMD.Console.Miscellaneous;
+using WMD.Console.UI.Menus;
+using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Core
 {
     static class UserInput
     {
+        public static IGameCommand GetCommand()
+        {
+            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
+            actionMenu.Run();
+            if (actionMenu.Result != null)
+            {
+                var command = (IGameCommand)actionMenu.Result;
+                return command;
+            }
+            else
+            {
+                throw new InvalidOperationException($"No {typeof(IGameCommand).Name} result value found on action selection menu (this is a bug).");
+            }
+        }
+
         public static bool GetConfirmation(string requestText)
         {
             while (true)

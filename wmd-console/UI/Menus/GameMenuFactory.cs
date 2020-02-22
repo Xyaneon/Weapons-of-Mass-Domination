@@ -1,5 +1,5 @@
 ﻿using WMD.Console.UI.Core;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Menus
 {
@@ -22,8 +22,8 @@ namespace WMD.Console.UI.Menus
 
             var landActionItems = new MenuItem[]
             {
-                new MenuItem("Purchase unclaimed land", () => menu.SetResultAndClose(PlayerActionKind.PurchaseUnclaimedLand)),
-                new MenuItem("Sell land", () => menu.SetResultAndClose(PlayerActionKind.SellLand)),
+                new MenuItem("Purchase unclaimed land", () => menu.SetResultAndClose(new PurchaseUnclaimedLandCommand())),
+                new MenuItem("Sell land", () => menu.SetResultAndClose(new SellLandCommand())),
                 new MenuItem("Back", () => menu.NavigateBack())
             };
 
@@ -31,8 +31,8 @@ namespace WMD.Console.UI.Menus
 
             var secretBaseActionItems = new MenuItem[]
             {
-                new MenuItem("Build a secret base", () => menu.SetResultAndClose(PlayerActionKind.BuildSecretBase)),
-                new MenuItem("Upgrade your secret base", () => menu.SetResultAndClose(PlayerActionKind.UpgradeSecretBase)),
+                new MenuItem("Build a secret base", () => menu.SetResultAndClose(new BuildSecretBaseCommand())),
+                new MenuItem("Upgrade your secret base", () => menu.SetResultAndClose(new UpgradeSecretBaseCommand())),
                 new MenuItem("Back", () => menu.NavigateBack())
             };
 
@@ -40,12 +40,12 @@ namespace WMD.Console.UI.Menus
 
             var mainActionItems = new MenuItem[]
             {
-                new MenuItem("Steal money", () => menu.SetResultAndClose(PlayerActionKind.StealMoney)),
+                new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand())),
                 new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
-                new MenuItem("Hire henchmen", () => menu.SetResultAndClose(PlayerActionKind.HireHenchmen)),
+                new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
-                new MenuItem("Skip turn", () => menu.SetResultAndClose(PlayerActionKind.Skip)),
-                new MenuItem("Resign", () => menu.SetResultAndClose(PlayerActionKind.Resign))
+                new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),
+                new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()))
             };
 
             menu.AddPage("Actions", mainActionItems).AddPage(landActionsPage).AddPage(secretBasePage);

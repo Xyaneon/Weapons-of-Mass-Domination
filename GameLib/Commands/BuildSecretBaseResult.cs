@@ -1,11 +1,11 @@
 ﻿using WMD.Game.Players;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of a player building their secret base.
     /// </summary>
-    public class BuildSecretBaseResult : ActionResult
+    public class BuildSecretBaseResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSecretBaseResult"/> class.

@@ -1,11 +1,11 @@
 ﻿using WMD.Game.Players;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of a player hiring henchmen.
     /// </summary>
-    public class HireHenchmenResult : ActionResult
+    public class HireHenchmenResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HireHenchmenResult"/> class.

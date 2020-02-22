@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Additional input data for selling land.
     /// </summary>
-    public class SellLandInput : ActionInput
+    public class SellLandInput : CommandInput
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SellLandInput"/> class.

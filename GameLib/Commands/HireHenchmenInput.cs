@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Additional input data for the hire henchmen action.
     /// </summary>
-    public class HireHenchmenInput : ActionInput
+    public class HireHenchmenInput : CommandInput
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HireHenchmenInput"/> class.

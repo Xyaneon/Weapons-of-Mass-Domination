@@ -1,11 +1,11 @@
 ﻿using WMD.Game.Players;
 
-namespace WMD.Game.Actions
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of a player selling land they controlled.
     /// </summary>
-    public class SellLandResult : ActionResult
+    public class SellLandResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SellLandResult"/> class.

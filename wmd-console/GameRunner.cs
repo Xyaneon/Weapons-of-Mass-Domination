@@ -1,9 +1,7 @@
-﻿using System;
-using WMD.Console.UI;
+﻿using WMD.Console.UI;
 using WMD.Console.UI.Core;
-using WMD.Console.UI.Menus;
 using WMD.Game;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 using WMD.Game.Rounds;
 
 namespace WMD.Console
@@ -49,20 +47,6 @@ namespace WMD.Console
             PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
         }
 
-        private PlayerActionKind GetPlayerActionKind()
-        {
-            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
-            actionMenu.Run();
-            if (actionMenu.Result != null)
-            {
-                return (PlayerActionKind)actionMenu.Result;
-            }
-            else
-            {
-                throw new InvalidOperationException($"No {typeof(PlayerActionKind).Name} result value found on action selection menu (this is a bug).");
-            }
-        }
-
         private void RunTurn()
         {
             StartOfTurnPrinter.PrintStartOfTurn(CurrentGameState);
@@ -73,13 +57,13 @@ namespace WMD.Console
             }
             else
             {
-                ActionResult? actionResult = null;
-                while (actionResult == null)
+                CommandResult? commandResult = null;
+                while (commandResult == null)
                 {
-                    var selectedAction = GetPlayerActionKind();
-                    actionResult = PlayerActionRunner.RunSelectedAction(CurrentGameState, selectedAction);
+                    var command = UserInput.GetCommand();
+                    commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
                 }
-                ActionResultPrinter.PrintActionResult(actionResult);
+                CommandResultPrinter.PrintCommandResult(commandResult);
                 PrintingUtility.PrintEndOfTurn();
                 UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
             }

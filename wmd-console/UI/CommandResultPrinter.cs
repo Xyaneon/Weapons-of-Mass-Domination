@@ -1,11 +1,11 @@
 ﻿using System;
-using WMD.Game.Actions;
+using WMD.Game.Commands;
 
 namespace WMD.Console.UI
 {
-    static class ActionResultPrinter
+    static class CommandResultPrinter
     {
-        public static void PrintActionResult(ActionResult actionResult)
+        public static void PrintCommandResult(CommandResult actionResult)
         {
             switch (actionResult)
             {
@@ -34,7 +34,7 @@ namespace WMD.Console.UI
                     PrintUpgradeSecretBaseResult(result);
                     break;
                 default:
-                    throw new ArgumentException($"Unsupported {typeof(ActionResult).Name} type: {actionResult.GetType().FullName}");
+                    throw new ArgumentException($"Unsupported {typeof(CommandResult).Name} type: {actionResult.GetType().FullName}");
             }
 
             System.Console.WriteLine();

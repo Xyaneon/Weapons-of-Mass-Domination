@@ -1,4 +1,4 @@
-﻿using System;
+﻿using WMD.Console.UI;
 using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
 
@@ -8,15 +8,10 @@ namespace WMD.Console
     {
         static void Main(string[] args)
         {
-            ShowTitle();
+            PrintingUtility.PrintTitle();
 
             Menu mainMenu = GameMenuFactory.CreateMainMenu();
             mainMenu.Run();
-        }
-
-        private static void ShowTitle()
-        {
-            System.Console.WriteLine("Weapons of Mass Domination");
         }
     }
 }
