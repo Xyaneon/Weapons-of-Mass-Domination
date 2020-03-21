@@ -138,7 +138,12 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        private static SkipTurnInput GetSkipTurnInput(GameState gameState) => new SkipTurnInput();
+        private static SkipTurnInput? GetSkipTurnInput(GameState gameState)
+        {
+            return UserInput.GetConfirmation("Are you really sure you want to skip your turn?")
+                ? new SkipTurnInput()
+                : null;
+        }
 
         private static StealMoneyInput GetStealMoneyInput(GameState gameState)
         {
