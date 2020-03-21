@@ -107,7 +107,12 @@ namespace WMD.Console.UI
                 : null;
         }
 
-        private static ResignInput GetResignInput(GameState gameState) => new ResignInput();
+        private static ResignInput? GetResignInput(GameState gameState)
+        {
+            return UserInput.GetConfirmation("Are you really sure you want to resign?")
+                ? new ResignInput()
+                : null;
+        }
 
         private static SellLandInput? GetSellLandInput(GameState gameState)
         {
