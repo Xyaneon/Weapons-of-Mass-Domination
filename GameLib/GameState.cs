@@ -10,6 +10,7 @@ namespace WMD.Game
     /// </summary>
     public class GameState
     {
+        private const int IndexNotFound = -1;
         private const decimal LandBasePrice = 200;
         private const decimal MaxLandPriceIncreaseFromScarcity = 1000000;
 
@@ -71,29 +72,13 @@ namespace WMD.Game
         /// <returns><see langword="true"/> if the game has been won; otherwise, <see langword="false"/>.</returns>
         public bool GameHasBeenWon(out int winningPlayerIndex)
         {
-            winningPlayerIndex = -1;
-
-            if (GameHasOnePlayerLeft(out int remainingPlayerIndex))
-            {
-                winningPlayerIndex = remainingPlayerIndex;
-                return true;
-            }
-
-            for (int i = 0; i < Players.Count; i++)
-            {
-                if (Players[i].State.Land == Planet.TotalLandArea)
-                {
-                    winningPlayerIndex = i;
-                    return true;
-                }
-            }
-
-            return false;
+            winningPlayerIndex = FindIndexOfWinningPlayer();
+            return winningPlayerIndex != IndexNotFound;
         }
 
-        private bool GameHasOnePlayerLeft(out int remainingPlayerIndex)
+        private int FindIndexOfLastRemainingPlayer()
         {
-            remainingPlayerIndex = -1;
+            int remainingPlayerIndex = -1;
 
             for (int i = 0; i < Players.Count; i++)
             {
@@ -101,15 +86,38 @@ namespace WMD.Game
                 {
                     if (remainingPlayerIndex >= 0)
                     {
-                        remainingPlayerIndex = -1;
-                        return false;
+                        return IndexNotFound;
                     }
 
                     remainingPlayerIndex = i;
                 }
             }
 
-            return true;
+            return remainingPlayerIndex;
+        }
+
+        private int FindIndexOfWinningPlayer()
+        {
+            if (GameHasOnePlayerLeft(out int remainingPlayerIndex))
+            {
+                return remainingPlayerIndex;
+            }
+
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].State.Land == Planet.TotalLandArea)
+                {
+                    return i;
+                }
+            }
+
+            return IndexNotFound;
+        }
+
+        private bool GameHasOnePlayerLeft(out int remainingPlayerIndex)
+        {
+            remainingPlayerIndex = FindIndexOfLastRemainingPlayer();
+            return remainingPlayerIndex != IndexNotFound;
         }
     }
 }
