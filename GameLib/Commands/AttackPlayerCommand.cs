@@ -29,8 +29,7 @@ namespace WMD.Game.Commands
                 throw new ArgumentNullException(nameof(input));
             }
 
-            // TODO
-            throw new NotImplementedException();
+            return !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
         }
 
         public override AttackPlayerResult Execute(GameState gameState, AttackPlayerInput input)
@@ -45,8 +44,28 @@ namespace WMD.Game.Commands
                 throw new ArgumentNullException(nameof(input));
             }
 
+            if (CurrentPlayerIsAttackingThemselves(gameState, input))
+            {
+                throw new InvalidOperationException("A player cannot attack themselves.");
+            }
+
+            if (!TargetPlayerFound(gameState, input))
+            {
+                throw new InvalidOperationException("The target player index is outside the player list bounds.");
+            }
+
             // TODO
             throw new NotImplementedException();
+        }
+
+        private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input)
+        {
+            return gameState.CurrentPlayerIndex == input.TargetPlayerIndex;
+        }
+
+        private static bool TargetPlayerFound(GameState gameState, AttackPlayerInput input)
+        {
+            return input.TargetPlayerIndex < gameState.Players.Count;
         }
     }
 }
