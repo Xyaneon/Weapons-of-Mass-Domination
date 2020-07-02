@@ -7,6 +7,20 @@ namespace WMD.Game.Commands
     /// </summary>
     public class AttackPlayerCommand : GameCommand<AttackPlayerInput, AttackPlayerResult>
     {
+        private const string InvalidOperationException_playerAttackingThemselves = "A player cannot attack themselves.";
+        private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
+        private const double BasePercentageOfHenchmenAttackerLost = 0.1;
+        private const double MaxAdditionalPercentageOfHenchmenAttackerLost = 0.4;
+        private const double BasePercentageOfHenchmenDefenderLost = 0.2;
+        private const double MaxAdditionalPercentageOfHenchmenDefenderLost = 0.7;
+
+        static AttackPlayerCommand()
+        {
+            _random = new Random();
+        }
+
+        private static readonly Random _random;
+
         public override bool CanExecuteForState(GameState gameState)
         {
             if (gameState == null)
@@ -46,16 +60,43 @@ namespace WMD.Game.Commands
 
             if (CurrentPlayerIsAttackingThemselves(gameState, input))
             {
-                throw new InvalidOperationException("A player cannot attack themselves.");
+                throw new InvalidOperationException(InvalidOperationException_playerAttackingThemselves);
             }
 
             if (!TargetPlayerFound(gameState, input))
             {
-                throw new InvalidOperationException("The target player index is outside the player list bounds.");
+                throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            // TODO
-            throw new NotImplementedException();
+            double percentageOfAttackerHenchmenLost = CalculatePercentageOfHenchmenAttackerLost();
+            double percentageOfDefenderHenchmenLost = CalculatePercentageOfHenchmenDefenderLost();
+            int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, percentageOfAttackerHenchmenLost);
+            int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfDefenderHenchmenLost);
+
+            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen -= henchmenAttackerLost;
+            gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen -= henchmenDefenderLost;
+
+            return new AttackPlayerResult(gameState.CurrentPlayer, gameState, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
+        }
+
+        private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input, double percentageOfDefenderHenchmenLost)
+        {
+            return (int)Math.Round(gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen * percentageOfDefenderHenchmenLost);
+        }
+
+        private static int CalculateNumberOfHenchmenAttackerLost(GameState gameState, double percentageOfAttackerHenchmenLost)
+        {
+            return (int)Math.Round(gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * percentageOfAttackerHenchmenLost);
+        }
+
+        private static double CalculatePercentageOfHenchmenDefenderLost()
+        {
+            return BasePercentageOfHenchmenDefenderLost + _random.NextDouble() * MaxAdditionalPercentageOfHenchmenDefenderLost;
+        }
+
+        private static double CalculatePercentageOfHenchmenAttackerLost()
+        {
+            return BasePercentageOfHenchmenAttackerLost + _random.NextDouble() * MaxAdditionalPercentageOfHenchmenAttackerLost;
         }
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input)
