@@ -1,10 +1,33 @@
-﻿using WMD.Console.UI.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WMD.Console.UI.Core;
+using WMD.Game;
 using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Menus
 {
     static class GameMenuFactory
     {
+        public static Menu CreateAttackTargetPlayerMenu(GameState gameState)
+        {
+            var menu = new Menu();
+            Queue<MenuItem> menuItems = new Queue<MenuItem>();
+
+            Enumerable.Range(0, gameState.Players.Count).ToList().ForEach(index =>
+            {
+                if (index != gameState.CurrentPlayerIndex)
+                {
+                    var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Name, () => menu.SetResultAndClose(index));
+                    menuItems.Enqueue(playerChoiceMenuItem);
+                }
+            });
+
+            menu.AddPage("Choose a Target Player", menuItems.ToArray());
+
+            return menu;
+        }
+
         public static Menu CreateMainMenu()
         {
             var mainMenuItems = new MenuItem[]
@@ -16,7 +39,7 @@ namespace WMD.Console.UI.Menus
             return new Menu().AddPage("Main menu", mainMenuItems);
         }
 
-        public static Menu CreatePlayerActionMenu()
+        public static Menu CreatePlayerActionMenu(GameState gameState)
         {
             var menu = new Menu();
 
@@ -42,6 +65,7 @@ namespace WMD.Console.UI.Menus
             {
                 new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand())),
                 new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
+                new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand())),
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),

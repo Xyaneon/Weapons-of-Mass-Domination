@@ -47,6 +47,7 @@ namespace WMD.Game.Commands
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
             TargetPlayerIndex = targetPlayerIndex;
+            TargetPlayerName = gameState.Players[targetPlayerIndex].Name;
         }
 
         /// <summary>
@@ -63,5 +64,10 @@ namespace WMD.Game.Commands
         /// Gets the index of the player who was attacked.
         /// </summary>
         public int TargetPlayerIndex { get; }
+
+        /// <summary>
+        /// Gets the name of the player who was attacked.
+        /// </summary>
+        public string TargetPlayerName { get; }
     }
 }
