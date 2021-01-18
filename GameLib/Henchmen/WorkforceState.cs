@@ -5,7 +5,7 @@ namespace WMD.Game.Henchmen
     /// <summary>
     /// Represents the current state of a player's workforce.
     /// </summary>
-    public class WorkforceState
+    public record WorkforceState
     {
         /// <summary>
         /// The minimum daily wage. If a player chooses to pay less than this
@@ -25,12 +25,27 @@ namespace WMD.Game.Henchmen
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="WorkforceState"/> class.
+        /// </summary>
+        /// <param name="dailyPayRate">
+        /// The daily pay rate of each henchman.
+        /// </param>
+        /// <param name="numberOfHenchmen">
+        /// The number of henchmen in this workforce.
+        /// </param>
+        public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, int numberOfHenchmen = 0)
+        {
+            DailyPayRate = dailyPayRate;
+            NumberOfHenchmen = numberOfHenchmen;
+        }
+
+        /// <summary>
         /// Gets the daily pay rate of each henchman.
         /// </summary>
         public decimal DailyPayRate
         {
             get => _dailyPayRate;
-            internal set
+            init
             {
                 if (value < 0)
                 {
@@ -47,7 +62,7 @@ namespace WMD.Game.Henchmen
         public int NumberOfHenchmen
         {
             get => _numberOfHenchmen;
-            internal set
+            init
             {
                 if (value < 0)
                 {

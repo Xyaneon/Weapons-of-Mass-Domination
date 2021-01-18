@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -7,45 +8,27 @@ namespace WMD.Game.Commands
     /// </summary>
     public class HireHenchmenCommand : GameCommand<HireHenchmenInput, HireHenchmenResult>
     {
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, HireHenchmenInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] HireHenchmenInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return true;
         }
 
-        public override HireHenchmenResult Execute(GameState gameState, HireHenchmenInput input)
+        public override HireHenchmenResult Execute([DisallowNull] GameState gameState, [DisallowNull] HireHenchmenInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             int henchmenHired = input.OpenPositionsOffered;
-            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen += henchmenHired;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with
+            {
+                WorkforceState = playerState.WorkforceState with
+                {
+                    NumberOfHenchmen = playerState.WorkforceState.NumberOfHenchmen + henchmenHired
+                }
+            };
             return new HireHenchmenResult(gameState.CurrentPlayer, gameState, henchmenHired);
         }
     }

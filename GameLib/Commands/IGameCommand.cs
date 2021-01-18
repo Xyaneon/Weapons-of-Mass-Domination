@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Commands
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Non-generic interface for game commands.
@@ -19,7 +21,7 @@
         /// given <paramref name="gameState"/>; otherwise,
         /// <see langword="false"/>.
         /// </returns>
-        bool CanExecuteForState(GameState gameState);
+        bool CanExecuteForState([DisallowNull] GameState gameState);
 
         /// <summary>
         /// Determines whether this command can be executed for the given
@@ -37,7 +39,7 @@
         /// given <paramref name="gameState"/> and <paramref name="input"/>;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        bool CanExecuteForStateAndInput(GameState gameState, object input);
+        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, object input);
 
         /// <summary>
         /// Executes this command using the given <see cref="GameState"/> and
@@ -53,7 +55,7 @@
         /// <returns>
         /// A new object describing the results of running the command.
         /// </returns>
-        object Execute(GameState gameState, object input);
+        object Execute([DisallowNull] GameState gameState, object input);
     }
 
     /// <summary>
@@ -82,7 +84,7 @@
         /// given <paramref name="gameState"/> and <paramref name="input"/>;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        bool CanExecuteForStateAndInput(GameState gameState, TInput input);
+        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, TInput input);
 
         /// <summary>
         /// Executes this command using the given <see cref="GameState"/> and
@@ -98,6 +100,6 @@
         /// <returns>
         /// A new object describing the results of running the command.
         /// </returns>
-        TOutput Execute(GameState gameState, TInput input);
+        TOutput Execute([DisallowNull] GameState gameState, TInput input);
     }
 }

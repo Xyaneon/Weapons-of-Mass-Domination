@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using WMD.Game.Planets;
 using WMD.Game.Players;
 
@@ -8,7 +9,7 @@ namespace WMD.Game
     /// <summary>
     /// Represents the current state of the game.
     /// </summary>
-    public class GameState
+    public record GameState
     {
         private const int IndexNotFound = -1;
         private const decimal LandBasePrice = 200;
@@ -19,7 +20,7 @@ namespace WMD.Game
         /// </summary>
         /// <param name="players">The list of players to include in this game.</param>
         /// <param name="planet">The planet where this game is taking place.</param>
-        public GameState(IList<Player> players, Planet planet)
+        public GameState([DisallowNull] IList<Player> players, [DisallowNull] Planet planet)
         {
             Players = new List<Player>(players).AsReadOnly();
             Planet = planet;
@@ -30,12 +31,12 @@ namespace WMD.Game
         /// <summary>
         /// Gets the list of players in this game.
         /// </summary>
-        public IReadOnlyList<Player> Players;
+        public IReadOnlyList<Player> Players { get; init; }
 
         /// <summary>
         /// Gets the current game round.
         /// </summary>
-        public int CurrentRound { get; internal set; }
+        public int CurrentRound { get; init; }
 
         /// <summary>
         /// Gets the current <see cref="Player"/> whose turn it is.
@@ -45,12 +46,12 @@ namespace WMD.Game
         /// <summary>
         /// Gets the index of the current <see cref="Player"/> whose turn it is.
         /// </summary>
-        public int CurrentPlayerIndex { get; internal set; }
+        public int CurrentPlayerIndex { get; init; }
 
         /// <summary>
         /// Gets the <see cref="Planet"/> where this game is taking place.
         /// </summary>
-        public Planet Planet { get; }
+        public Planet Planet { get; init; }
 
         /// <summary>
         /// Gets the current price per square kilometer of unclaimed land.

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WMD.Game.Rounds
 {
@@ -13,16 +13,8 @@ namespace WMD.Game.Rounds
         /// </summary>
         /// <param name="roundWhichEnded">The number of the round which ended.</param>
         /// <param name="items">The list of items which occurred between rounds.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="items"/> is <see langword="null"/>.
-        /// </exception>
-        public RoundUpdateResult(int roundWhichEnded, IEnumerable<RoundUpdateResultItem> items)
+        public RoundUpdateResult(int roundWhichEnded, [DisallowNull] IEnumerable<RoundUpdateResultItem> items)
         {
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items), "The collection of round update items cannot be null.");
-            }
-
             RoundWhichEnded = roundWhichEnded;
             Items = new List<RoundUpdateResultItem>(items).AsReadOnly();
         }

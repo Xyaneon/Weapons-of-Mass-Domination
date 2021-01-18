@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using WMD.Game.Henchmen;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -21,43 +24,18 @@ namespace WMD.Game.Commands
 
         private static readonly Random _random;
 
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, AttackPlayerInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
         }
 
-        public override AttackPlayerResult Execute(GameState gameState, AttackPlayerInput input)
+        public override AttackPlayerResult Execute([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             if (CurrentPlayerIsAttackingThemselves(gameState, input))
             {
                 throw new InvalidOperationException(InvalidOperationException_playerAttackingThemselves);
@@ -73,8 +51,27 @@ namespace WMD.Game.Commands
             int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, percentageOfAttackerHenchmenLost);
             int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfDefenderHenchmenLost);
 
-            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen -= henchmenAttackerLost;
-            gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen -= henchmenDefenderLost;
+            PlayerState attackerPlayerState = gameState.CurrentPlayer.State;
+            WorkforceState attackerWorkforceState = attackerPlayerState.WorkforceState;
+
+            PlayerState defenderPlayerState = gameState.Players[input.TargetPlayerIndex].State;
+            WorkforceState defenderWorkforceState = defenderPlayerState.WorkforceState;
+
+            gameState.CurrentPlayer.State = attackerPlayerState with
+            {
+                WorkforceState = attackerWorkforceState with
+                {
+                    NumberOfHenchmen = attackerWorkforceState.NumberOfHenchmen - henchmenAttackerLost
+                }
+            };
+
+            gameState.Players[input.TargetPlayerIndex].State = defenderPlayerState with
+            {
+                WorkforceState = defenderWorkforceState with
+                {
+                    NumberOfHenchmen = defenderWorkforceState.NumberOfHenchmen - henchmenDefenderLost
+                }
+            };
 
             return new AttackPlayerResult(gameState.CurrentPlayer, gameState, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -7,43 +9,18 @@ namespace WMD.Game.Commands
     /// </summary>
     public class PurchaseUnclaimedLandCommand : GameCommand<PurchaseUnclaimedLandInput, PurchaseUnclaimedLandResult>
     {
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, PurchaseUnclaimedLandInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] PurchaseUnclaimedLandInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return !(CurrentPlayerHasInsufficientFunds(gameState, input) || NotEnoughLandToSatisfyPurchaseAmount(gameState, input));
         }
 
-        public override PurchaseUnclaimedLandResult Execute(GameState gameState, PurchaseUnclaimedLandInput input)
+        public override PurchaseUnclaimedLandResult Execute([DisallowNull] GameState gameState, [DisallowNull] PurchaseUnclaimedLandInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             decimal totalPurchasePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToPurchase;
             if (CurrentPlayerHasInsufficientFunds(gameState, input))
             {
@@ -55,8 +32,9 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException("There is not enough unclaimed land left to satisfy the current player's requested amount to purchase.");
             }
 
-            GameStateUpdater.GiveUnclaimedLandToPlayer(gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
-            gameState.CurrentPlayer.State.Money -= totalPurchasePrice;
+            GameStateUpdater.GiveUnclaimedLandToPlayer(ref gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - totalPurchasePrice };
 
             return new PurchaseUnclaimedLandResult(gameState.CurrentPlayer, gameState, input.AreaToPurchase, totalPurchasePrice);
         }

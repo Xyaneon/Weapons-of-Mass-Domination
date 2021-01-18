@@ -49,7 +49,7 @@ namespace WMD.Console.UI
 
         private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
         {
-            SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
+            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
             decimal buildPrice = SecretBase.SecretBaseBuildPrice;
 
             if (secretBase != null)
@@ -162,7 +162,7 @@ namespace WMD.Console.UI
 
         private static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
         {
-            SecretBase secretBase = gameState.CurrentPlayer.State.SecretBase;
+            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
 
             if (secretBase == null)
             {

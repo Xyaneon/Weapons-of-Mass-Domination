@@ -49,12 +49,13 @@ namespace WMD.Console
 
         private static Player SetUpHumanPlayer(ICollection<string> takenNames)
         {
-            string name;
+            string? name;
 
             while(true)
             {
                 name = UserInput.GetString("Please enter your name");
-                if (!takenNames.Contains(name))
+
+                if (name != null && !takenNames.Contains(name))
                 {
                     break;
                 }

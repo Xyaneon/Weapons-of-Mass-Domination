@@ -1,5 +1,4 @@
-﻿using System;
-using WMD.Game.Players;
+﻿using WMD.Game.Players;
 
 namespace WMD.Game.Rounds
 {
@@ -12,16 +11,8 @@ namespace WMD.Game.Rounds
         /// Initializes a new instance of the <see cref="PlayerHenchmenPaid"/> class.
         /// </summary>
         /// <param name="player">The <see cref="Player"/> who paid their henchmen.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="player"/> is <see langword="null"/>.
-        /// </exception>
         public PlayerHenchmenPaid(Player player)
         {
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player), "The player who paid their henchmen cannot be null.");
-            }
-
             DailyPayRate = player.State.WorkforceState.DailyPayRate;
             NumberOfHenchmenPaid = player.State.WorkforceState.NumberOfHenchmen;
             Player = player;

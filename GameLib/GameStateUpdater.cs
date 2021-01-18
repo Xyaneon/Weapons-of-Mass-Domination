@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using WMD.Game.Players;
 using WMD.Game.Rounds;
 
 namespace WMD.Game
@@ -10,8 +12,6 @@ namespace WMD.Game
     /// </summary>
     public static class GameStateUpdater
     {
-        private const string ArgumentNull_GameState = "The game state to update cannot be null.";
-
         /// <summary>
         /// Advances the game to the next turn. If a new round starts, a <see cref="RoundUpdateResult"/> will be returned.
         /// </summary>
@@ -19,23 +19,16 @@ namespace WMD.Game
         /// <returns>
         /// A new <see cref="RoundUpdateResult"/> if the game has advanced to the next round; otherwise, <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="gameState"/> is <see langword="null"/>.
-        /// </exception>
-        public static RoundUpdateResult AdvanceToNextTurn(GameState gameState)
+        public static RoundUpdateResult? AdvanceToNextTurn([DisallowNull, NotNull] ref GameState gameState)
         {
-            if (gameState == null)
+            gameState = gameState with
             {
-                throw new ArgumentNullException(nameof(gameState), ArgumentNull_GameState);
-            }
-
-            gameState.CurrentPlayerIndex = gameState.CurrentPlayerIndex >= gameState.Players.Count - 1
-                ? 0
-                : gameState.CurrentPlayerIndex + 1;
+                CurrentPlayerIndex = gameState.CurrentPlayerIndex >= gameState.Players.Count - 1 ? 0 : gameState.CurrentPlayerIndex + 1
+            };
 
             if (gameState.CurrentPlayerIndex == 0)
             {
-                return AdvanceToNextRound(gameState);
+                return AdvanceToNextRound(ref gameState);
             }
 
             return null;
@@ -47,22 +40,14 @@ namespace WMD.Game
         /// <param name="gameState">The <see cref="GameState"/> to update.</param>
         /// <param name="playerIndex">The index of the player receiving the land.</param>
         /// <param name="area">The amount of land to give, in square kilometers.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="gameState"/> is <see langword="null"/>.
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="area"/> is less than zero.
         /// -or-
         /// <paramref name="area"/> is more than the actual amount of unclaimed land left.
         /// </exception>
         /// <seealso cref="HavePlayerGiveUpLand(GameState, int, int)"/>
-        public static void GiveUnclaimedLandToPlayer(GameState gameState, int playerIndex, int area)
+        public static void GiveUnclaimedLandToPlayer([DisallowNull, NotNull] ref GameState gameState, int playerIndex, int area)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState), ArgumentNull_GameState);
-            }
-
             if (area < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of unclaimed land to give to a player cannot be negative.");
@@ -74,7 +59,8 @@ namespace WMD.Game
             }
 
             gameState.Planet.UnclaimedLandArea -= area;
-            gameState.Players[playerIndex].State.Land += area;
+            PlayerState playerState = gameState.Players[playerIndex].State;
+            gameState.Players[playerIndex].State = playerState with { Land = playerState.Land + area };
         }
 
         /// <summary>
@@ -83,22 +69,14 @@ namespace WMD.Game
         /// <param name="gameState">The <see cref="GameState"/> to update.</param>
         /// <param name="playerIndex">The index of the player losing the land.</param>
         /// <param name="area">The amount of land to lose, in square kilometers.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="gameState"/> is <see langword="null"/>.
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="area"/> is less than zero.
         /// -or-
         /// <paramref name="area"/> is more than the actual amount of land left in the player's control.
         /// </exception>
         /// <seealso cref="GiveUnclaimedLandToPlayer(GameState, int, int)"/>
-        public static void HavePlayerGiveUpLand(GameState gameState, int playerIndex, int area)
+        public static void HavePlayerGiveUpLand([DisallowNull, NotNull] ref GameState gameState, int playerIndex, int area)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState), ArgumentNull_GameState);
-            }
-
             if (area < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of land to have a player give up cannot be negative.");
@@ -110,25 +88,26 @@ namespace WMD.Game
             }
 
             gameState.Planet.UnclaimedLandArea += area;
-            gameState.Players[playerIndex].State.Land -= area;
+            PlayerState playerState = gameState.Players[playerIndex].State;
+            gameState.Players[playerIndex].State = playerState with { Land = playerState.Land - area };
         }
 
-        private static RoundUpdateResult AdvanceToNextRound(GameState gameState)
+        private static RoundUpdateResult AdvanceToNextRound(ref GameState gameState)
         {
             RoundUpdateResult result = CreateRoundUpdateResult(gameState);
-            ApplyRoundUpdates(gameState, result);
-            gameState.CurrentRound++;
+            ApplyRoundUpdates(ref gameState, result);
+            gameState = gameState with { CurrentRound = gameState.CurrentRound + 1 };
 
             return result;
         }
 
-        private static void ApplyRoundUpdates(GameState gameState, RoundUpdateResult roundUpdates)
+        private static void ApplyRoundUpdates(ref GameState gameState, RoundUpdateResult roundUpdates)
         {
             try
             {
                 foreach (RoundUpdateResultItem roundUpdate in roundUpdates.Items)
                 {
-                    ApplyRoundUpdateItem(gameState, roundUpdate);
+                    ApplyRoundUpdateItem(ref gameState, roundUpdate);
                 }
             }
             catch (ArgumentException ex)
@@ -137,15 +116,24 @@ namespace WMD.Game
             }
         }
 
-        private static void ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate)
+        private static void ApplyRoundUpdateItem(ref GameState gameState, RoundUpdateResultItem roundUpdate)
         {
             switch (roundUpdate)
             {
                 case PlayerHenchmenPaid playerHenchmenPaid:
-                    playerHenchmenPaid.Player.State.Money -= playerHenchmenPaid.TotalPaidAmount;
+                    playerHenchmenPaid.Player.State = playerHenchmenPaid.Player.State with
+                    {
+                        Money = playerHenchmenPaid.Player.State.Money - playerHenchmenPaid.TotalPaidAmount
+                    };
                     break;
                 case PlayerHenchmenQuit playerHenchmenQuit:
-                    playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;
+                    playerHenchmenQuit.Player.State = playerHenchmenQuit.Player.State with
+                    {
+                        WorkforceState = playerHenchmenQuit.Player.State.WorkforceState with
+                        {
+                            NumberOfHenchmen = playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen - playerHenchmenQuit.NumberOfHenchmenQuit
+                        }
+                    };
                     break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");

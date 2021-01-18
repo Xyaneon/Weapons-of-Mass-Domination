@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WMD.Game.Commands
 {
@@ -7,43 +8,18 @@ namespace WMD.Game.Commands
     /// </summary>
     public class BuildSecretBaseCommand : GameCommand<BuildSecretBaseInput, BuildSecretBaseResult>
     {
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return !(CurrentPlayerDoesNotHaveEnoughMoney(gameState) || CurrentPlayerAlreadyHasASecretBase(gameState));
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, BuildSecretBaseInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] BuildSecretBaseInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return CanExecuteForState(gameState);
         }
 
-        public override BuildSecretBaseResult Execute(GameState gameState, BuildSecretBaseInput input)
+        public override BuildSecretBaseResult Execute([DisallowNull] GameState gameState, [DisallowNull] BuildSecretBaseInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             if (CurrentPlayerDoesNotHaveEnoughMoney(gameState))
             {
                 throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
@@ -51,7 +27,7 @@ namespace WMD.Game.Commands
 
             if (!CurrentPlayerAlreadyHasASecretBase(gameState))
             {
-                gameState.CurrentPlayer.State.SecretBase = new SecretBase();
+                gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
             }
             else
             {
@@ -59,7 +35,7 @@ namespace WMD.Game.Commands
             }
 
             decimal buildPrice = CalculateBuildPrice(gameState);
-            gameState.CurrentPlayer.State.Money -= buildPrice;
+            gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { Money = gameState.CurrentPlayer.State.Money - buildPrice };
 
             return new BuildSecretBaseResult(gameState.CurrentPlayer, gameState, buildPrice);
         }

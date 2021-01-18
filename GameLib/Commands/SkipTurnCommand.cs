@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace WMD.Game.Commands
 {
@@ -7,43 +7,18 @@ namespace WMD.Game.Commands
     /// </summary>
     public class SkipTurnCommand : GameCommand<SkipTurnInput, SkipTurnResult>
     {
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, SkipTurnInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] SkipTurnInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return true;
         }
 
-        public override SkipTurnResult Execute(GameState gameState, SkipTurnInput input)
+        public override SkipTurnResult Execute([DisallowNull] GameState gameState, [DisallowNull] SkipTurnInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return new SkipTurnResult(gameState.CurrentPlayer, gameState);
         }
     }
