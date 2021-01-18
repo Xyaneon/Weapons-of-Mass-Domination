@@ -21,7 +21,7 @@ namespace WMD.Game.Commands
 
         public override UpgradeSecretBaseResult Execute([DisallowNull] GameState gameState, [DisallowNull] UpgradeSecretBaseInput input)
         {
-            if (CurrentPlayerDoesNotHaveASecretBase(gameState))
+            if (gameState.CurrentPlayer.State.SecretBase == null)
             {
                 throw new InvalidOperationException("The current player does not have a secret base to upgrade.");
             }
@@ -32,9 +32,12 @@ namespace WMD.Game.Commands
             }
 
             decimal upgradePrice = CalculateUpgradePrice(gameState);
-            gameState.CurrentPlayer.State.SecretBase.Level++;
+            if (gameState.CurrentPlayer.State.SecretBase != null)
+            {
+                gameState.CurrentPlayer.State.SecretBase.Level++;
+            }
             PlayerState playerState = gameState.CurrentPlayer.State;
-            int newLevel = playerState.SecretBase.Level;
+            int newLevel = playerState.SecretBase!.Level;
             gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - upgradePrice };
 
             return new UpgradeSecretBaseResult(gameState.CurrentPlayer, gameState, newLevel, upgradePrice);
@@ -42,7 +45,7 @@ namespace WMD.Game.Commands
 
         private static decimal CalculateUpgradePrice(GameState gameState)
         {
-            return SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.State.SecretBase);
+            return SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.State.SecretBase!);
         }
 
         private static bool CurrentPlayerDoesNotHaveASecretBase(GameState gameState)

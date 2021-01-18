@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException("There is not enough unclaimed land left to satisfy the current player's requested amount to purchase.");
             }
 
-            GameStateUpdater.GiveUnclaimedLandToPlayer(gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
+            GameStateUpdater.GiveUnclaimedLandToPlayer(ref gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
             PlayerState playerState = gameState.CurrentPlayer.State;
             gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - totalPurchasePrice };
 

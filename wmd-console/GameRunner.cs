@@ -33,7 +33,9 @@ namespace WMD.Console
                 RunTurn();
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
-                    RoundUpdateResult? roundUpdate = GameStateUpdater.AdvanceToNextTurn(CurrentGameState);
+                    GameState gameState = CurrentGameState;
+                    RoundUpdateResult? roundUpdate = GameStateUpdater.AdvanceToNextTurn(ref gameState);
+                    CurrentGameState = gameState;
 
                     if (roundUpdate != null)
                     {

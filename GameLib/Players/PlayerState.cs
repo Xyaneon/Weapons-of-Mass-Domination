@@ -29,7 +29,7 @@ namespace WMD.Game.Players
         /// The value of this property is <see langword="null"/> if the player
         /// does not have a base.
         /// </remarks>
-        public SecretBase SecretBase { get; init; } = null;
+        public SecretBase? SecretBase { get; init; } = null;
 
         /// <summary>
         /// Gets this player's current workforce state.

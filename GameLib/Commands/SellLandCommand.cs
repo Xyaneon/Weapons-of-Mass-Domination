@@ -32,7 +32,7 @@ namespace WMD.Game.Commands
             }
 
             decimal totalSalePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToSell;
-            GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
+            GameStateUpdater.HavePlayerGiveUpLand(ref gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
             PlayerState playerState = gameState.CurrentPlayer.State;
             gameState.CurrentPlayer.State = playerState with { Money = playerState.Money + totalSalePrice };
 
