@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -56,8 +57,9 @@ namespace WMD.Game.Commands
 
             decimal upgradePrice = CalculateUpgradePrice(gameState);
             gameState.CurrentPlayer.State.SecretBase.Level++;
-            int newLevel = gameState.CurrentPlayer.State.SecretBase.Level;
-            gameState.CurrentPlayer.State.Money -= upgradePrice;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            int newLevel = playerState.SecretBase.Level;
+            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - upgradePrice };
 
             return new UpgradeSecretBaseResult(gameState.CurrentPlayer, gameState, newLevel, upgradePrice);
         }

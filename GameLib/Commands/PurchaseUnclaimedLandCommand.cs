@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -56,7 +57,8 @@ namespace WMD.Game.Commands
             }
 
             GameStateUpdater.GiveUnclaimedLandToPlayer(gameState, gameState.CurrentPlayerIndex, input.AreaToPurchase);
-            gameState.CurrentPlayer.State.Money -= totalPurchasePrice;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - totalPurchasePrice };
 
             return new PurchaseUnclaimedLandResult(gameState.CurrentPlayer, gameState, input.AreaToPurchase, totalPurchasePrice);
         }

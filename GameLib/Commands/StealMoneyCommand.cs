@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -56,7 +57,8 @@ namespace WMD.Game.Commands
             decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
-            gameState.CurrentPlayer.State.Money += moneyStolen;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money + moneyStolen };
 
             return new StealMoneyResult(gameState.CurrentPlayer, gameState, moneyStolen);
         }

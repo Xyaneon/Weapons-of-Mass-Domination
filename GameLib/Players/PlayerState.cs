@@ -5,34 +5,22 @@ namespace WMD.Game.Players
     /// <summary>
     /// Holds current state for an individual <see cref="Player"/>.
     /// </summary>
-    public class PlayerState
+    public record PlayerState
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlayerState"/> class.
-        /// </summary>
-        public PlayerState()
-        {
-            HasResigned = false;
-            Land = 0;
-            Money = 0;
-            SecretBase = null;
-            WorkforceState = new WorkforceState();
-        }
-
         /// <summary>
         /// Gets whether this player has resigned.
         /// </summary>
-        public bool HasResigned { get; internal set; }
+        public bool HasResigned { get; init; } = false;
 
         /// <summary>
         /// The amount of land this player controls, in square kilometers.
         /// </summary>
-        public int Land { get; internal set; }
+        public int Land { get; init; } = 0;
 
         /// <summary>
         /// Gets how much money this player has.
         /// </summary>
-        public decimal Money { get; internal set; }
+        public decimal Money { get; init; } = 0;
 
         /// <summary>
         /// Gets this player's secret base.
@@ -41,11 +29,11 @@ namespace WMD.Game.Players
         /// The value of this property is <see langword="null"/> if the player
         /// does not have a base.
         /// </remarks>
-        public SecretBase SecretBase { get; internal set; }
+        public SecretBase SecretBase { get; init; } = null;
 
         /// <summary>
         /// Gets this player's current workforce state.
         /// </summary>
-        public WorkforceState WorkforceState { get; internal set; }
+        public WorkforceState WorkforceState { get; init; } = new WorkforceState();
     }
 }

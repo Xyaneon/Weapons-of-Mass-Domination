@@ -44,7 +44,7 @@ namespace WMD.Game.Commands
                 throw new ArgumentNullException(nameof(input));
             }
 
-            gameState.CurrentPlayer.State.HasResigned = true;
+            gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { HasResigned = true };
             return new ResignResult(gameState.CurrentPlayer, gameState);
         }
     }

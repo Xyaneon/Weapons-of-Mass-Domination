@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -56,7 +57,8 @@ namespace WMD.Game.Commands
 
             decimal totalSalePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToSell;
             GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
-            gameState.CurrentPlayer.State.Money += totalSalePrice;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money + totalSalePrice };
 
             return new SellLandResult(gameState.CurrentPlayer, gameState, input.AreaToSell, totalSalePrice);
         }

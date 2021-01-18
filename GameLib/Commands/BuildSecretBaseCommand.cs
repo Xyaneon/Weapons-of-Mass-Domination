@@ -51,7 +51,7 @@ namespace WMD.Game.Commands
 
             if (!CurrentPlayerAlreadyHasASecretBase(gameState))
             {
-                gameState.CurrentPlayer.State.SecretBase = new SecretBase();
+                gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
             }
             else
             {
@@ -59,7 +59,7 @@ namespace WMD.Game.Commands
             }
 
             decimal buildPrice = CalculateBuildPrice(gameState);
-            gameState.CurrentPlayer.State.Money -= buildPrice;
+            gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { Money = gameState.CurrentPlayer.State.Money - buildPrice };
 
             return new BuildSecretBaseResult(gameState.CurrentPlayer, gameState, buildPrice);
         }

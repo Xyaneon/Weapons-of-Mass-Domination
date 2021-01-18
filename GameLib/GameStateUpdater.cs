@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WMD.Game.Players;
 using WMD.Game.Rounds;
 
 namespace WMD.Game
@@ -74,7 +75,8 @@ namespace WMD.Game
             }
 
             gameState.Planet.UnclaimedLandArea -= area;
-            gameState.Players[playerIndex].State.Land += area;
+            PlayerState playerState = gameState.Players[playerIndex].State;
+            gameState.Players[playerIndex].State = playerState with { Land = playerState.Land + area };
         }
 
         /// <summary>
@@ -110,7 +112,8 @@ namespace WMD.Game
             }
 
             gameState.Planet.UnclaimedLandArea += area;
-            gameState.Players[playerIndex].State.Land -= area;
+            PlayerState playerState = gameState.Players[playerIndex].State;
+            gameState.Players[playerIndex].State = playerState with { Land = playerState.Land - area };
         }
 
         private static RoundUpdateResult AdvanceToNextRound(GameState gameState)
@@ -142,7 +145,8 @@ namespace WMD.Game
             switch (roundUpdate)
             {
                 case PlayerHenchmenPaid playerHenchmenPaid:
-                    playerHenchmenPaid.Player.State.Money -= playerHenchmenPaid.TotalPaidAmount;
+                    PlayerState playerState = playerHenchmenPaid.Player.State;
+                    playerHenchmenPaid.Player.State = playerState with { Money = playerState.Money - playerHenchmenPaid.TotalPaidAmount };
                     break;
                 case PlayerHenchmenQuit playerHenchmenQuit:
                     playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;

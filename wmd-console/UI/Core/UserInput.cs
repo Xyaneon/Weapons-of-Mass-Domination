@@ -27,7 +27,7 @@ namespace WMD.Console.UI.Core
         {
             while (true)
             {
-                string response = GetString($"{requestText} (Y[es]/n[o])").ToLower();
+                string? response = GetString($"{requestText} (Y[es]/n[o])")?.ToLower();
                 switch (response)
                 {
                     case "y":
@@ -48,7 +48,7 @@ namespace WMD.Console.UI.Core
             while (!result)
             {
                 PrintPrompt(requestText);
-                string input = System.Console.ReadLine();
+                string? input = System.Console.ReadLine();
 
                 result = int.TryParse(input, out number);
                 if (result && !range.ContainsValueInclusive(number))
@@ -60,7 +60,7 @@ namespace WMD.Console.UI.Core
             return number;
         }
 
-        public static string GetString(string requestText)
+        public static string? GetString(string requestText)
         {
             PrintPrompt(requestText);
             return System.Console.ReadLine();

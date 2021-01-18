@@ -30,6 +30,6 @@
         /// <summary>
         /// Gets current state information for this player.
         /// </summary>
-        public PlayerState State { get; }
+        public PlayerState State { get; internal set; }
     }
 }
