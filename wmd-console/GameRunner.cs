@@ -60,7 +60,7 @@ namespace WMD.Console
                 CommandResult? commandResult = null;
                 while (commandResult == null)
                 {
-                    var command = UserInput.GetCommand();
+                    var command = UserInput.GetCommand(CurrentGameState);
                     commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
                 }
                 CommandResultPrinter.PrintCommandResult(commandResult);

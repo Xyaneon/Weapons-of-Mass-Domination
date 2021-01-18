@@ -16,6 +16,7 @@ namespace WMD.Console.UI
         {
             _inputDict = new Dictionary<Type, Func<GameState, CommandInput?>>
             {
+                { typeof(AttackPlayerInput), GetAttackPlayerInput },
                 { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
                 { typeof(HireHenchmenInput), GetHireHenchmenInput },
                 { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
@@ -36,6 +37,14 @@ namespace WMD.Console.UI
                 throw new ArgumentException("Command input type not recognized.", nameof(commandInputType));
             }
             return commandFunction.Invoke(gameState);
+        }
+
+        private static AttackPlayerInput? GetAttackPlayerInput(GameState gameState)
+        {
+            int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
+            return targetPlayerIndex.HasValue
+                ? new AttackPlayerInput(targetPlayerIndex.Value)
+                : null;
         }
 
         private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)

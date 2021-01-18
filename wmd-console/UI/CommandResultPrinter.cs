@@ -9,6 +9,9 @@ namespace WMD.Console.UI
         {
             switch (actionResult)
             {
+                case AttackPlayerResult result:
+                    PrintAttackPlayerResult(result);
+                    break;
                 case BuildSecretBaseResult result:
                     PrintBuildSecretBaseResult(result);
                     break;
@@ -38,6 +41,11 @@ namespace WMD.Console.UI
             }
 
             System.Console.WriteLine();
+        }
+
+        private static void PrintAttackPlayerResult(AttackPlayerResult result)
+        {
+            System.Console.WriteLine($"{result.Player.Name} attacked {result.TargetPlayerName}; the former lost {result.HenchmenAttackerLost:N0} henchmen and the latter lost {result.HenchmenDefenderLost:N0} henchmen.");
         }
 
         private static void PrintBuildSecretBaseResult(BuildSecretBaseResult result)

@@ -1,15 +1,16 @@
 ﻿using System;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Menus;
+using WMD.Game;
 using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Core
 {
     static class UserInput
     {
-        public static IGameCommand GetCommand()
+        public static IGameCommand GetCommand(GameState gameState)
         {
-            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu();
+            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu(gameState);
             actionMenu.Run();
             if (actionMenu.Result != null)
             {
@@ -63,6 +64,13 @@ namespace WMD.Console.UI.Core
         {
             PrintPrompt(requestText);
             return System.Console.ReadLine();
+        }
+
+        public static int? GetAttackTargetPlayerIndex(GameState gameState)
+        {
+            Menu playerSelectMenu = GameMenuFactory.CreateAttackTargetPlayerMenu(gameState);
+            playerSelectMenu.Run();
+            return (int?)playerSelectMenu.Result;
         }
 
         public static void WaitForPlayerAcknowledgementOfRoundEnd()
