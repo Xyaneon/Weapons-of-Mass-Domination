@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using WMD.Game.Players;
 
 namespace WMD.Game.Commands
@@ -17,43 +18,18 @@ namespace WMD.Game.Commands
 
         private static readonly Random _random;
 
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, StealMoneyInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return true;
         }
 
-        public override StealMoneyResult Execute(GameState gameState, StealMoneyInput input)
+        public override StealMoneyResult Execute([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
             decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;

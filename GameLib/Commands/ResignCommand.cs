@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace WMD.Game.Commands
 {
@@ -7,43 +7,18 @@ namespace WMD.Game.Commands
     /// </summary>
     public class ResignCommand : GameCommand<ResignInput, ResignResult>
     {
-        public override bool CanExecuteForState(GameState gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
             return true;
         }
 
-        public override bool CanExecuteForStateAndInput(GameState gameState, ResignInput input)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] ResignInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             return true;
         }
 
-        public override ResignResult Execute(GameState gameState, ResignInput input)
+        public override ResignResult Execute([DisallowNull] GameState gameState, [DisallowNull] ResignInput input)
         {
-            if (gameState == null)
-            {
-                throw new ArgumentNullException(nameof(gameState));
-            }
-
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { HasResigned = true };
             return new ResignResult(gameState.CurrentPlayer, gameState);
         }

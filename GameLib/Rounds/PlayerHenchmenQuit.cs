@@ -13,19 +13,11 @@ namespace WMD.Game.Rounds
         /// </summary>
         /// <param name="player">The <see cref="Player"/> whose henchmen quit.</param>
         /// <param name="numberOfHenchmenQuit">The number of henchmen who quit.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="player"/> is <see langword="null"/>.
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="numberOfHenchmenQuit"/> is less than one.
         /// </exception>
         public PlayerHenchmenQuit(Player player, int numberOfHenchmenQuit)
         {
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player), "The player who paid their henchmen cannot be null.");
-            }
-
             if (numberOfHenchmenQuit <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfHenchmenQuit), numberOfHenchmenQuit, "The number of henchmen who quit must be at least one.");

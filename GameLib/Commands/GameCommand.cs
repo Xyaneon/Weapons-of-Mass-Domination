@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Commands
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Generic base class for game commands.
@@ -10,18 +12,18 @@
         where TInput : CommandInput
         where TOutput : CommandResult
     {
-        public abstract bool CanExecuteForState(GameState gameState);
+        public abstract bool CanExecuteForState([DisallowNull] GameState gameState);
 
-        public abstract bool CanExecuteForStateAndInput(GameState gameState, TInput input);
+        public abstract bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, TInput input);
 
-        public bool CanExecuteForStateAndInput(GameState gameState, object input)
+        public bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, object input)
         {
             return CanExecuteForStateAndInput(gameState, (TInput)input);
         }
 
-        public abstract TOutput Execute(GameState gameState, TInput input);
+        public abstract TOutput Execute([DisallowNull] GameState gameState, TInput input);
 
-        public object Execute(GameState gameState, object input)
+        public object Execute([DisallowNull] GameState gameState, object input)
         {
             return Execute(gameState, (TInput)input);
         }
