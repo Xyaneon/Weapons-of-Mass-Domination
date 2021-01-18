@@ -41,8 +41,10 @@ namespace WMD.Console.UI
 
         private static AttackPlayerInput? GetAttackPlayerInput(GameState gameState)
         {
-            int targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
-            return new AttackPlayerInput(targetPlayerIndex);
+            int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
+            return targetPlayerIndex.HasValue
+                ? new AttackPlayerInput(targetPlayerIndex.Value)
+                : null;
         }
 
         private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)

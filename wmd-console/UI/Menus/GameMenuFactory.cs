@@ -23,6 +23,9 @@ namespace WMD.Console.UI.Menus
                 }
             });
 
+            var playerChoiceMenuItem = new MenuItem("Cancel", () => menu.SetResultAndClose(null));
+            menuItems.Enqueue(playerChoiceMenuItem);
+
             menu.AddPage("Choose a Target Player", menuItems.ToArray());
 
             return menu;

@@ -66,18 +66,11 @@ namespace WMD.Console.UI.Core
             return System.Console.ReadLine();
         }
 
-        public static int GetAttackTargetPlayerIndex(GameState gameState)
+        public static int? GetAttackTargetPlayerIndex(GameState gameState)
         {
             Menu playerSelectMenu = GameMenuFactory.CreateAttackTargetPlayerMenu(gameState);
             playerSelectMenu.Run();
-            if (playerSelectMenu.Result != null)
-            {
-                return (int)playerSelectMenu.Result;
-            }
-            else
-            {
-                throw new InvalidOperationException($"Menu result for target player selection was null.");
-            }
+            return (int?)playerSelectMenu.Result;
         }
 
         public static void WaitForPlayerAcknowledgementOfRoundEnd()
