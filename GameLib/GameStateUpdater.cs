@@ -145,11 +145,19 @@ namespace WMD.Game
             switch (roundUpdate)
             {
                 case PlayerHenchmenPaid playerHenchmenPaid:
-                    PlayerState playerState = playerHenchmenPaid.Player.State;
-                    playerHenchmenPaid.Player.State = playerState with { Money = playerState.Money - playerHenchmenPaid.TotalPaidAmount };
+                    playerHenchmenPaid.Player.State = playerHenchmenPaid.Player.State with
+                    {
+                        Money = playerHenchmenPaid.Player.State.Money - playerHenchmenPaid.TotalPaidAmount
+                    };
                     break;
                 case PlayerHenchmenQuit playerHenchmenQuit:
-                    playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen -= playerHenchmenQuit.NumberOfHenchmenQuit;
+                    playerHenchmenQuit.Player.State = playerHenchmenQuit.Player.State with
+                    {
+                        WorkforceState = playerHenchmenQuit.Player.State.WorkforceState with
+                        {
+                            NumberOfHenchmen = playerHenchmenQuit.Player.State.WorkforceState.NumberOfHenchmen - playerHenchmenQuit.NumberOfHenchmenQuit
+                        }
+                    };
                     break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");

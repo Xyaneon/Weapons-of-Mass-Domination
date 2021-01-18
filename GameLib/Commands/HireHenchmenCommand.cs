@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -45,7 +46,14 @@ namespace WMD.Game.Commands
             }
 
             int henchmenHired = input.OpenPositionsOffered;
-            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen += henchmenHired;
+            PlayerState playerState = gameState.CurrentPlayer.State;
+            gameState.CurrentPlayer.State = playerState with
+            {
+                WorkforceState = playerState.WorkforceState with
+                {
+                    NumberOfHenchmen = playerState.WorkforceState.NumberOfHenchmen + henchmenHired
+                }
+            };
             return new HireHenchmenResult(gameState.CurrentPlayer, gameState, henchmenHired);
         }
     }

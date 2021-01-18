@@ -1,4 +1,6 @@
 ﻿using System;
+using WMD.Game.Henchmen;
+using WMD.Game.Players;
 
 namespace WMD.Game.Commands
 {
@@ -73,8 +75,27 @@ namespace WMD.Game.Commands
             int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, percentageOfAttackerHenchmenLost);
             int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfDefenderHenchmenLost);
 
-            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen -= henchmenAttackerLost;
-            gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen -= henchmenDefenderLost;
+            PlayerState attackerPlayerState = gameState.CurrentPlayer.State;
+            WorkforceState attackerWorkforceState = attackerPlayerState.WorkforceState;
+
+            PlayerState defenderPlayerState = gameState.Players[input.TargetPlayerIndex].State;
+            WorkforceState defenderWorkforceState = defenderPlayerState.WorkforceState;
+
+            gameState.CurrentPlayer.State = attackerPlayerState with
+            {
+                WorkforceState = attackerWorkforceState with
+                {
+                    NumberOfHenchmen = attackerWorkforceState.NumberOfHenchmen - henchmenAttackerLost
+                }
+            };
+
+            gameState.Players[input.TargetPlayerIndex].State = defenderPlayerState with
+            {
+                WorkforceState = defenderWorkforceState with
+                {
+                    NumberOfHenchmen = defenderWorkforceState.NumberOfHenchmen - henchmenDefenderLost
+                }
+            };
 
             return new AttackPlayerResult(gameState.CurrentPlayer, gameState, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
         }
