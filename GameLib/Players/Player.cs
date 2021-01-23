@@ -3,33 +3,26 @@
     /// <summary>
     /// Represents a player.
     /// </summary>
-    public class Player
+    public record Player
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Player"/> class.
         /// </summary>
-        /// <param name="name">The player's name.</param>
-        /// <param name="color">The player's color as a <see cref="PlayerColor"/> value.</param>
-        public Player(string name, PlayerColor color)
+        /// <param name="identification">Information that can visually identify the player.</param>
+        public Player(PlayerIdentification identification)
         {
-            Color = color;
-            Name = name;
+            Identification = identification;
             State = new PlayerState();
         }
 
         /// <summary>
-        /// Gets this player's color as a <see cref="PlayerColor"/> value.
+        /// Gets information that can visually identify the player.
         /// </summary>
-        public PlayerColor Color { get; }
-
-        /// <summary>
-        /// Gets this player's name.
-        /// </summary>
-        public string Name { get; }
+        public PlayerIdentification Identification { get; init; }
 
         /// <summary>
         /// Gets current state information for this player.
         /// </summary>
-        public PlayerState State { get; internal set; }
+        public PlayerState State { get; init; }
     }
 }

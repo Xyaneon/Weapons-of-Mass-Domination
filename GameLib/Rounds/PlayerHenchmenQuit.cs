@@ -6,35 +6,35 @@ namespace WMD.Game.Rounds
     /// <summary>
     /// An occurrence of a player's henchmen quitting.
     /// </summary>
-    public class PlayerHenchmenQuit : RoundUpdateResultItem
+    public record PlayerHenchmenQuit : RoundUpdateResultItem
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerHenchmenQuit"/> class.
         /// </summary>
-        /// <param name="player">The <see cref="Player"/> whose henchmen quit.</param>
+        /// <param name="playerIndex">The index of the <see cref="Player"/> whose henchmen quit.</param>
         /// <param name="numberOfHenchmenQuit">The number of henchmen who quit.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="numberOfHenchmenQuit"/> is less than one.
         /// </exception>
-        public PlayerHenchmenQuit(Player player, int numberOfHenchmenQuit)
+        public PlayerHenchmenQuit(int playerIndex, int numberOfHenchmenQuit)
         {
             if (numberOfHenchmenQuit <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfHenchmenQuit), numberOfHenchmenQuit, "The number of henchmen who quit must be at least one.");
             }
 
-            Player = player;
+            PlayerIndex = playerIndex;
             NumberOfHenchmenQuit = numberOfHenchmenQuit;
         }
 
         /// <summary>
         /// Gets the number of henchmen who quit.
         /// </summary>
-        public int NumberOfHenchmenQuit { get; }
+        public int NumberOfHenchmenQuit { get; init; }
 
         /// <summary>
-        /// Gets the <see cref="Player"/> who lost henchmen.
+        /// Gets the index of the <see cref="Player"/> who lost henchmen.
         /// </summary>
-        public Player Player { get; }
+        public int PlayerIndex { get; init; }
     }
 }

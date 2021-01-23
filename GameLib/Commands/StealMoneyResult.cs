@@ -5,15 +5,15 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Represents the result of a player stealing money.
     /// </summary>
-    public class StealMoneyResult : CommandResult
+    public record StealMoneyResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StealMoneyResult"/> class.
         /// </summary>
-        /// <param name="player">The <see cref="Player"/> whose action this is the result of.</param>
-        /// <param name="gameState">The updated <see cref="GameState"/> resulting from this action.</param>
+        /// <param name="updatedGameState">The updated <see cref="GameState"/> resulting from this action.</param>
+        /// <param name="playerIndex">The <see cref="Player"/> whose action this is the result of.</param>
         /// <param name="stolenAmount">The amount of money the player stole.</param>
-        public StealMoneyResult(Player player, GameState gameState, decimal stolenAmount) : base(player, gameState)
+        public StealMoneyResult(GameState updatedGameState, int playerIndex, decimal stolenAmount) : base(updatedGameState, playerIndex)
         {
             StolenAmount = stolenAmount;
         }
@@ -21,6 +21,6 @@ namespace WMD.Game.Commands
         /// <summary>
         /// Gets the amount of money the player stole.
         /// </summary>
-        public decimal StolenAmount { get; }
+        public decimal StolenAmount { get; init; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using WMD.Game.Planets;
 using WMD.Game.Players;
 
@@ -75,6 +76,45 @@ namespace WMD.Game
         {
             winningPlayerIndex = FindIndexOfWinningPlayer();
             return winningPlayerIndex != IndexNotFound;
+        }
+
+        /// <summary>
+        /// Creates a shallow copy of this <see cref="GameState"/> with a player's state updated.
+        /// </summary>
+        /// <param name="playerIndex">The index of the <see cref="Player"/> whose state to update.</param>
+        /// <param name="state">The new <see cref="PlayerState"/> to give to the indicated <see cref="Player"/>.</param>
+        /// <returns>A shallow copy of this <see cref="GameState"/> with the applied state update for the player.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="playerIndex"/> is less than zero.
+        /// -or-
+        /// <paramref name="playerIndex"/> is greater than or equal to the number of players in <paramref name="state"/>.
+        /// </exception>
+        [Obsolete]
+        public GameState CreateShallowCopyWithUpdatedStateForPlayer(int playerIndex, PlayerState state)
+        {
+            if (playerIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(playerIndex), playerIndex, "The player index cannot be less than zero.");
+            }
+
+            if (playerIndex >= Players.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(playerIndex), playerIndex, "The player index cannot be greater than or equal to the number of players.");
+            }
+
+            return this with { Players = CreatePlayerListCopyWithUpdatedStateForPlayer(playerIndex, state) };
+        }
+
+        private IReadOnlyList<Player> CreatePlayerListCopyWithUpdatedStateForPlayer(int playerIndex, PlayerState state)
+        {
+            Queue<Player> players = new Queue<Player>(Players.Count);
+
+            for (int i = 0; i < Players.Count; i++)
+            {
+                players.Enqueue(i == playerIndex ? Players[i] with { State = state } : Players[i]);
+            }
+
+            return players.ToList().AsReadOnly();
         }
 
         private int FindIndexOfLastRemainingPlayer()

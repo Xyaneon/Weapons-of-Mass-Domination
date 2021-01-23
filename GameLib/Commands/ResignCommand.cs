@@ -19,8 +19,9 @@ namespace WMD.Game.Commands
 
         public override ResignResult Execute([DisallowNull] GameState gameState, [DisallowNull] ResignInput input)
         {
-            gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { HasResigned = true };
-            return new ResignResult(gameState.CurrentPlayer, gameState);
+            GameState updatedGameState = gameState.CreateShallowCopyWithUpdatedStateForPlayer(gameState.CurrentPlayerIndex, gameState.CurrentPlayer.State with { HasResigned = true });
+
+            return new ResignResult(updatedGameState, gameState.CurrentPlayerIndex);
         }
     }
 }

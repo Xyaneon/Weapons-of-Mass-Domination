@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WMD.Console.UI.Core;
 using WMD.Game;
@@ -18,7 +17,7 @@ namespace WMD.Console.UI.Menus
             {
                 if (index != gameState.CurrentPlayerIndex)
                 {
-                    var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Name, () => menu.SetResultAndClose(index));
+                    var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Identification.Name, () => menu.SetResultAndClose(index));
                     menuItems.Enqueue(playerChoiceMenuItem);
                 }
             });

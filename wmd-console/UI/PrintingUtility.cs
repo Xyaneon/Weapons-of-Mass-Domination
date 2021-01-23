@@ -55,7 +55,7 @@ namespace WMD.Console.UI
             {
                 foreach (RoundUpdateResultItem item in roundUpdate.Items)
                 {
-                    PrintEndOfRoundItem(item);
+                    PrintEndOfRoundItem(roundUpdate.GameState, item);
                 }
             }
             
@@ -102,15 +102,15 @@ namespace WMD.Console.UI
             System.Console.WriteLine("Weapons of Mass Domination");
         }
 
-        private static void PrintEndOfRoundItem(RoundUpdateResultItem item)
+        private static void PrintEndOfRoundItem(GameState gameState, RoundUpdateResultItem item)
         {
             switch (item)
             {
                 case PlayerHenchmenPaid playerHenchmenPaid:
-                    System.Console.WriteLine($"{playerHenchmenPaid.Player.Name} paid each of their {playerHenchmenPaid.NumberOfHenchmenPaid:N0} henchmen their daily pay of {playerHenchmenPaid.DailyPayRate:C}, for a total of {playerHenchmenPaid.TotalPaidAmount:C}.");
+                    System.Console.WriteLine($"{gameState.Players[playerHenchmenPaid.PlayerIndex].Identification.Name} paid each of their {playerHenchmenPaid.NumberOfHenchmenPaid:N0} henchmen their daily pay of {playerHenchmenPaid.DailyPayRate:C}, for a total of {playerHenchmenPaid.TotalPaidAmount:C}.");
                     break;
                 case PlayerHenchmenQuit playerHenchmenQuit:
-                    System.Console.WriteLine($"{playerHenchmenQuit.NumberOfHenchmenQuit:N0} of {playerHenchmenQuit.Player.Name}'s henchmen quit.");
+                    System.Console.WriteLine($"{playerHenchmenQuit.NumberOfHenchmenQuit:N0} of {gameState.Players[playerHenchmenQuit.PlayerIndex].Identification.Name}'s henchmen quit.");
                     break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}.");

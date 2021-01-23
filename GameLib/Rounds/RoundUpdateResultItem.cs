@@ -5,7 +5,7 @@
     /// This class cannot be instantiated.
     /// </summary>
     /// <seealso cref="RoundUpdateResult"/>
-    public abstract class RoundUpdateResultItem
+    public abstract record RoundUpdateResultItem
     {
     }
 }
