@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WMD.Console.UI.Core;
-using WMD.Game;
 using WMD.Game.Commands;
+using WMD.Game.State.Data;
 
 namespace WMD.Console.UI.Menus
 {

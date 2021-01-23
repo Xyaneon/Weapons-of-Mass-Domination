@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using WMD.Game.Henchmen;
-using WMD.Game.Planets;
-using WMD.Game.Players;
-using WMD.Game.Rounds;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Updates.Rounds;
 
-namespace WMD.Game
+namespace WMD.Game.State.Updates
 {
     /// <summary>
     /// Performs updates on <see cref="GameState"/> instances.
@@ -59,9 +59,9 @@ namespace WMD.Game
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of unclaimed land to give to a player cannot exceed the actual amount left.");
             }
 
-            GameState gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, -1 * area);
-            PlayerState playerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
-            PlayerState updatedPlayerState = playerState with { Land = playerState.Land + area };
+            var gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, -1 * area);
+            var playerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
+            var updatedPlayerState = playerState with { Land = playerState.Land + area };
 
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
@@ -91,9 +91,9 @@ namespace WMD.Game
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of land to have a player give up cannot exceed the actual amount they have.");
             }
 
-            GameState gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, area);
-            PlayerState currentPlayerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
-            PlayerState updatedPlayerState = currentPlayerState with { Land = currentPlayerState.Land - area };
+            var gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, area);
+            var currentPlayerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
+            var updatedPlayerState = currentPlayerState with { Land = currentPlayerState.Land - area };
 
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
@@ -107,8 +107,8 @@ namespace WMD.Game
         /// <returns>An updated copy of <paramref name="gameState"/>.</returns>
         public static GameState AdjustMoneyForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
         {
-            PlayerState currentPlayerState = gameState.Players[playerIndex].State;
-            PlayerState updatedPlayerState = currentPlayerState with { Money = currentPlayerState.Money + adjustmentAmount };
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            var updatedPlayerState = currentPlayerState with { Money = currentPlayerState.Money + adjustmentAmount };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
@@ -123,17 +123,17 @@ namespace WMD.Game
         /// <exception cref="InvalidOperationException"><paramref name="adjustmentAmount"/> would cause the player's henchmen count to become negative.</exception>
         public static GameState AdjustHenchmenForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
         {
-            PlayerState currentPlayerState = gameState.Players[playerIndex].State;
-            WorkforceState currentWorkforceState = currentPlayerState.WorkforceState;
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            var currentWorkforceState = currentPlayerState.WorkforceState;
 
-            int updatedHenchmenAmount = currentWorkforceState.NumberOfHenchmen + adjustmentAmount;
+            var updatedHenchmenAmount = currentWorkforceState.NumberOfHenchmen + adjustmentAmount;
             if (updatedHenchmenAmount < 0)
             {
                 throw new InvalidOperationException("The number of henchmen a player has cannot become negative.");
             }
 
-            WorkforceState updatedWorkforceState = currentWorkforceState with { NumberOfHenchmen = updatedHenchmenAmount };
-            PlayerState updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
+            var updatedWorkforceState = currentWorkforceState with { NumberOfHenchmen = updatedHenchmenAmount };
+            var updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
@@ -149,7 +149,7 @@ namespace WMD.Game
         /// </exception>
         public static GameState AdjustUnclaimedLandArea([DisallowNull] GameState gameState, int adjustmentAmount)
         {
-            Planet currentPlanetState = gameState.Planet;
+            var currentPlanetState = gameState.Planet;
             Planet updatedPlanetState;
 
             try
@@ -173,10 +173,10 @@ namespace WMD.Game
         /// <exception cref="InvalidOperationException">The player does not have a secret base.</exception>
         public static GameState IncrementSecretBaseLevel([DisallowNull] GameState gameState, int playerIndex)
         {
-            PlayerState currentPlayerState = gameState.Players[playerIndex].State;
-            SecretBase currentSecretBase = currentPlayerState.SecretBase ?? throw new InvalidOperationException("The player does not have a secret base to level up.");
-            SecretBase updatedSecretBase = currentSecretBase with { Level = currentSecretBase.Level + 1 };
-            PlayerState updatedPlayerState = currentPlayerState with { SecretBase = updatedSecretBase };
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            var currentSecretBase = currentPlayerState.SecretBase ?? throw new InvalidOperationException("The player does not have a secret base to level up.");
+            var updatedSecretBase = currentSecretBase with { Level = currentSecretBase.Level + 1 };
+            var updatedPlayerState = currentPlayerState with { SecretBase = updatedSecretBase };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
@@ -221,8 +221,8 @@ namespace WMD.Game
 
         private static (GameState, RoundUpdateResult) AdvanceToNextRound(GameState gameState)
         {
-            RoundUpdateResult result = CreateRoundUpdateResult(gameState);
-            GameState updatedGameState = ApplyRoundUpdates(gameState, result);
+            var result = CreateRoundUpdateResult(gameState);
+            var updatedGameState = ApplyRoundUpdates(gameState, result);
             updatedGameState = updatedGameState with { CurrentRound = updatedGameState.CurrentRound + 1 };
 
             return (updatedGameState, result);
@@ -230,11 +230,11 @@ namespace WMD.Game
 
         private static GameState ApplyRoundUpdates(GameState gameState, RoundUpdateResult roundUpdates)
         {
-            GameState updatedGameState = gameState;
+            var updatedGameState = gameState;
 
             try
             {
-                foreach (RoundUpdateResultItem roundUpdate in roundUpdates.Items)
+                foreach (var roundUpdate in roundUpdates.Items)
                 {
                     updatedGameState = ApplyRoundUpdateItem(updatedGameState, roundUpdate);
                 }
@@ -262,9 +262,9 @@ namespace WMD.Game
 
         private static IReadOnlyList<Player> CreatePlayerListCopyWithUpdatedStateForPlayer(IReadOnlyList<Player> players, int playerIndex, PlayerState state)
         {
-            Queue<Player> updatedPlayers = new Queue<Player>(players.Count);
+            var updatedPlayers = new Queue<Player>(players.Count);
 
-            for (int i = 0; i < players.Count; i++)
+            for (var i = 0; i < players.Count; i++)
             {
                 updatedPlayers.Enqueue(i == playerIndex ? players[i] with { State = state } : players[i]);
             }

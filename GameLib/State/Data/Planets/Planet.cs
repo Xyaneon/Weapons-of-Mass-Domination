@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WMD.Game.Planets
+namespace WMD.Game.State.Data.Planets
 {
     /// <summary>
     /// Represents a planet.
@@ -81,7 +81,7 @@ namespace WMD.Game.Planets
         /// Gets the total land area in square kilometers.
         /// </summary>
         public int TotalLandArea { get; }
-        
+
         /// <summary>
         /// Gets the total surface area in square kilometers.
         /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.Rounds
+﻿namespace WMD.Game.State.Updates.Rounds
 {
     /// <summary>
     /// Represents an individual item which occurred in between rounds.

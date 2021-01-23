@@ -1,4 +1,6 @@
-﻿namespace WMD.Game.Commands
+﻿using WMD.Game.State.Data;
+
+namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of a player's action.

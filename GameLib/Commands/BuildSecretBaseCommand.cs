@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -31,7 +35,8 @@ namespace WMD.Game.Commands
             }
 
             decimal buildPrice = CalculateBuildPrice(gameState);
-            GameState updatedGameState = gameState.CreateShallowCopyWithUpdatedStateForPlayer(gameState.CurrentPlayerIndex, gameState.CurrentPlayer.State with { SecretBase = new SecretBase() });
+            PlayerState updatedPlayerState = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
+            GameState updatedGameState = GameStateUpdater.UpdatePlayerState(gameState, gameState.CurrentPlayerIndex, updatedPlayerState);
             updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, -1 * buildPrice);
 
             return new BuildSecretBaseResult(updatedGameState, gameState.CurrentPlayerIndex, buildPrice);

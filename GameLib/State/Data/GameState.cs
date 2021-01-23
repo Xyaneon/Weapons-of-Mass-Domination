@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using WMD.Game.Planets;
-using WMD.Game.Players;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
 
-namespace WMD.Game
+namespace WMD.Game.State.Data
 {
     /// <summary>
     /// Represents the current state of the game.
@@ -61,8 +61,8 @@ namespace WMD.Game
         {
             get
             {
-                double percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
-                decimal priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
+                var percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
+                var priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
                 return LandBasePrice + priceIncreaseFromScarcity;
             }
         }
@@ -107,9 +107,9 @@ namespace WMD.Game
 
         private IReadOnlyList<Player> CreatePlayerListCopyWithUpdatedStateForPlayer(int playerIndex, PlayerState state)
         {
-            Queue<Player> players = new Queue<Player>(Players.Count);
+            var players = new Queue<Player>(Players.Count);
 
-            for (int i = 0; i < Players.Count; i++)
+            for (var i = 0; i < Players.Count; i++)
             {
                 players.Enqueue(i == playerIndex ? Players[i] with { State = state } : Players[i]);
             }
@@ -119,9 +119,9 @@ namespace WMD.Game
 
         private int FindIndexOfLastRemainingPlayer()
         {
-            int remainingPlayerIndex = -1;
+            var remainingPlayerIndex = -1;
 
-            for (int i = 0; i < Players.Count; i++)
+            for (var i = 0; i < Players.Count; i++)
             {
                 if (!Players[i].State.HasResigned)
                 {
@@ -139,12 +139,12 @@ namespace WMD.Game
 
         private int FindIndexOfWinningPlayer()
         {
-            if (GameHasOnePlayerLeft(out int remainingPlayerIndex))
+            if (GameHasOnePlayerLeft(out var remainingPlayerIndex))
             {
                 return remainingPlayerIndex;
             }
 
-            for (int i = 0; i < Players.Count; i++)
+            for (var i = 0; i < Players.Count; i++)
             {
                 if (Players[i].State.Land == Planet.TotalLandArea)
                 {

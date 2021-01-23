@@ -1,6 +1,7 @@
-﻿using WMD.Game.Henchmen;
+﻿using WMD.Game.State.Data.Henchmen;
+using WMD.Game.State.Data.SecretBases;
 
-namespace WMD.Game.Players
+namespace WMD.Game.State.Data.Players
 {
     /// <summary>
     /// Holds current state for an individual <see cref="Player"/>.

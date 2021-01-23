@@ -1,7 +1,7 @@
 ﻿using System;
-using WMD.Game.Players;
+using WMD.Game.State.Data.Players;
 
-namespace WMD.Game.Rounds
+namespace WMD.Game.State.Updates.Rounds
 {
     /// <summary>
     /// An occurrence of a player's henchmen quitting.

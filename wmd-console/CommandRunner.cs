@@ -1,7 +1,7 @@
 ﻿using System;
 using WMD.Console.UI;
-using WMD.Game;
 using WMD.Game.Commands;
+using WMD.Game.State.Data;
 
 namespace WMD.Console
 {

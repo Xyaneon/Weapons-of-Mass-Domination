@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
-using WMD.Game;
-using WMD.Game.Planets;
-using WMD.Game.Players;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data;
 
 namespace WMD.Console
 {

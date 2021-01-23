@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
 
-namespace WMD.Game.Rounds
+namespace WMD.Game.State.Updates.Rounds
 {
     /// <summary>
     /// Provides details of what happened in between rounds.

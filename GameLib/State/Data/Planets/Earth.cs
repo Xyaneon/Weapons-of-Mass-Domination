@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.Planets
+﻿namespace WMD.Game.State.Data.Planets
 {
     /// <summary>
     /// Represents Earth as a playable planet.

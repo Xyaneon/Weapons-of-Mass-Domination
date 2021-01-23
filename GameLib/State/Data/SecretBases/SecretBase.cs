@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WMD.Game
+namespace WMD.Game.State.Data.SecretBases
 {
     /// <summary>
     /// Represents a player's secret base of operations.

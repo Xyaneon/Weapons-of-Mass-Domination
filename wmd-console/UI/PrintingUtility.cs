@@ -1,6 +1,6 @@
 ﻿using System;
-using WMD.Game;
-using WMD.Game.Rounds;
+using WMD.Game.State.Data;
+using WMD.Game.State.Updates.Rounds;
 
 namespace WMD.Console.UI
 {

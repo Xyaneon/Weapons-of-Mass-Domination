@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.Players
+﻿namespace WMD.Game.State.Data.Players
 {
     /// <summary>
     /// Contains information that can be used to visually identify a <see cref="Player"/>.

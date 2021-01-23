@@ -1,8 +1,9 @@
 ﻿using WMD.Console.UI;
 using WMD.Console.UI.Core;
-using WMD.Game;
 using WMD.Game.Commands;
-using WMD.Game.Rounds;
+using WMD.Game.State.Data;
+using WMD.Game.State.Updates;
+using WMD.Game.State.Updates.Rounds;
 
 namespace WMD.Console
 {

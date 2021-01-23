@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.Players
+﻿namespace WMD.Game.State.Data.Players
 {
     /// <summary>
     /// Represents a player.

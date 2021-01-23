@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using WMD.Console.Miscellaneous;
-using WMD.Game;
-using WMD.Game.Planets;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
 {

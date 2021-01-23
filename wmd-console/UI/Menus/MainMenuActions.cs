@@ -1,5 +1,5 @@
 ﻿using System;
-using WMD.Game;
+using WMD.Game.State.Data;
 
 namespace WMD.Console.UI.Menus
 {

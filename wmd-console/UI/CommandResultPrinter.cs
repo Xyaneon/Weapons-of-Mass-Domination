@@ -1,6 +1,6 @@
 ﻿using System;
 using WMD.Game.Commands;
-using WMD.Game.Players;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Console.UI
 {

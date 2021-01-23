@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {

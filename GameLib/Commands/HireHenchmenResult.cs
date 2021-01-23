@@ -1,4 +1,5 @@
-﻿using WMD.Game.Players;
+﻿using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Game.Commands
 {

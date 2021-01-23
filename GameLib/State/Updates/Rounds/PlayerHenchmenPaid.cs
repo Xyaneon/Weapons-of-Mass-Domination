@@ -1,6 +1,6 @@
-﻿using WMD.Game.Players;
+﻿using WMD.Game.State.Data;
 
-namespace WMD.Game.Rounds
+namespace WMD.Game.State.Updates.Rounds
 {
     /// <summary>
     /// An occurrence of a player's henchmen getting paid.
@@ -14,7 +14,7 @@ namespace WMD.Game.Rounds
         /// <param name="playerIndex">The index of the player who paid their henchmen.</param>
         public PlayerHenchmenPaid(GameState gameState, int playerIndex)
         {
-            PlayerState playerState = gameState.Players[playerIndex].State;
+            var playerState = gameState.Players[playerIndex].State;
             DailyPayRate = playerState.WorkforceState.DailyPayRate;
             NumberOfHenchmenPaid = playerState.WorkforceState.NumberOfHenchmen;
             PlayerIndex = playerIndex;

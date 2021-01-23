@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -19,7 +22,8 @@ namespace WMD.Game.Commands
 
         public override ResignResult Execute([DisallowNull] GameState gameState, [DisallowNull] ResignInput input)
         {
-            GameState updatedGameState = gameState.CreateShallowCopyWithUpdatedStateForPlayer(gameState.CurrentPlayerIndex, gameState.CurrentPlayer.State with { HasResigned = true });
+            PlayerState updatedPlayerState = gameState.CurrentPlayer.State with { HasResigned = true };
+            GameState updatedGameState = GameStateUpdater.UpdatePlayerState(gameState, gameState.CurrentPlayerIndex, updatedPlayerState);
 
             return new ResignResult(updatedGameState, gameState.CurrentPlayerIndex);
         }
