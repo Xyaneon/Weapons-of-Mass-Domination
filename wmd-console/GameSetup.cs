@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
-using WMD.Game;
-using WMD.Game.Planets;
-using WMD.Game.Players;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data;
 
 namespace WMD.Console
 {
@@ -61,7 +61,7 @@ namespace WMD.Console
                 }
             }
 
-            return new Player(name, GetNextAvailableColor());
+            return new Player(new PlayerIdentification(name, GetNextAvailableColor()));
         }
 
         private static IList<Player> CreatePlayerList(Player humanPlayer, int computerPlayerCount)
@@ -79,7 +79,7 @@ namespace WMD.Console
         private static IList<Player> CreateComputerPlayers(int computerPlayerCount)
         {
             return Enumerable.Range(1, computerPlayerCount)
-                .Select(playerNumber => new Player($"CPU {playerNumber}", GetNextAvailableColor()))
+                .Select(playerNumber => new Player(new PlayerIdentification($"CPU {playerNumber}", GetNextAvailableColor())))
                 .ToList();
         }
 

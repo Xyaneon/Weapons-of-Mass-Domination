@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -25,19 +29,17 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
             }
 
-            if (!CurrentPlayerAlreadyHasASecretBase(gameState))
-            {
-                gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
-            }
-            else
+            if (CurrentPlayerAlreadyHasASecretBase(gameState))
             {
                 throw new InvalidOperationException("The current player already has a secret base.");
             }
 
             decimal buildPrice = CalculateBuildPrice(gameState);
-            gameState.CurrentPlayer.State = gameState.CurrentPlayer.State with { Money = gameState.CurrentPlayer.State.Money - buildPrice };
+            PlayerState updatedPlayerState = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
+            GameState updatedGameState = GameStateUpdater.UpdatePlayerState(gameState, gameState.CurrentPlayerIndex, updatedPlayerState);
+            updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, -1 * buildPrice);
 
-            return new BuildSecretBaseResult(gameState.CurrentPlayer, gameState, buildPrice);
+            return new BuildSecretBaseResult(updatedGameState, gameState.CurrentPlayerIndex, buildPrice);
         }
 
         private static bool CurrentPlayerAlreadyHasASecretBase(GameState gameState)

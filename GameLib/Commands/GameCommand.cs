@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
 
 namespace WMD.Game.Commands
 {

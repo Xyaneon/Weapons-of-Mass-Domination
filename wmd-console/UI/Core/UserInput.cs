@@ -1,8 +1,8 @@
 ﻿using System;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Menus;
-using WMD.Game;
 using WMD.Game.Commands;
+using WMD.Game.State.Data;
 
 namespace WMD.Console.UI.Core
 {

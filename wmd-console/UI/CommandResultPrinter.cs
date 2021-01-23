@@ -1,5 +1,6 @@
 ﻿using System;
 using WMD.Game.Commands;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Console.UI
 {
@@ -45,47 +46,52 @@ namespace WMD.Console.UI
 
         private static void PrintAttackPlayerResult(AttackPlayerResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} attacked {result.TargetPlayerName}; the former lost {result.HenchmenAttackerLost:N0} henchmen and the latter lost {result.HenchmenDefenderLost:N0} henchmen.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} attacked {result.TargetPlayerName}; the former lost {result.HenchmenAttackerLost:N0} henchmen and the latter lost {result.HenchmenDefenderLost:N0} henchmen.");
         }
 
         private static void PrintBuildSecretBaseResult(BuildSecretBaseResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} built their own secret base for {result.BuildPrice:C}.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} built their own secret base for {result.BuildPrice:C}.");
         }
 
         private static void PrintHireHenchmenResult(HireHenchmenResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
         }
 
         private static void PrintPurchaseUnclaimedLandResult(PurchaseUnclaimedLandResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
         }
 
         private static void PrintResignResult(ResignResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} resigned.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} resigned.");
         }
 
         private static void PrintSellLandResult(SellLandResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} sold {result.LandAreaSold:N0} km² of land for {result.TotalSalePrice:C}.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} sold {result.LandAreaSold:N0} km² of land for {result.TotalSalePrice:C}.");
         }
 
         private static void PrintSkipTurnResult(SkipTurnResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} skipped their turn and wasted a whole day.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} skipped their turn and wasted a whole day.");
         }
 
         private static void PrintStealMoneyResult(StealMoneyResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} stole {result.StolenAmount:C}. They now have {result.Player.State.Money:C}.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} stole {result.StolenAmount:C}. They now have {RetrievePlayerWhoActed(result).State.Money:C}.");
         }
 
         private static void PrintUpgradeSecretBaseResult(UpgradeSecretBaseResult result)
         {
-            System.Console.WriteLine($"{result.Player.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} upgraded their secret base to Level {result.NewLevel:N0} for {result.UpgradePrice:C}.");
+        }
+
+        private static Player RetrievePlayerWhoActed(CommandResult result)
+        {
+            return result.UpdatedGameState.Players[result.PlayerIndex];
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using WMD.Console.Miscellaneous;
-using WMD.Game;
-using WMD.Game.Planets;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Planets;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
 {
@@ -32,13 +33,13 @@ namespace WMD.Console.UI
 
         private static void PrintHeader(Player player, int currentRound)
         {
-            string headerText = $"{player.Name}'s turn (Day {currentRound})";
+            string headerText = $"{player.Identification.Name}'s turn (Day {currentRound})";
             string topLine = "╔" + new string('═', headerText.Length + 2) + "╗";
             string bottomLine = "╚" + new string('═', headerText.Length + 2) + "╝";
 
             System.Console.WriteLine(topLine);
             System.Console.Write("║");
-            System.Console.BackgroundColor = ConvertPlayerColorToConsoleColor(player.Color);
+            System.Console.BackgroundColor = ConvertPlayerColorToConsoleColor(player.Identification.Color);
             System.Console.Write($" {headerText} ");
             System.Console.ResetColor();
             System.Console.WriteLine("║");
@@ -74,7 +75,7 @@ namespace WMD.Console.UI
 
         private static void PrintSummary(Planet planet)
         {
-            string summaryString = $"{planet.UnclaimedLandArea:N0} km² of land remains uncontrolled ({planet.PercentageOfLandStillUnclaimed:P2}).";
+            string summaryString = $"{planet.UnclaimedLandArea:N0} km² of land on {planet.Name} remains uncontrolled ({planet.PercentageOfLandStillUnclaimed:P2}).";
             System.Console.WriteLine(summaryString);
         }
 

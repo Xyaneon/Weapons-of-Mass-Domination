@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.SecretBases;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -31,16 +34,17 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException("The current player does not have enough money to upgrade their secret base.");
             }
 
+            GameState updatedGameState = gameState;
             decimal upgradePrice = CalculateUpgradePrice(gameState);
             if (gameState.CurrentPlayer.State.SecretBase != null)
             {
-                gameState.CurrentPlayer.State.SecretBase.Level++;
+                updatedGameState = GameStateUpdater.IncrementSecretBaseLevel(gameState, gameState.CurrentPlayerIndex);
             }
-            PlayerState playerState = gameState.CurrentPlayer.State;
-            int newLevel = playerState.SecretBase!.Level;
-            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money - upgradePrice };
+            PlayerState updatedPlayerState = updatedGameState.CurrentPlayer.State;
+            int newLevel = updatedPlayerState.SecretBase!.Level;
+            updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, updatedGameState.CurrentPlayerIndex, -1 * upgradePrice);
 
-            return new UpgradeSecretBaseResult(gameState.CurrentPlayer, gameState, newLevel, upgradePrice);
+            return new UpgradeSecretBaseResult(updatedGameState, updatedGameState.CurrentPlayerIndex, newLevel, upgradePrice);
         }
 
         private static decimal CalculateUpgradePrice(GameState gameState)

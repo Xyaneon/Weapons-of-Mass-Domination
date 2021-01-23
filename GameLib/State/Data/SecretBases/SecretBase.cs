@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace WMD.Game
+namespace WMD.Game.State.Data.SecretBases
 {
     /// <summary>
     /// Represents a player's secret base of operations.
     /// </summary>
-    public class SecretBase
+    public record SecretBase
     {
         /// <summary>
         /// The price to pay for building a new secret base.
@@ -26,7 +26,7 @@ namespace WMD.Game
         }
 
         /// <summary>
-        /// Gets or sets the base's level, which starts at one.
+        /// Gets the base's level, which starts at one.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         /// The provided value is less than one.
@@ -34,7 +34,7 @@ namespace WMD.Game
         public int Level
         {
             get => _level;
-            internal set
+            init
             {
                 if (value < 1)
                 {

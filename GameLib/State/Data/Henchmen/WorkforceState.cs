@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WMD.Game.Henchmen
+namespace WMD.Game.State.Data.Henchmen
 {
     /// <summary>
     /// Represents the current state of a player's workforce.

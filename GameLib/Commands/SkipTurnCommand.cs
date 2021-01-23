@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data;
 
 namespace WMD.Game.Commands
 {
@@ -19,7 +20,7 @@ namespace WMD.Game.Commands
 
         public override SkipTurnResult Execute([DisallowNull] GameState gameState, [DisallowNull] SkipTurnInput input)
         {
-            return new SkipTurnResult(gameState.CurrentPlayer, gameState);
+            return new SkipTurnResult(gameState, gameState.CurrentPlayerIndex);
         }
     }
 }

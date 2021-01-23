@@ -1,8 +1,9 @@
 ﻿using WMD.Console.UI;
 using WMD.Console.UI.Core;
-using WMD.Game;
 using WMD.Game.Commands;
-using WMD.Game.Rounds;
+using WMD.Game.State.Data;
+using WMD.Game.State.Updates;
+using WMD.Game.State.Updates.Rounds;
 
 namespace WMD.Console
 {
@@ -23,7 +24,7 @@ namespace WMD.Console
             int winningPlayerIndex;
             if (CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
             {
-                winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Name;
+                winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
                 PrintingUtility.PrintGameHasAlreadyBeenWon(winningPlayerName);
                 return;
             }
@@ -34,18 +35,18 @@ namespace WMD.Console
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
                     GameState gameState = CurrentGameState;
-                    RoundUpdateResult? roundUpdate = GameStateUpdater.AdvanceToNextTurn(ref gameState);
-                    CurrentGameState = gameState;
+                    (GameState GameState, RoundUpdateResult? RoundUpdateResult) resultTuple = GameStateTurnAdvancer.AdvanceToNextTurn(gameState);
+                    CurrentGameState = resultTuple.GameState;
 
-                    if (roundUpdate != null)
+                    if (resultTuple.RoundUpdateResult != null)
                     {
-                        PrintingUtility.PrintEndOfRound(roundUpdate);
+                        PrintingUtility.PrintEndOfRound(resultTuple.RoundUpdateResult);
                         UserInput.WaitForPlayerAcknowledgementOfRoundEnd();
                     }
                 }
             }
 
-            winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Name;
+            winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
             PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
         }
 
@@ -55,7 +56,7 @@ namespace WMD.Console
 
             if (CurrentGameState.CurrentPlayer.State.HasResigned)
             {
-                PrintingUtility.PrintCurrentPlayerHasResignedAndCannotTakeTurn(CurrentGameState.CurrentPlayer.Name);
+                PrintingUtility.PrintCurrentPlayerHasResignedAndCannotTakeTurn(CurrentGameState.CurrentPlayer.Identification.Name);
             }
             else
             {
@@ -65,6 +66,7 @@ namespace WMD.Console
                     var command = UserInput.GetCommand(CurrentGameState);
                     commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
                 }
+                CurrentGameState = commandResult.UpdatedGameState;
                 CommandResultPrinter.PrintCommandResult(commandResult);
                 PrintingUtility.PrintEndOfTurn();
                 UserInput.WaitForPlayerAcknowledgementOfTurnEnd();

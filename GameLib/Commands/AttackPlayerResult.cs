@@ -1,12 +1,13 @@
 ﻿using System;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Game.Commands
 {
     /// <summary>
     /// Represents the result of a player attacking another player.
     /// </summary>
-    public class AttackPlayerResult: CommandResult
+    public record AttackPlayerResult: CommandResult
     {
         private const string ArgumentOutOfRangeException_henchmenAttackerLost = "The number of henchmen the attacker lost cannot be less than zero.";
         private const string ArgumentOutOfRangeException_henchmenDefenderLost = "The number of henchmen the defender lost cannot be less than zero.";
@@ -15,8 +16,8 @@ namespace WMD.Game.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="AttackPlayerResult"/> class.
         /// </summary>
-        /// <param name="player">The <see cref="Player"/> whose action this is the result of.</param>
-        /// <param name="gameState">The updated <see cref="GameState"/> resulting from this action.</param>
+        /// <param name="updatedGameState">The updated <see cref="GameState"/> resulting from this action.</param>
+        /// <param name="playerIndex">The index of the <see cref="Player"/> whose action this is the result of.</param>
         /// <param name="targetPlayerIndex">The index of the player who was attacked.</param>
         /// <param name="henchmenAttackerLost">The number of henchmen the attacker lost.</param>
         /// <param name="henchmenDefenderLost">The number of henchmen the defender lost.</param>
@@ -27,7 +28,7 @@ namespace WMD.Game.Commands
         /// -or-
         /// <paramref name="henchmenDefenderLost"/> is less than zero.
         /// </exception>
-        public AttackPlayerResult(Player player, GameState gameState, int targetPlayerIndex, int henchmenAttackerLost, int henchmenDefenderLost) : base(player, gameState)
+        public AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, int henchmenAttackerLost, int henchmenDefenderLost) : base(updatedGameState, playerIndex)
         {
             if (targetPlayerIndex < 0)
             {
@@ -47,27 +48,26 @@ namespace WMD.Game.Commands
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
             TargetPlayerIndex = targetPlayerIndex;
-            TargetPlayerName = gameState.Players[targetPlayerIndex].Name;
         }
 
         /// <summary>
         /// Gets the number of henchmen the attacker lost.
         /// </summary>
-        public int HenchmenAttackerLost { get; }
+        public int HenchmenAttackerLost { get; init; }
 
         /// <summary>
         /// Gets the number of henchmen the defender lost.
         /// </summary>
-        public int HenchmenDefenderLost { get; }
+        public int HenchmenDefenderLost { get; init; }
 
         /// <summary>
         /// Gets the index of the player who was attacked.
         /// </summary>
-        public int TargetPlayerIndex { get; }
+        public int TargetPlayerIndex { get; init; }
 
         /// <summary>
         /// Gets the name of the player who was attacked.
         /// </summary>
-        public string TargetPlayerName { get; }
+        public string TargetPlayerName { get => UpdatedGameState.Players[TargetPlayerIndex].Identification.Name; }
     }
 }

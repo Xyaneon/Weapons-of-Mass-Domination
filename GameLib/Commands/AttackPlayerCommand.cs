@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using WMD.Game.Henchmen;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -51,29 +51,10 @@ namespace WMD.Game.Commands
             int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, percentageOfAttackerHenchmenLost);
             int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfDefenderHenchmenLost);
 
-            PlayerState attackerPlayerState = gameState.CurrentPlayer.State;
-            WorkforceState attackerWorkforceState = attackerPlayerState.WorkforceState;
+            GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * henchmenAttackerLost);
+            updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * henchmenDefenderLost);
 
-            PlayerState defenderPlayerState = gameState.Players[input.TargetPlayerIndex].State;
-            WorkforceState defenderWorkforceState = defenderPlayerState.WorkforceState;
-
-            gameState.CurrentPlayer.State = attackerPlayerState with
-            {
-                WorkforceState = attackerWorkforceState with
-                {
-                    NumberOfHenchmen = attackerWorkforceState.NumberOfHenchmen - henchmenAttackerLost
-                }
-            };
-
-            gameState.Players[input.TargetPlayerIndex].State = defenderPlayerState with
-            {
-                WorkforceState = defenderWorkforceState with
-                {
-                    NumberOfHenchmen = defenderWorkforceState.NumberOfHenchmen - henchmenDefenderLost
-                }
-            };
-
-            return new AttackPlayerResult(gameState.CurrentPlayer, gameState, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
+            return new AttackPlayerResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
         }
 
         private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input, double percentageOfDefenderHenchmenLost)

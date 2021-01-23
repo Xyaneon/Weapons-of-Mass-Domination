@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using WMD.Game.Players;
+using WMD.Game.State.Data;
+using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
 {
@@ -32,11 +33,10 @@ namespace WMD.Game.Commands
             }
 
             decimal totalSalePrice = gameState.UnclaimedLandPurchasePrice * input.AreaToSell;
-            GameStateUpdater.HavePlayerGiveUpLand(ref gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
-            PlayerState playerState = gameState.CurrentPlayer.State;
-            gameState.CurrentPlayer.State = playerState with { Money = playerState.Money + totalSalePrice };
+            GameState updatedGameState = GameStateUpdater.HavePlayerGiveUpLand(gameState, gameState.CurrentPlayerIndex, input.AreaToSell);
+            updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, totalSalePrice);
 
-            return new SellLandResult(gameState.CurrentPlayer, gameState, input.AreaToSell, totalSalePrice);
+            return new SellLandResult(updatedGameState, gameState.CurrentPlayerIndex, input.AreaToSell, totalSalePrice);
         }
 
         private static bool CurrentPlayerDoesNotHaveEnoughLandToSellForInput([DisallowNull] GameState gameState, [DisallowNull] SellLandInput input)

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
-using WMD.Game;
 using WMD.Game.Commands;
+using WMD.Game.State.Data;
+using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
 {
