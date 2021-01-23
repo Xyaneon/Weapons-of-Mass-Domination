@@ -35,7 +35,7 @@ namespace WMD.Console
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
                     GameState gameState = CurrentGameState;
-                    (GameState GameState, RoundUpdateResult? RoundUpdateResult) resultTuple = GameStateUpdater.AdvanceToNextTurn(gameState);
+                    (GameState GameState, RoundUpdateResult? RoundUpdateResult) resultTuple = GameStateTurnAdvancer.AdvanceToNextTurn(gameState);
                     CurrentGameState = resultTuple.GameState;
 
                     if (resultTuple.RoundUpdateResult != null)
