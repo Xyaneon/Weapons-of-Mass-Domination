@@ -37,8 +37,8 @@ namespace WMD.Game.Commands
             {
                 updatedGameState = GameStateUpdater.IncrementSecretBaseLevel(gameState, gameState.CurrentPlayerIndex);
             }
-            PlayerState playerState = gameState.CurrentPlayer.State;
-            int newLevel = playerState.SecretBase!.Level;
+            PlayerState updatedPlayerState = updatedGameState.CurrentPlayer.State;
+            int newLevel = updatedPlayerState.SecretBase!.Level;
             updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, updatedGameState.CurrentPlayerIndex, -1 * upgradePrice);
 
             return new UpgradeSecretBaseResult(updatedGameState, updatedGameState.CurrentPlayerIndex, newLevel, upgradePrice);
