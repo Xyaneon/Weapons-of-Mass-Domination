@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WMD.Game.Planets
 {
@@ -8,11 +9,12 @@ namespace WMD.Game.Planets
     /// <remarks>
     /// All surface area properties are in square kilometers.
     /// </remarks>
-    public abstract class Planet
+    public abstract record Planet
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Planet"/> class.
         /// </summary>
+        /// <param name="name">The planet's name.</param>
         /// <param name="totalLandArea">The total land area in square kilometers.</param>
         /// <param name="totalSurfaceArea">The total surface area in square kilometers.</param>
         /// <param name="totalWaterArea">The total water area in square kilometers.</param>
@@ -21,11 +23,18 @@ namespace WMD.Game.Planets
         /// <paramref name="totalWaterArea"/> are less than zero.
         /// </exception>
         /// <exception cref="ArgumentException">
+        /// <paramref name="name"/> is empty or all whitespace.
+        /// -or-
         /// <paramref name="totalSurfaceArea"/> is not equal to the total of
         /// <paramref name="totalLandArea"/> and <paramref name="totalWaterArea"/>.
         /// </exception>
-        public Planet(int totalLandArea, int totalSurfaceArea, int totalWaterArea)
+        public Planet([DisallowNull] string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("The name of the planet cannot be empty or all whitespace.", nameof(name));
+            }
+
             if (totalLandArea < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(totalLandArea), "The total land area cannot be negative.");
@@ -46,12 +55,19 @@ namespace WMD.Game.Planets
                 throw new ArgumentException("The land and water areas do not add up to the total surface area.");
             }
 
+            Name = name.Trim();
+
             TotalLandArea = totalLandArea;
             TotalSurfaceArea = totalSurfaceArea;
             TotalWaterArea = totalWaterArea;
 
             UnclaimedLandArea = totalLandArea;
         }
+
+        /// <summary>
+        /// Gets the name of this planet.
+        /// </summary>
+        public string Name { get; init; }
 
         /// <summary>
         /// Gets the percentage of land still unclaimed as a number between 0 and 1.
@@ -77,7 +93,7 @@ namespace WMD.Game.Planets
         public int TotalWaterArea { get; }
 
         /// <summary>
-        /// Gets or sets the amount of unclaimed land in square kilometers.
+        /// Gets the amount of unclaimed land in square kilometers.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         /// The provided value is less than zero.
@@ -88,7 +104,7 @@ namespace WMD.Game.Planets
         public int UnclaimedLandArea
         {
             get => _unclaimedLandArea;
-            set
+            init
             {
                 if (value < 0)
                 {

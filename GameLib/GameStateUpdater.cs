@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WMD.Game.Henchmen;
+using WMD.Game.Planets;
 using WMD.Game.Players;
 using WMD.Game.Rounds;
 
@@ -21,7 +22,7 @@ namespace WMD.Game
         /// A tuple containing the updated <see cref="GameState"/> and possibly a <see cref="RoundUpdateResult"/> if a new
         /// round has started, or otherwise <see langword="null"/>.
         /// </returns>
-        public static (GameState, RoundUpdateResult?) AdvanceToNextTurn([DisallowNull, NotNull] GameState gameState)
+        public static (GameState, RoundUpdateResult?) AdvanceToNextTurn([DisallowNull] GameState gameState)
         {
             gameState = gameState with
             {
@@ -46,7 +47,7 @@ namespace WMD.Game
         /// <paramref name="area"/> is more than the actual amount of unclaimed land left.
         /// </exception>
         /// <seealso cref="HavePlayerGiveUpLand(GameState, int, int)"/>
-        public static GameState GiveUnclaimedLandToPlayer([DisallowNull, NotNull] GameState gameState, int playerIndex, int area)
+        public static GameState GiveUnclaimedLandToPlayer([DisallowNull] GameState gameState, int playerIndex, int area)
         {
             if (area < 0)
             {
@@ -58,11 +59,11 @@ namespace WMD.Game
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of unclaimed land to give to a player cannot exceed the actual amount left.");
             }
 
-            gameState.Planet.UnclaimedLandArea -= area;
-            PlayerState playerState = gameState.Players[playerIndex].State;
+            GameState gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, -1 * area);
+            PlayerState playerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
             PlayerState updatedPlayerState = playerState with { Land = playerState.Land + area };
 
-            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+            return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace WMD.Game
         /// <paramref name="area"/> is more than the actual amount of land left in the player's control.
         /// </exception>
         /// <seealso cref="GiveUnclaimedLandToPlayer(GameState, int, int)"/>
-        public static GameState HavePlayerGiveUpLand([DisallowNull, NotNull] GameState gameState, int playerIndex, int area)
+        public static GameState HavePlayerGiveUpLand([DisallowNull] GameState gameState, int playerIndex, int area)
         {
             if (area < 0)
             {
@@ -90,11 +91,11 @@ namespace WMD.Game
                 throw new ArgumentOutOfRangeException(nameof(area), "The amount of land to have a player give up cannot exceed the actual amount they have.");
             }
 
-            gameState.Planet.UnclaimedLandArea += area;
-            PlayerState currentPlayerState = gameState.Players[playerIndex].State;
+            GameState gameStateWithAdjustedUnclaimedLand = AdjustUnclaimedLandArea(gameState, area);
+            PlayerState currentPlayerState = gameStateWithAdjustedUnclaimedLand.Players[playerIndex].State;
             PlayerState updatedPlayerState = currentPlayerState with { Land = currentPlayerState.Land - area };
 
-            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+            return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace WMD.Game
         /// <param name="playerIndex">The index of the player whose money to adjust.</param>
         /// <param name="adjustmentAmount">The amount to adjust by (positive to give money to the player, negative to take it away).</param>
         /// <returns>An updated copy of <paramref name="gameState"/>.</returns>
-        public static GameState AdjustMoneyForPlayer([DisallowNull, NotNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
+        public static GameState AdjustMoneyForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
         {
             PlayerState currentPlayerState = gameState.Players[playerIndex].State;
             PlayerState updatedPlayerState = currentPlayerState with { Money = currentPlayerState.Money + adjustmentAmount };
@@ -120,7 +121,7 @@ namespace WMD.Game
         /// <param name="adjustmentAmount">The number of henchmen to adjust by (positive to give henchmen to the player, negative to take it away).</param>
         /// <returns>An updated copy of <paramref name="gameState"/>.</returns>
         /// <exception cref="InvalidOperationException"><paramref name="adjustmentAmount"/> would cause the player's henchmen count to become negative.</exception>
-        public static GameState AdjustHenchmenForPlayer([DisallowNull, NotNull] GameState gameState, int playerIndex, int adjustmentAmount)
+        public static GameState AdjustHenchmenForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
         {
             PlayerState currentPlayerState = gameState.Players[playerIndex].State;
             WorkforceState currentWorkforceState = currentPlayerState.WorkforceState;
@@ -138,13 +139,39 @@ namespace WMD.Game
         }
 
         /// <summary>
+        /// Adjusts the unclaimed land area by the specified amount.
+        /// </summary>
+        /// <param name="gameState">The <see cref="GameState"/> to update.</param>
+        /// <param name="adjustmentAmount">The number of square kilometers to adjust by (positive to increase unclaimed land area, negative to decrease it).</param>
+        /// <returns>An updated copy of <paramref name="gameState"/>.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <paramref name="adjustmentAmount"/> would cause the unclaimed land area to be negative or exceed the total amount of land area.
+        /// </exception>
+        public static GameState AdjustUnclaimedLandArea([DisallowNull] GameState gameState, int adjustmentAmount)
+        {
+            Planet currentPlanetState = gameState.Planet;
+            Planet updatedPlanetState;
+
+            try
+            {
+                updatedPlanetState = currentPlanetState with { UnclaimedLandArea = currentPlanetState.UnclaimedLandArea + adjustmentAmount };
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                throw new InvalidOperationException($"Planet state after unclaimed land area adjustment would be invalid: {ex.Message}", ex);
+            }
+
+            return gameState with { Planet = updatedPlanetState };
+        }
+
+        /// <summary>
         /// Increments the level of a player's secret base.
         /// </summary>
         /// <param name="gameState">The <see cref="GameState"/> to update.</param>
         /// <param name="playerIndex">The index of the player whose secret base to level up.</param>
         /// <returns>An updated copy of <paramref name="gameState"/>.</returns>
         /// <exception cref="InvalidOperationException">The player does not have a secret base.</exception>
-        public static GameState IncrementSecretBaseLevel([DisallowNull, NotNull] GameState gameState, int playerIndex)
+        public static GameState IncrementSecretBaseLevel([DisallowNull] GameState gameState, int playerIndex)
         {
             PlayerState currentPlayerState = gameState.Players[playerIndex].State;
             SecretBase currentSecretBase = currentPlayerState.SecretBase ?? throw new InvalidOperationException("The player does not have a secret base to level up.");
@@ -152,6 +179,17 @@ namespace WMD.Game
             PlayerState updatedPlayerState = currentPlayerState with { SecretBase = updatedSecretBase };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+        }
+
+        /// <summary>
+        /// Creates a shallow copy of the given <see cref="GameState"/> with the planet's state updated.
+        /// </summary>
+        /// <param name="gameState">The <see cref="GameState"/> to update.</param>
+        /// <param name="planete">The new <see cref="Planet"/> to use.</param>
+        /// <returns>A shallow copy of <paramref name="gameState"/> with the applied state update.</returns>
+        public static GameState UpdatePlanetState([DisallowNull] GameState gameState, [DisallowNull] Planet planet)
+        {
+            return gameState with { Planet = planet };
         }
 
         /// <summary>
@@ -166,7 +204,7 @@ namespace WMD.Game
         /// -or-
         /// <paramref name="playerIndex"/> is greater than or equal to the number of players in <paramref name="state"/>.
         /// </exception>
-        public static GameState UpdatePlayerState([DisallowNull, NotNull] GameState gameState, int playerIndex, [DisallowNull, NotNull] PlayerState playerState)
+        public static GameState UpdatePlayerState([DisallowNull] GameState gameState, int playerIndex, [DisallowNull] PlayerState playerState)
         {
             if (playerIndex < 0)
             {
