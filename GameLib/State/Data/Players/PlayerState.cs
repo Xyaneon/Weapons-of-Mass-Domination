@@ -1,4 +1,5 @@
 ﻿using WMD.Game.State.Data.Henchmen;
+using WMD.Game.State.Data.Research;
 using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Game.State.Data.Players
@@ -22,6 +23,11 @@ namespace WMD.Game.State.Data.Players
         /// Gets how much money this player has.
         /// </summary>
         public decimal Money { get; init; } = 0;
+
+        /// <summary>
+        /// Gets this player's current research state.
+        /// </summary>
+        public ResearchState ResearchState { get; init; } = new ResearchState();
 
         /// <summary>
         /// Gets this player's secret base.
