@@ -5,6 +5,7 @@ using System.Linq;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.Research;
 
 namespace WMD.Game.State.Updates
 {
@@ -50,7 +51,7 @@ namespace WMD.Game.State.Updates
 
         public static GameState IncrementPlayerNukesResearchLevel([DisallowNull] GameState gameState, int playerIndex)
         {
-            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= 10)
+            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= ResearchState.MaxNukeResearchLevel)
             {
                 throw new InvalidOperationException("The player has already maxed out their nukes research.");
             }

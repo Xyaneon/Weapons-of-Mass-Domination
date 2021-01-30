@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Research;
 using WMD.Game.State.Updates;
 
 namespace WMD.Game.Commands
@@ -51,7 +52,7 @@ namespace WMD.Game.Commands
 
         private static decimal CalculateResearchPrice(GameState gameState)
         {
-            return 500;
+            return ResearchState.NukeResearchLevelCost;
         }
 
         private static bool CurrentPlayerHasInsufficientFunds(GameState gameState)
@@ -61,7 +62,7 @@ namespace WMD.Game.Commands
 
         private static bool CurrentPlayerIsAtMaxNukesResearchLevel(GameState gameState)
         {
-            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= 10;
+            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= ResearchState.MaxNukeResearchLevel;
         }
 
         private static bool CurrentPlayerDoesNotHaveSecretBase(GameState gameState)
