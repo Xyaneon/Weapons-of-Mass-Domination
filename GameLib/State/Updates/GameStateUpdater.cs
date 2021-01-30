@@ -48,6 +48,20 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
 
+        public static GameState IncrementPlayerNukesResearchLevel([DisallowNull] GameState gameState, int playerIndex)
+        {
+            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= 10)
+            {
+                throw new InvalidOperationException("The player has already maxed out their nukes research.");
+            }
+
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            var updatedResearchState = currentPlayerState.ResearchState with { NukeResearchLevel = currentPlayerState.ResearchState.NukeResearchLevel + 1 };
+            var updatedPlayerState = currentPlayerState with { ResearchState = updatedResearchState };
+
+            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+        }
+
         public static GameState AdjustMoneyForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
         {
             var currentPlayerState = gameState.Players[playerIndex].State;
