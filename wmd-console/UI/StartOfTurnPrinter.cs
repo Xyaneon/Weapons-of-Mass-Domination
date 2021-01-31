@@ -4,6 +4,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.Research;
 using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
@@ -23,6 +24,10 @@ namespace WMD.Console.UI
             PrintPlayerStats(currentPlayer);
             PrintRealWorldLocationComparison(currentPlayer.State.Land);
             PrintSecretBaseInfo(currentPlayer.State.SecretBase);
+            if (currentPlayer.State.SecretBase != null)
+            {
+                PrintNukeResearchLevel(currentPlayer.State.ResearchState);
+            }
 
             System.Console.WriteLine();
 
@@ -44,6 +49,26 @@ namespace WMD.Console.UI
             System.Console.ResetColor();
             System.Console.WriteLine("║");
             System.Console.WriteLine(bottomLine);
+        }
+
+        private static void PrintNukeResearchLevel(ResearchState researchState)
+        {
+            string researchProgressFlavorText = researchState.NukeResearchLevel switch
+            {
+                0 => "not yet started",
+                1 => "begun with online web searches",
+                2 => "drawing up blueprints",
+                3 => "constructing missile silos",
+                4 => "obtaining uranium",
+                5 => "enriching uranium",
+                6 => "constructing a prototype warhead",
+                7 => "constructing a prototype missile",
+                8 => "setting up a manufacturing process",
+                9 => "performing final tests",
+                10 => "you can build and use nukes!",
+                _ => "?",
+            };
+            System.Console.WriteLine($"Your nuke research level is {researchState.NukeResearchLevel:N0} ({researchProgressFlavorText}).");
         }
 
         private static void PrintPlayerStats(Player player)
