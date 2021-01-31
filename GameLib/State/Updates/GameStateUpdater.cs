@@ -5,6 +5,7 @@ using System.Linq;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
+using WMD.Game.State.Data.Research;
 
 namespace WMD.Game.State.Updates
 {
@@ -46,6 +47,20 @@ namespace WMD.Game.State.Updates
             var updatedPlayerState = currentPlayerState with { Land = currentPlayerState.Land - area };
 
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
+        }
+
+        public static GameState IncrementPlayerNukesResearchLevel([DisallowNull] GameState gameState, int playerIndex)
+        {
+            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= ResearchState.MaxNukeResearchLevel)
+            {
+                throw new InvalidOperationException("The player has already maxed out their nukes research.");
+            }
+
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            var updatedResearchState = currentPlayerState.ResearchState with { NukeResearchLevel = currentPlayerState.ResearchState.NukeResearchLevel + 1 };
+            var updatedPlayerState = currentPlayerState with { ResearchState = updatedResearchState };
+
+            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
         public static GameState AdjustMoneyForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
