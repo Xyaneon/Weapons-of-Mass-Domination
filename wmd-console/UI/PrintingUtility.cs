@@ -77,6 +77,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine($"You do not have enough money to build a secret base ({cost:C} needed).");
         }
 
+        public static void PrintInsufficientFundsForResearchingNukes(decimal cost)
+        {
+            System.Console.WriteLine($"You do not have enough money to continue researching nukes ({cost:C} needed).");
+        }
+
         public static void PrintInsufficientFundsForUpgradingSecretBase(decimal cost)
         {
             System.Console.WriteLine($"You do not have enough money to upgrade your secret base ({cost:C} needed).");
@@ -95,6 +100,11 @@ namespace WMD.Console.UI
         public static void PrintNoUnclaimedLandLeftToPurchase()
         {
             System.Console.WriteLine("There is no unclaimed land left to purchase.");
+        }
+
+        public static void PrintNukesResearchAlreadyMaxedOut()
+        {
+            System.Console.WriteLine($"Your nukes research is already complete.");
         }
 
         public static void PrintTitle()

@@ -22,6 +22,9 @@ namespace WMD.Console.UI
                 case PurchaseUnclaimedLandResult result:
                     PrintPurchaseUnclaimedLandResult(result);
                     break;
+                case ResearchNukesResult result:
+                    PrintResearchNukesResult(result);
+                    break;
                 case ResignResult result:
                     PrintResignResult(result);
                     break;
@@ -62,6 +65,11 @@ namespace WMD.Console.UI
         private static void PrintPurchaseUnclaimedLandResult(PurchaseUnclaimedLandResult result)
         {
             System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
+        }
+
+        private static void PrintResearchNukesResult(ResearchNukesResult result)
+        {
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} advanced their nukes research to Level {result.NewNukesResearchLevel:N0} for {result.TotalResearchPrice:C}.");
         }
 
         private static void PrintResignResult(ResignResult result)

@@ -68,7 +68,7 @@ namespace WMD.Console.UI
                 10 => "you can build and use nukes!",
                 _ => "?",
             };
-            System.Console.WriteLine($"Your nuke research level is {researchState.NukeResearchLevel:N0} ({researchProgressFlavorText}).");
+            System.Console.WriteLine($"Your nuke research is at Level {researchState.NukeResearchLevel:N0} ({researchProgressFlavorText}).");
         }
 
         private static void PrintPlayerStats(Player player)

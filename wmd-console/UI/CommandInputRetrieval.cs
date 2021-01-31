@@ -4,6 +4,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Research;
 using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
@@ -21,6 +22,7 @@ namespace WMD.Console.UI
                 { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
                 { typeof(HireHenchmenInput), GetHireHenchmenInput },
                 { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
+                { typeof(ResearchNukesInput), GetResearchNukesInput },
                 { typeof(ResignInput), GetResignInput },
                 { typeof(SellLandInput), GetSellLandInput },
                 { typeof(SkipTurnInput), GetSkipTurnInput },
@@ -114,6 +116,39 @@ namespace WMD.Console.UI
             string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new PurchaseUnclaimedLandInput(areaToPurchase)
+                : null;
+        }
+
+        private static ResearchNukesInput? GetResearchNukesInput(GameState gameState)
+        {
+            int currentResearchLevel = gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel;
+
+            if (currentResearchLevel >= ResearchState.MaxNukeResearchLevel)
+            {
+                PrintingUtility.PrintNukesResearchAlreadyMaxedOut();
+                return null;
+            }
+
+            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
+
+            if (secretBase == null)
+            {
+                PrintingUtility.PrintDoNotHaveASecretBase();
+                return null;
+            }
+
+            decimal researchPrice = ResearchState.NukeResearchLevelCost;
+
+            if (researchPrice > gameState.CurrentPlayer.State.Money)
+            {
+                PrintingUtility.PrintInsufficientFundsForResearchingNukes(researchPrice);
+                return null;
+            }
+
+            string prompt = $"You can advance your nukes research to Level {currentResearchLevel + 1:N0} for {researchPrice:C}. Proceed?";
+
+            return UserInput.GetConfirmation(prompt)
+                ? new ResearchNukesInput()
                 : null;
         }
 
