@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wmd-console", "wmd-console\wmd-console.csproj", "{5ABCF958-6DCD-4218-A0E4-729CAE5A8D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLib", "GameLib\GameLib.csproj", "{012DA9CC-54A4-4ABF-8B5E-5B5131793D19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wmd-core", "wmd-core\wmd-core.csproj", "{012DA9CC-54A4-4ABF-8B5E-5B5131793D19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
