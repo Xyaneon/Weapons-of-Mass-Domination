@@ -51,7 +51,7 @@ namespace WMD.Game.State.Data.SecretBases
         /// </summary>
         /// <param name="secretBase">The <see cref="SecretBase"/> which could be upgraded (or built if <see langword="null"/>).</param>
         /// <returns>The price of upgrading the secret base.</returns>
-        public static decimal CalculateUpgradePrice(SecretBase secretBase)
+        public static decimal CalculateUpgradePrice(SecretBase? secretBase)
         {
             return secretBase?.Level * SecretBaseUpgradeFactor ?? SecretBaseBuildPrice;
         }
