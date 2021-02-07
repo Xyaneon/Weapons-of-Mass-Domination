@@ -5,27 +5,27 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Additional input data for selling land.
     /// </summary>
-    public class SellLandInput : CommandInput
+    public record SellLandInput : CommandInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SellLandInput"/> class.
+        /// Gets or initializes the amount of land to sell in square kilometers.
         /// </summary>
-        /// <param name="areaToSell">The amount of land to sell in square kilometers.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="areaToSell"/> is less than zero.
+        /// Thr provided value is less than zero.
         /// </exception>
-        public SellLandInput(int areaToSell) : base()
+        public int AreaToSell
         {
-            if (areaToSell < 0)
+            get => _areaToSell;
+            init
             {
-                throw new ArgumentOutOfRangeException(nameof(areaToSell), areaToSell, "The amount of land area to sell cannot be less than zero.");
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The amount of land area to sell cannot be less than zero.");
+                }
+                _areaToSell = value;
             }
-            AreaToSell = areaToSell;
         }
 
-        /// <summary>
-        /// Gets the amount of land to sell in square kilometers.
-        /// </summary>
-        public int AreaToSell { get; }
+        private int _areaToSell;
     }
 }

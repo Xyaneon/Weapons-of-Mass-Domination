@@ -5,27 +5,27 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Additional input data for the attack player action.
     /// </summary>
-    public class AttackPlayerInput : CommandInput
+    public record AttackPlayerInput : CommandInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AttackPlayerInput"/> class.
+        /// Gets or initializes the index of the player being attacked.
         /// </summary>
-        /// <param name="targetPlayerIndex">The index of the player being attacked.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="targetPlayerIndex"/> is less than zero.
+        /// The provided value is less than zero.
         /// </exception>
-        public AttackPlayerInput(int targetPlayerIndex) : base()
+        public int TargetPlayerIndex
         {
-            if (targetPlayerIndex < 0)
+            get => _targetPlayerIndex;
+            init
             {
-                throw new ArgumentOutOfRangeException(nameof(targetPlayerIndex), targetPlayerIndex, "The target player index cannot be less than zero.");
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The target player index cannot be less than zero.");
+                }
+                _targetPlayerIndex = value;
             }
-            TargetPlayerIndex = targetPlayerIndex;
         }
 
-        /// <summary>
-        /// Gets the index of the player being attacked.
-        /// </summary>
-        public int TargetPlayerIndex { get; }
+        private int _targetPlayerIndex;
     }
 }

@@ -46,7 +46,7 @@ namespace WMD.Console.UI
         {
             int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
             return targetPlayerIndex.HasValue
-                ? new AttackPlayerInput(targetPlayerIndex.Value)
+                ? new AttackPlayerInput() { TargetPlayerIndex = targetPlayerIndex.Value }
                 : null;
         }
 
@@ -84,7 +84,7 @@ namespace WMD.Console.UI
                 return null;
             }
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
-                ? new HireHenchmenInput(openPositionsToOffer)
+                ? new HireHenchmenInput() with { OpenPositionsOffered = openPositionsToOffer }
                 : null;
         }
 
@@ -115,7 +115,7 @@ namespace WMD.Console.UI
             decimal totalPurchasePrice = areaToPurchase * gameState.UnclaimedLandPurchasePrice;
             string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
-                ? new PurchaseUnclaimedLandInput(areaToPurchase)
+                ? new PurchaseUnclaimedLandInput() with { AreaToPurchase = areaToPurchase }
                 : null;
         }
 
@@ -179,7 +179,7 @@ namespace WMD.Console.UI
             decimal totalSalePrice = areaToSell * pricePerSquareKilometer;
             string confirmationPrompt = $"This transaction will earn you {totalSalePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
-                ? new SellLandInput(areaToSell)
+                ? new SellLandInput() with { AreaToSell = areaToSell }
                 : null;
         }
 

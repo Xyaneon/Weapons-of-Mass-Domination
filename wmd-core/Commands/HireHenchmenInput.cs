@@ -5,27 +5,27 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Additional input data for the hire henchmen action.
     /// </summary>
-    public class HireHenchmenInput : CommandInput
+    public record HireHenchmenInput : CommandInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HireHenchmenInput"/> class.
+        /// Gets or initializes the number of open positions to offer.
         /// </summary>
-        /// <param name="openPositionsOffered">The number of open positions to offer.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="openPositionsOffered"/> is less than one.
+        /// The provided value is less than one.
         /// </exception>
-        public HireHenchmenInput(int openPositionsOffered) : base()
+        public int OpenPositionsOffered
         {
-            if (openPositionsOffered < 1)
+            get => _openPositionsOffered;
+            init
             {
-                throw new ArgumentOutOfRangeException(nameof(openPositionsOffered), openPositionsOffered, "The number of open positions offered must be greater than zero.");
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The number of open positions offered must be greater than zero.");
+                }
+                _openPositionsOffered = value;
             }
-            OpenPositionsOffered = openPositionsOffered;
         }
 
-        /// <summary>
-        /// Gets the number of open positions to offer.
-        /// </summary>
-        public int OpenPositionsOffered { get; }
+        private int _openPositionsOffered;
     }
 }
