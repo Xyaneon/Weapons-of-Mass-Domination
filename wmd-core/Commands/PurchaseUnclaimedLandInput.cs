@@ -5,27 +5,27 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Additional input data for purchasing unclaimed land.
     /// </summary>
-    public class PurchaseUnclaimedLandInput : CommandInput
+    public record PurchaseUnclaimedLandInput : CommandInput
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PurchaseUnclaimedLandInput"/> class.
+        /// Gets or initializes the amount of land to purchase in square kilometers.
         /// </summary>
-        /// <param name="areaToPurchase">The amount of land to purchase in square kilometers.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="areaToPurchase"/> is less than zero.
+        /// The provided value is less than zero.
         /// </exception>
-        public PurchaseUnclaimedLandInput(int areaToPurchase) : base()
+        public int AreaToPurchase
         {
-            if (areaToPurchase < 0)
+            get => _areaToPurchase;
+            init
             {
-                throw new ArgumentOutOfRangeException(nameof(areaToPurchase), "The area of land to purchase cannot be negative.");
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The area of land to purchase cannot be negative.");
+                }
+                _areaToPurchase = value;
             }
-            AreaToPurchase = areaToPurchase;
         }
 
-        /// <summary>
-        /// Gets the amount of land to purchase in square kilometers.
-        /// </summary>
-        public int AreaToPurchase { get; }
+        private int _areaToPurchase;
     }
 }
