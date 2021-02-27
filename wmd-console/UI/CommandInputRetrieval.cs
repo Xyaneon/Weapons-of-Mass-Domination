@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game.Commands;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
-using WMD.Game.State.Data.Research;
 using WMD.Game.State.Data.SecretBases;
 
 namespace WMD.Console.UI
@@ -123,7 +123,7 @@ namespace WMD.Console.UI
         {
             int currentResearchLevel = gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel;
 
-            if (currentResearchLevel >= ResearchState.MaxNukeResearchLevel)
+            if (currentResearchLevel >= NukeConstants.MaxNukeResearchLevel)
             {
                 PrintingUtility.PrintNukesResearchAlreadyMaxedOut();
                 return null;
@@ -137,7 +137,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal researchPrice = ResearchState.NukeResearchLevelCost;
+            decimal researchPrice = NukeConstants.NukeResearchLevelCost;
 
             if (researchPrice > gameState.CurrentPlayer.State.Money)
             {
