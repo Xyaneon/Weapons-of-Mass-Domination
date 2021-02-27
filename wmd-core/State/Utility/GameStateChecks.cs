@@ -10,6 +10,17 @@ namespace WMD.Game.State.Utility
     public static class GameStateChecks
     {
         /// <summary>
+        /// Determines whether the current player could purchase any unclaimed land with their current funds.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns><see langword="true"/> if the current player could purchase any unclaimed land with their current funds; otherwise, <see langword="false"/>.</returns>
+        /// <remarks>This method does not take into account the actual amount of remaining land area available for purchase.</remarks>
+        public static bool CurrentPlayerCouldPurchaseLand([DisallowNull] GameState gameState)
+        {
+            return LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState) > 0;
+        }
+
+        /// <summary>
         /// Determines whether the current player has a secret base.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>

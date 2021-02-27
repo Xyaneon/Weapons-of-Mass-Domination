@@ -36,21 +36,16 @@ namespace WMD.Game.Commands
             }
 
             GameState updatedGameState = gameState;
-            decimal manufacturingPrice = CalculateManufacturingPrice(gameState, input.NumberOfNukesToManufacture);
+            decimal manufacturingPrice = NukesCalculator.CalculateTotalManufacturingPrice(gameState, input.NumberOfNukesToManufacture);
             updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, -1 * manufacturingPrice);
             updatedGameState = GameStateUpdater.AdjustNukesForPlayer(updatedGameState, gameState.CurrentPlayerIndex, input.NumberOfNukesToManufacture);
 
             return new ManufactureNukesResult(updatedGameState, gameState.CurrentPlayerIndex, input.NumberOfNukesToManufacture);
         }
 
-        private static decimal CalculateManufacturingPrice(GameState gameState, int quantity)
-        {
-            return NukeConstants.ManufacturingPrice * quantity;
-        }
-
         private static bool CurrentPlayerDoesNotHaveEnoughMoney(GameState gameState, int quantity)
         {
-            return CalculateManufacturingPrice(gameState, quantity) > gameState.CurrentPlayer.State.Money;
+            return NukesCalculator.CalculateTotalManufacturingPrice(gameState, quantity) > gameState.CurrentPlayer.State.Money;
         }
     }
 }

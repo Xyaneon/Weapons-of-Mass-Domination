@@ -98,7 +98,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            var maximumAllowedNukeQuantity = (int)Math.Floor(gameState.CurrentPlayer.State.Money / NukeConstants.ManufacturingPrice);
+            var maximumAllowedNukeQuantity = NukesCalculator.CalculateMaximumNumberOfNukesCurrentPlayerCouldManufacture(gameState);
             var allowedAmounts = new IntRange(0, maximumAllowedNukeQuantity);
 
             string prompt = $"{NukesToManufacturePrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
@@ -110,7 +110,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal manufacturingPrice = NukeConstants.ManufacturingPrice * nukesToManufacture;
+            decimal manufacturingPrice = NukesCalculator.CalculateTotalManufacturingPrice(gameState, nukesToManufacture);
 
             return UserInput.GetConfirmation($"You will manufacture {nukesToManufacture:N0} new nukes for {manufacturingPrice:C}. Continue?")
                 ? new ManufactureNukesInput() with { NumberOfNukesToManufacture = nukesToManufacture }
@@ -125,14 +125,15 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            PrintingUtility.PrintCurrentUnclaimedLand(gameState);
-            int maxPurchaseableArea = LandAreaCalculator.CalculateMaxPurchaseableLandAreaForCurrentPlayer(gameState);
-            if (maxPurchaseableArea < 1)
+            PrintingUtility.PrintCurrentUnclaimedLandAreaAndPrice(gameState);
+
+            if (GameStateChecks.CurrentPlayerCouldPurchaseLand(gameState))
             {
                 PrintingUtility.PrintInsufficientFundsForAnyLandPurchase();
                 return null;
             }
 
+            int maxPurchaseableArea = LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState);
             var allowedPurchaseAmounts = new IntRange(0, maxPurchaseableArea);
             string prompt = $"{UnclaimedLandPurchasePrompt} ({allowedPurchaseAmounts.Minimum} to {allowedPurchaseAmounts.Maximum})";
             int areaToPurchase = UserInput.GetInteger(prompt, allowedPurchaseAmounts);
@@ -141,7 +142,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal totalPurchasePrice = areaToPurchase * gameState.UnclaimedLandPurchasePrice;
+            decimal totalPurchasePrice = LandAreaCalculator.CalculateTotalPurchasePrice(gameState, areaToPurchase);
             string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new PurchaseUnclaimedLandInput() with { AreaToPurchase = areaToPurchase }

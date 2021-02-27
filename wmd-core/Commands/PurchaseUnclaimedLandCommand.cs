@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -22,7 +23,7 @@ namespace WMD.Game.Commands
 
         public override PurchaseUnclaimedLandResult Execute([DisallowNull] GameState gameState, [DisallowNull] PurchaseUnclaimedLandInput input)
         {
-            decimal totalPurchasePrice = CalculateTotalPurchasePrice(gameState, input);
+            decimal totalPurchasePrice = LandAreaCalculator.CalculateTotalPurchasePrice(gameState, input.AreaToPurchase);
 
             if (CurrentPlayerHasInsufficientFunds(gameState, input))
             {
@@ -40,14 +41,9 @@ namespace WMD.Game.Commands
             return new PurchaseUnclaimedLandResult(updatedGameState, gameState.CurrentPlayerIndex, input.AreaToPurchase, totalPurchasePrice);
         }
 
-        private static decimal CalculateTotalPurchasePrice(GameState gameState, PurchaseUnclaimedLandInput input)
-        {
-            return gameState.UnclaimedLandPurchasePrice * input.AreaToPurchase;
-        }
-
         private static bool CurrentPlayerHasInsufficientFunds(GameState gameState, PurchaseUnclaimedLandInput input)
         {
-            return CalculateTotalPurchasePrice(gameState, input) > gameState.CurrentPlayer.State.Money;
+            return LandAreaCalculator.CalculateTotalPurchasePrice(gameState, input.AreaToPurchase) > gameState.CurrentPlayer.State.Money;
         }
 
         private static bool NotEnoughLandToSatisfyPurchaseAmount(GameState gameState, PurchaseUnclaimedLandInput input)
