@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -13,24 +14,26 @@ namespace WMD.Game.Commands
     {
         public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            throw new NotImplementedException();
+            return GameStateChecks.CurrentPlayerHasASecretBase(gameState)
+                && !CurrentPlayerHasInsufficientFunds(gameState)
+                && !GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState);
         }
 
         public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, ResearchNukesInput input)
         {
-            return !(CurrentPlayerDoesNotHaveSecretBase(gameState) || CurrentPlayerHasInsufficientFunds(gameState) || CurrentPlayerIsAtMaxNukesResearchLevel(gameState));
+            return CanExecuteForState(gameState);
         }
 
         public override ResearchNukesResult Execute([DisallowNull] GameState gameState, ResearchNukesInput input)
         {
             decimal totalResearchCost = CalculateResearchPrice(gameState);
 
-            if(CurrentPlayerIsAtMaxNukesResearchLevel(gameState))
+            if(GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState))
             {
                 throw new InvalidOperationException("The current player has already maxed out their nukes research.");
             }
 
-            if(CurrentPlayerDoesNotHaveSecretBase(gameState))
+            if(!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 throw new InvalidOperationException("The current player needs a secret base before they can research nukes.");
             }
@@ -54,16 +57,6 @@ namespace WMD.Game.Commands
         private static bool CurrentPlayerHasInsufficientFunds(GameState gameState)
         {
             return CalculateResearchPrice(gameState) > gameState.CurrentPlayer.State.Money;
-        }
-
-        private static bool CurrentPlayerIsAtMaxNukesResearchLevel(GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
-        }
-
-        private static bool CurrentPlayerDoesNotHaveSecretBase(GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.SecretBase == null;
         }
     }
 }

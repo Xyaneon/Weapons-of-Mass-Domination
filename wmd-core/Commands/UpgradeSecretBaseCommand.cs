@@ -4,6 +4,7 @@ using WMD.Game.State.Data;
 using WMD.Game.State.Data.Players;
 using WMD.Game.State.Data.SecretBases;
 using WMD.Game.State.Updates;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -14,17 +15,18 @@ namespace WMD.Game.Commands
     {
         public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            return !CurrentPlayerDoesNotHaveASecretBase(gameState);
+            return GameStateChecks.CurrentPlayerHasASecretBase(gameState);
         }
 
         public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] UpgradeSecretBaseInput input)
         {
-            return !(CurrentPlayerDoesNotHaveASecretBase(gameState) || CurrentPlayerDoesNotHaveEnoughMoney(gameState));
+            return GameStateChecks.CurrentPlayerHasASecretBase(gameState)
+                && !CurrentPlayerDoesNotHaveEnoughMoney(gameState);
         }
 
         public override UpgradeSecretBaseResult Execute([DisallowNull] GameState gameState, [DisallowNull] UpgradeSecretBaseInput input)
         {
-            if (gameState.CurrentPlayer.State.SecretBase == null)
+            if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 throw new InvalidOperationException("The current player does not have a secret base to upgrade.");
             }
@@ -36,7 +38,7 @@ namespace WMD.Game.Commands
 
             GameState updatedGameState = gameState;
             decimal upgradePrice = CalculateUpgradePrice(gameState);
-            if (gameState.CurrentPlayer.State.SecretBase != null)
+            if (GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 updatedGameState = GameStateUpdater.IncrementSecretBaseLevel(gameState, gameState.CurrentPlayerIndex);
             }
@@ -50,11 +52,6 @@ namespace WMD.Game.Commands
         private static decimal CalculateUpgradePrice(GameState gameState)
         {
             return SecretBase.CalculateUpgradePrice(gameState.CurrentPlayer.State.SecretBase!);
-        }
-
-        private static bool CurrentPlayerDoesNotHaveASecretBase(GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.SecretBase == null;
         }
 
         private static bool CurrentPlayerDoesNotHaveEnoughMoney(GameState gameState)

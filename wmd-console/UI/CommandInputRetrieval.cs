@@ -6,6 +6,7 @@ using WMD.Game.Commands;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.SecretBases;
+using WMD.Game.State.Utility;
 
 namespace WMD.Console.UI
 {
@@ -54,10 +55,9 @@ namespace WMD.Console.UI
 
         private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
         {
-            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
             decimal buildPrice = SecretBase.SecretBaseBuildPrice;
 
-            if (secretBase != null)
+            if (GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 PrintingUtility.PrintAlreadyHaveASecretBase();
                 return null;
@@ -92,7 +92,7 @@ namespace WMD.Console.UI
 
         private static ManufactureNukesInput? GetManufactureNukesInput(GameState gameState)
         {
-            if (CurrentPlayerHasNotCompletedNukesResearch(gameState))
+            if (!GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState))
             {
                 PrintingUtility.PrintNukesResearchNotCompleted();
                 return null;
@@ -151,15 +151,13 @@ namespace WMD.Console.UI
         {
             int currentResearchLevel = gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel;
 
-            if (currentResearchLevel >= NukeConstants.MaxNukeResearchLevel)
+            if (GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState))
             {
                 PrintingUtility.PrintNukesResearchAlreadyMaxedOut();
                 return null;
             }
 
-            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
-
-            if (secretBase == null)
+            if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 PrintingUtility.PrintDoNotHaveASecretBase();
                 return null;
@@ -228,7 +226,7 @@ namespace WMD.Console.UI
         {
             SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
 
-            if (secretBase == null)
+            if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
                 PrintingUtility.PrintDoNotHaveASecretBase();
                 return null;
@@ -242,7 +240,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            string prompt = $"You can upgrade your secret base to Level {secretBase.Level + 1:N0} for {upgradePrice:C}. Proceed?";
+            string prompt = $"You can upgrade your secret base to Level {secretBase!.Level + 1:N0} for {upgradePrice:C}. Proceed?";
 
             return UserInput.GetConfirmation(prompt)
                 ? new UpgradeSecretBaseInput()
@@ -254,11 +252,6 @@ namespace WMD.Console.UI
             decimal availableFunds = gameState.CurrentPlayer.State.Money;
             decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
-        }
-
-        private static bool CurrentPlayerHasNotCompletedNukesResearch(GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel < NukeConstants.MaxNukeResearchLevel;
         }
     }
 }
