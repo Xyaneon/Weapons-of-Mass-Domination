@@ -25,6 +25,11 @@ namespace WMD.Game.State.Data.Players
         public decimal Money { get; init; } = 0;
 
         /// <summary>
+        /// Gets how many nukes this player has.
+        /// </summary>
+        public int Nukes { get; init; } = 0;
+
+        /// <summary>
         /// Gets this player's current research state.
         /// </summary>
         public ResearchState ResearchState { get; init; } = new ResearchState();

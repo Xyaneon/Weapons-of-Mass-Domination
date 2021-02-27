@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
-using WMD.Game.State.Data.Research;
 
 namespace WMD.Game.State.Updates
 {
@@ -51,7 +51,7 @@ namespace WMD.Game.State.Updates
 
         public static GameState IncrementPlayerNukesResearchLevel([DisallowNull] GameState gameState, int playerIndex)
         {
-            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= ResearchState.MaxNukeResearchLevel)
+            if (gameState.Players[playerIndex].State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel)
             {
                 throw new InvalidOperationException("The player has already maxed out their nukes research.");
             }
@@ -67,6 +67,21 @@ namespace WMD.Game.State.Updates
         {
             var currentPlayerState = gameState.Players[playerIndex].State;
             var updatedPlayerState = currentPlayerState with { Money = currentPlayerState.Money + adjustmentAmount };
+
+            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+        }
+
+        public static GameState AdjustNukesForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
+        {
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            int updatedNukesQuantity = currentPlayerState.Nukes + adjustmentAmount;
+
+            if (updatedNukesQuantity < 0)
+            {
+                throw new InvalidOperationException("The player cannot have a negative quantity of nukes.");
+            }
+
+            var updatedPlayerState = currentPlayerState with { Nukes = updatedNukesQuantity };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using WMD.Console.Miscellaneous;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
@@ -74,12 +76,16 @@ namespace WMD.Console.UI
         private static void PrintPlayerStats(Player player)
         {
             PlayerState state = player.State;
-            var stats = new string[]
+            var stats = new List<string>(new string[]
             {
                 $"Money: {state.Money:C}",
                 $"Henchmen: {state.WorkforceState.NumberOfHenchmen:N0}",
                 $"Land: {state.Land:N0} km²"
-            };
+            });
+            if (state.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel)
+            {
+                stats.Add($"Nukes: {state.Nukes:N0}");
+            }
 
             System.Console.WriteLine(string.Join(" | ", stats));
         }

@@ -96,6 +96,11 @@ namespace WMD.Console.UI
         {
             System.Console.WriteLine("You apparently changed your mind.");
         }
+        
+        public static void PrintNoNukesToManufacture()
+        {
+            System.Console.WriteLine("You apparently changed your mind.");
+        }
 
         public static void PrintNoUnclaimedLandLeftToPurchase()
         {
@@ -105,6 +110,11 @@ namespace WMD.Console.UI
         public static void PrintNukesResearchAlreadyMaxedOut()
         {
             System.Console.WriteLine($"Your nukes research is already complete.");
+        }
+
+        public static void PrintNukesResearchNotCompleted()
+        {
+            System.Console.WriteLine($"Your nukes research has not yet been completed.");
         }
 
         public static void PrintTitle()
