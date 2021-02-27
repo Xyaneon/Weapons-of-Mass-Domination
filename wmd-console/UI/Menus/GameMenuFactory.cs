@@ -71,6 +71,7 @@ namespace WMD.Console.UI.Menus
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
                 new MenuItem("Research nukes", () => menu.SetResultAndClose(new ResearchNukesCommand())),
+                new MenuItem("Manufacture nukes", () => menu.SetResultAndClose(new ManufactureNukesCommand())),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),
                 new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()))
             };
