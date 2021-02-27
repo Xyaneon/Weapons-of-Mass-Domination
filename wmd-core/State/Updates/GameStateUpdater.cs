@@ -71,6 +71,21 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
+        public static GameState AdjustNukesForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
+        {
+            var currentPlayerState = gameState.Players[playerIndex].State;
+            int updatedNukesQuantity = currentPlayerState.Nukes + adjustmentAmount;
+
+            if (updatedNukesQuantity < 0)
+            {
+                throw new InvalidOperationException("The player cannot have a negative quantity of nukes.");
+            }
+
+            var updatedPlayerState = currentPlayerState with { Nukes = updatedNukesQuantity };
+
+            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+        }
+
         public static GameState AdjustHenchmenForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
         {
             var currentPlayerState = gameState.Players[playerIndex].State;
