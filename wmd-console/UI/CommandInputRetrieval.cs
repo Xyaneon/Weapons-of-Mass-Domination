@@ -12,6 +12,7 @@ namespace WMD.Console.UI
     static class CommandInputRetrieval
     {
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
+        private const string NukesToManufacturePrompt = "Please enter how many nukes you would like to manufacture";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
         static CommandInputRetrieval()
@@ -21,6 +22,7 @@ namespace WMD.Console.UI
                 { typeof(AttackPlayerInput), GetAttackPlayerInput },
                 { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
                 { typeof(HireHenchmenInput), GetHireHenchmenInput },
+                { typeof(ManufactureNukesInput), GetManufactureNukesInput },
                 { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
                 { typeof(ResearchNukesInput), GetResearchNukesInput },
                 { typeof(ResignInput), GetResignInput },
@@ -85,6 +87,32 @@ namespace WMD.Console.UI
             }
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
                 ? new HireHenchmenInput() with { OpenPositionsOffered = openPositionsToOffer }
+                : null;
+        }
+
+        private static ManufactureNukesInput? GetManufactureNukesInput(GameState gameState)
+        {
+            if (CurrentPlayerHasNotCompletedNukesResearch(gameState))
+            {
+                PrintingUtility.PrintNukesResearchNotCompleted();
+                return null;
+            }
+
+            var maximumAllowedNukeQuantity = (int)Math.Floor(gameState.CurrentPlayer.State.Money / NukeConstants.ManufacturingPrice);
+            var allowedAmounts = new IntRange(0, maximumAllowedNukeQuantity);
+
+            int nukesToManufacture = UserInput.GetInteger(NukesToManufacturePrompt, allowedAmounts);
+
+            if (nukesToManufacture <= 0)
+            {
+                PrintingUtility.PrintNoNukesToManufacture();
+                return null;
+            }
+
+            decimal manufacturingPrice = NukeConstants.ManufacturingPrice * nukesToManufacture;
+
+            return UserInput.GetConfirmation($"You will manufacture {nukesToManufacture:N0} new nukes for {manufacturingPrice:C}. Continue?")
+                ? new ManufactureNukesInput() with { NumberOfNukesToManufacture = nukesToManufacture }
                 : null;
         }
 
@@ -226,6 +254,11 @@ namespace WMD.Console.UI
             decimal availableFunds = gameState.CurrentPlayer.State.Money;
             decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
+        }
+
+        private static bool CurrentPlayerHasNotCompletedNukesResearch(GameState gameState)
+        {
+            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel < NukeConstants.MaxNukeResearchLevel;
         }
     }
 }
