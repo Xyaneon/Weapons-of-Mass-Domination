@@ -101,7 +101,8 @@ namespace WMD.Console.UI
             var maximumAllowedNukeQuantity = (int)Math.Floor(gameState.CurrentPlayer.State.Money / NukeConstants.ManufacturingPrice);
             var allowedAmounts = new IntRange(0, maximumAllowedNukeQuantity);
 
-            int nukesToManufacture = UserInput.GetInteger(NukesToManufacturePrompt, allowedAmounts);
+            string prompt = $"{NukesToManufacturePrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
+            int nukesToManufacture = UserInput.GetInteger(prompt, allowedAmounts);
 
             if (nukesToManufacture <= 0)
             {
@@ -125,7 +126,7 @@ namespace WMD.Console.UI
             }
 
             PrintingUtility.PrintCurrentUnclaimedLand(gameState);
-            int maxPurchaseableArea = CalculateMaxPurchaseableArea(gameState);
+            int maxPurchaseableArea = LandAreaCalculator.CalculateMaxPurchaseableLandAreaForCurrentPlayer(gameState);
             if (maxPurchaseableArea < 1)
             {
                 PrintingUtility.PrintInsufficientFundsForAnyLandPurchase();
@@ -245,13 +246,6 @@ namespace WMD.Console.UI
             return UserInput.GetConfirmation(prompt)
                 ? new UpgradeSecretBaseInput()
                 : null;
-        }
-
-        private static int CalculateMaxPurchaseableArea(GameState gameState)
-        {
-            decimal availableFunds = gameState.CurrentPlayer.State.Money;
-            decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
-            return (int)Math.Floor(availableFunds / pricePerSquareKilometer);
         }
     }
 }
