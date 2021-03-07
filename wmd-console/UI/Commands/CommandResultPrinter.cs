@@ -2,7 +2,7 @@
 using WMD.Game.Commands;
 using WMD.Game.State.Data.Players;
 
-namespace WMD.Console.UI
+namespace WMD.Console.UI.Commands
 {
     static class CommandResultPrinter
     {
@@ -69,7 +69,7 @@ namespace WMD.Console.UI
         {
             System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} manufactured {result.NukesManufactured:N0} nukes.");
         }
-        
+
         private static void PrintPurchaseUnclaimedLandResult(PurchaseUnclaimedLandResult result)
         {
             System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} purchased {result.LandAreaPurchased:N0} km² of land for {result.TotalPurchasePrice:C}.");
