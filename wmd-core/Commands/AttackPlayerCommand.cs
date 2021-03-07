@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -12,17 +13,6 @@ namespace WMD.Game.Commands
     {
         private const string InvalidOperationException_playerAttackingThemselves = "A player cannot attack themselves.";
         private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
-        private const double BasePercentageOfHenchmenAttackerLost = 0.1;
-        private const double MaxAdditionalPercentageOfHenchmenAttackerLost = 0.4;
-        private const double BasePercentageOfHenchmenDefenderLost = 0.2;
-        private const double MaxAdditionalPercentageOfHenchmenDefenderLost = 0.7;
-
-        static AttackPlayerCommand()
-        {
-            _random = new Random();
-        }
-
-        private static readonly Random _random;
 
         public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
@@ -46,10 +36,8 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            double percentageOfAttackerHenchmenLost = CalculatePercentageOfHenchmenAttackerLost();
-            double percentageOfDefenderHenchmenLost = CalculatePercentageOfHenchmenDefenderLost();
-            int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, percentageOfAttackerHenchmenLost);
-            int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfDefenderHenchmenLost);
+            int henchmenAttackerLost = AttacksCalculator.CalculateNumberOfHenchmenAttackerLost(gameState);
+            int henchmenDefenderLost = AttacksCalculator.CalculateNumberOfHenchmenDefenderLost(gameState, input);
 
             GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * henchmenAttackerLost);
             updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * henchmenDefenderLost);
@@ -57,34 +45,14 @@ namespace WMD.Game.Commands
             return new AttackPlayerResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
         }
 
-        private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input, double percentageOfDefenderHenchmenLost)
-        {
-            return (int)Math.Round(gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen * percentageOfDefenderHenchmenLost);
-        }
-
-        private static int CalculateNumberOfHenchmenAttackerLost(GameState gameState, double percentageOfAttackerHenchmenLost)
-        {
-            return (int)Math.Round(gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * percentageOfAttackerHenchmenLost);
-        }
-
-        private static double CalculatePercentageOfHenchmenDefenderLost()
-        {
-            return BasePercentageOfHenchmenDefenderLost + _random.NextDouble() * MaxAdditionalPercentageOfHenchmenDefenderLost;
-        }
-
-        private static double CalculatePercentageOfHenchmenAttackerLost()
-        {
-            return BasePercentageOfHenchmenAttackerLost + _random.NextDouble() * MaxAdditionalPercentageOfHenchmenAttackerLost;
-        }
-
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input)
         {
-            return gameState.CurrentPlayerIndex == input.TargetPlayerIndex;
+            return GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);
         }
 
         private static bool TargetPlayerFound(GameState gameState, AttackPlayerInput input)
         {
-            return input.TargetPlayerIndex < gameState.Players.Count;
+            return GameStateChecks.PlayerIndexIsInBounds(gameState, input.TargetPlayerIndex);
         }
     }
 }

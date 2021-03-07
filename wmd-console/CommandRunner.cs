@@ -1,5 +1,5 @@
 ﻿using System;
-using WMD.Console.UI;
+using WMD.Console.UI.Commands;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
 

@@ -39,5 +39,37 @@ namespace WMD.Game.State.Utility
         {
             return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
         }
+        
+        /// <summary>
+        /// Determines whether the current player has any nukes in their inventory.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns><see langword="true"/> if the current player has any nukes in their inventory; otherwise, <see langword="false"/>.</returns>
+        public static bool CurrentPlayerHasAnyNukes([DisallowNull] GameState gameState)
+        {
+            return gameState.CurrentPlayer.State.Nukes > 0;
+        }
+
+        /// <summary>
+        /// Determines whether the current player is attacking themselves.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <param name="targetPlayerIndex">The index of the player being attacked.</param>
+        /// <returns><see langword="true"/> if the current player is attacking themselves; otherwise, <see langword="false"/>.</returns>
+        public static bool CurrentPlayerIsAttackingThemselves([DisallowNull] GameState gameState, int targetPlayerIndex)
+        {
+            return gameState.CurrentPlayerIndex == targetPlayerIndex;
+        }
+
+        /// <summary>
+        /// Determines whether the provided <paramref name="playerIndex"/> is in bounds.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <param name="targetPlayerIndex">The index of the player.</param>
+        /// <returns><see langword="true"/> if the player index is in bounds; otherwise, <see langword="false"/>.</returns>
+        public static bool PlayerIndexIsInBounds([DisallowNull] GameState gameState, int playerIndex)
+        {
+            return playerIndex >= 0 && playerIndex < gameState.Players.Count;
+        }
     }
 }

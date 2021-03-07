@@ -1,4 +1,5 @@
 ﻿using WMD.Console.UI;
+using WMD.Console.UI.Commands;
 using WMD.Console.UI.Core;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
@@ -40,7 +41,7 @@ namespace WMD.Console
 
                     if (resultTuple.RoundUpdateResult != null)
                     {
-                        PrintingUtility.PrintEndOfRound(resultTuple.RoundUpdateResult);
+                        EndOfRoundPrinter.PrintEndOfRound(resultTuple.RoundUpdateResult);
                         UserInput.WaitForPlayerAcknowledgementOfRoundEnd();
                     }
                 }

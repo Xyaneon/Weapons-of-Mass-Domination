@@ -8,11 +8,14 @@ using WMD.Game.State.Data;
 using WMD.Game.State.Data.SecretBases;
 using WMD.Game.State.Utility;
 
-namespace WMD.Console.UI
+namespace WMD.Console.UI.Commands
 {
     static class CommandInputRetrieval
     {
+        private const string ArgumentException_commandInputTypeNotRecognized = "Command input type not recognized.";
+
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
+        private const string NukesToLaunchPrompt = "Please enter how many nukes you would like to launch";
         private const string NukesToManufacturePrompt = "Please enter how many nukes you would like to manufacture";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
@@ -23,6 +26,7 @@ namespace WMD.Console.UI
                 { typeof(AttackPlayerInput), GetAttackPlayerInput },
                 { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
                 { typeof(HireHenchmenInput), GetHireHenchmenInput },
+                { typeof(LaunchNukesInput), GetLaunchNukesInput },
                 { typeof(ManufactureNukesInput), GetManufactureNukesInput },
                 { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
                 { typeof(ResearchNukesInput), GetResearchNukesInput },
@@ -40,14 +44,14 @@ namespace WMD.Console.UI
         {
             if (!_inputDict.TryGetValue(commandInputType, out var commandFunction))
             {
-                throw new ArgumentException("Command input type not recognized.", nameof(commandInputType));
+                throw new ArgumentException(ArgumentException_commandInputTypeNotRecognized, nameof(commandInputType));
             }
             return commandFunction.Invoke(gameState);
         }
 
         private static AttackPlayerInput? GetAttackPlayerInput(GameState gameState)
         {
-            int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
+            var targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
             return targetPlayerIndex.HasValue
                 ? new AttackPlayerInput() { TargetPlayerIndex = targetPlayerIndex.Value }
                 : null;
@@ -55,7 +59,7 @@ namespace WMD.Console.UI
 
         private static BuildSecretBaseInput? GetBuildSecretBaseInput(GameState gameState)
         {
-            decimal buildPrice = SecretBase.SecretBaseBuildPrice;
+            var buildPrice = SecretBase.SecretBaseBuildPrice;
 
             if (GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
@@ -69,7 +73,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            string prompt = $"You can build your very own secret base for {buildPrice:C}. Proceed?";
+            var prompt = $"You can build your very own secret base for {buildPrice:C}. Proceed?";
 
             return UserInput.GetConfirmation(prompt)
                 ? new BuildSecretBaseInput()
@@ -79,7 +83,7 @@ namespace WMD.Console.UI
         private static HireHenchmenInput? GetHireHenchmenInput(GameState gameState)
         {
             var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
-            int openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
+            var openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
             if (openPositionsToOffer <= 0)
             {
                 PrintingUtility.PrintNoPositionsToOffer();
@@ -87,6 +91,38 @@ namespace WMD.Console.UI
             }
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
                 ? new HireHenchmenInput() with { OpenPositionsOffered = openPositionsToOffer }
+                : null;
+        }
+
+        private static LaunchNukesInput? GetLaunchNukesInput(GameState gameState)
+        {
+            if (!GameStateChecks.CurrentPlayerHasAnyNukes(gameState))
+            {
+                PrintingUtility.PrintHasNoNukesToLaunch();
+                return null;
+            }
+
+            if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
+            {
+                PrintingUtility.PrintHasNoSecretBaseToLaunchNukesFrom();
+                return null;
+            }
+
+            var targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
+
+            var allowedAmounts = new IntRange(0, gameState.CurrentPlayer.State.Nukes);
+
+            var prompt = $"{NukesToLaunchPrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
+            var nukesToLaunch = UserInput.GetInteger(prompt, allowedAmounts);
+
+            if (nukesToLaunch <= 0)
+            {
+                PrintingUtility.PrintChoseNoNukesToLaunch();
+                return null;
+            }
+
+            return targetPlayerIndex.HasValue
+                ? new LaunchNukesInput() { TargetPlayerIndex = targetPlayerIndex.Value, NumberOfNukesLaunched = nukesToLaunch }
                 : null;
         }
 
@@ -101,8 +137,8 @@ namespace WMD.Console.UI
             var maximumAllowedNukeQuantity = NukesCalculator.CalculateMaximumNumberOfNukesCurrentPlayerCouldManufacture(gameState);
             var allowedAmounts = new IntRange(0, maximumAllowedNukeQuantity);
 
-            string prompt = $"{NukesToManufacturePrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
-            int nukesToManufacture = UserInput.GetInteger(prompt, allowedAmounts);
+            var prompt = $"{NukesToManufacturePrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
+            var nukesToManufacture = UserInput.GetInteger(prompt, allowedAmounts);
 
             if (nukesToManufacture <= 0)
             {
@@ -110,7 +146,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal manufacturingPrice = NukesCalculator.CalculateTotalManufacturingPrice(gameState, nukesToManufacture);
+            var manufacturingPrice = NukesCalculator.CalculateTotalManufacturingPrice(gameState, nukesToManufacture);
 
             return UserInput.GetConfirmation($"You will manufacture {nukesToManufacture:N0} new nukes for {manufacturingPrice:C}. Continue?")
                 ? new ManufactureNukesInput() with { NumberOfNukesToManufacture = nukesToManufacture }
@@ -133,17 +169,17 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            int maxPurchaseableArea = LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState);
+            var maxPurchaseableArea = LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState);
             var allowedPurchaseAmounts = new IntRange(0, maxPurchaseableArea);
-            string prompt = $"{UnclaimedLandPurchasePrompt} ({allowedPurchaseAmounts.Minimum} to {allowedPurchaseAmounts.Maximum})";
-            int areaToPurchase = UserInput.GetInteger(prompt, allowedPurchaseAmounts);
+            var prompt = $"{UnclaimedLandPurchasePrompt} ({allowedPurchaseAmounts.Minimum} to {allowedPurchaseAmounts.Maximum})";
+            var areaToPurchase = UserInput.GetInteger(prompt, allowedPurchaseAmounts);
             if (areaToPurchase < 1)
             {
                 return null;
             }
 
-            decimal totalPurchasePrice = LandAreaCalculator.CalculateTotalPurchasePrice(gameState, areaToPurchase);
-            string confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
+            var totalPurchasePrice = LandAreaCalculator.CalculateTotalPurchasePrice(gameState, areaToPurchase);
+            var confirmationPrompt = $"This transaction will cost you {totalPurchasePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new PurchaseUnclaimedLandInput() with { AreaToPurchase = areaToPurchase }
                 : null;
@@ -151,7 +187,7 @@ namespace WMD.Console.UI
 
         private static ResearchNukesInput? GetResearchNukesInput(GameState gameState)
         {
-            int currentResearchLevel = gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel;
+            var currentResearchLevel = gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel;
 
             if (GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState))
             {
@@ -165,7 +201,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal researchPrice = NukeConstants.NukeResearchLevelCost;
+            var researchPrice = NukeConstants.NukeResearchLevelCost;
 
             if (researchPrice > gameState.CurrentPlayer.State.Money)
             {
@@ -173,7 +209,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            string prompt = $"You can advance your nukes research to Level {currentResearchLevel + 1:N0} for {researchPrice:C}. Proceed?";
+            var prompt = $"You can advance your nukes research to Level {currentResearchLevel + 1:N0} for {researchPrice:C}. Proceed?";
 
             return UserInput.GetConfirmation(prompt)
                 ? new ResearchNukesInput()
@@ -195,17 +231,17 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
+            var pricePerSquareKilometer = gameState.UnclaimedLandPurchasePrice;
             var allowedSaleAmounts = new IntRange(0, gameState.CurrentPlayer.State.Land);
-            string prompt = $"Land is currently selling at {pricePerSquareKilometer:C}/km². How much do you want to sell? ({allowedSaleAmounts.Minimum} to {allowedSaleAmounts.Maximum})";
-            int areaToSell = UserInput.GetInteger(prompt, allowedSaleAmounts);
+            var prompt = $"Land is currently selling at {pricePerSquareKilometer:C}/km². How much do you want to sell? ({allowedSaleAmounts.Minimum} to {allowedSaleAmounts.Maximum})";
+            var areaToSell = UserInput.GetInteger(prompt, allowedSaleAmounts);
             if (areaToSell <= 0)
             {
                 return null;
             }
 
-            decimal totalSalePrice = areaToSell * pricePerSquareKilometer;
-            string confirmationPrompt = $"This transaction will earn you {totalSalePrice:C}. Proceed?";
+            var totalSalePrice = areaToSell * pricePerSquareKilometer;
+            var confirmationPrompt = $"This transaction will earn you {totalSalePrice:C}. Proceed?";
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new SellLandInput() with { AreaToSell = areaToSell }
                 : null;
@@ -226,7 +262,7 @@ namespace WMD.Console.UI
 
         private static UpgradeSecretBaseInput? GetUpgradeSecretBaseInput(GameState gameState)
         {
-            SecretBase? secretBase = gameState.CurrentPlayer.State.SecretBase;
+            var secretBase = gameState.CurrentPlayer.State.SecretBase;
 
             if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
             {
@@ -234,7 +270,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            decimal upgradePrice = SecretBase.CalculateUpgradePrice(secretBase);
+            var upgradePrice = SecretBase.CalculateUpgradePrice(secretBase);
 
             if (upgradePrice > gameState.CurrentPlayer.State.Money)
             {
@@ -242,7 +278,7 @@ namespace WMD.Console.UI
                 return null;
             }
 
-            string prompt = $"You can upgrade your secret base to Level {secretBase!.Level + 1:N0} for {upgradePrice:C}. Proceed?";
+            var prompt = $"You can upgrade your secret base to Level {secretBase!.Level + 1:N0} for {upgradePrice:C}. Proceed?";
 
             return UserInput.GetConfirmation(prompt)
                 ? new UpgradeSecretBaseInput()
