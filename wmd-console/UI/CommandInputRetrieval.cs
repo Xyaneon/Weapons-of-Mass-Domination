@@ -96,6 +96,18 @@ namespace WMD.Console.UI
 
         private static LaunchNukesInput? GetLaunchNukesInput(GameState gameState)
         {
+            if (!GameStateChecks.CurrentPlayerHasAnyNukes(gameState))
+            {
+                PrintingUtility.PrintHasNoNukesToLaunch();
+                return null;
+            }
+
+            if (!GameStateChecks.CurrentPlayerHasASecretBase(gameState))
+            {
+                PrintingUtility.PrintHasNoSecretBaseToLaunchNukesFrom();
+                return null;
+            }
+
             int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
 
             var allowedAmounts = new IntRange(0, gameState.CurrentPlayer.State.Nukes);
@@ -105,7 +117,7 @@ namespace WMD.Console.UI
 
             if (nukesToLaunch <= 0)
             {
-                PrintingUtility.PrintNoNukesToLaunch();
+                PrintingUtility.PrintChoseNoNukesToLaunch();
                 return null;
             }
 

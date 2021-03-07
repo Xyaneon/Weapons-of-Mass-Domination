@@ -16,6 +16,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine("You already have a secret base. Maybe you should try upgrading it instead?");
         }
 
+        public static void PrintChoseNoNukesToLaunch()
+        {
+            System.Console.WriteLine("You apparently changed your mind.");
+        }
+
         public static void PrintCurrentPlayerHasResignedAndCannotTakeTurn(string playerName)
         {
             System.Console.WriteLine($"{playerName} resigned and cannot take any more actions.");
@@ -67,6 +72,16 @@ namespace WMD.Console.UI
             System.Console.WriteLine($"This game was already won by {playerName}.");
         }
 
+        public static void PrintHasNoNukesToLaunch()
+        {
+            System.Console.WriteLine("You do not have any nukes to launch.");
+        }
+
+        public static void PrintHasNoSecretBaseToLaunchNukesFrom()
+        {
+            System.Console.WriteLine("You don't have a secret base to launch nukes from. Maybe you should try building one?");
+        }
+
         public static void PrintInsufficientFundsForAnyLandPurchase()
         {
             System.Console.WriteLine("You do not have enough money to purchase any unclaimed land.");
@@ -93,11 +108,6 @@ namespace WMD.Console.UI
         }
 
         public static void PrintNoPositionsToOffer()
-        {
-            System.Console.WriteLine("You apparently changed your mind.");
-        }
-
-        public static void PrintNoNukesToLaunch()
         {
             System.Console.WriteLine("You apparently changed your mind.");
         }
