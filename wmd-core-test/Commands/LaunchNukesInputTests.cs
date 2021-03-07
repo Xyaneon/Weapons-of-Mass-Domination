@@ -12,7 +12,7 @@ namespace WMD.Game.Test.Commands
         {
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                _ = new LaunchNukesInput() with { NumberOfNukes = 0 };
+                _ = new LaunchNukesInput() with { NumberOfNukesLaunched = 0 };
             });
 
             Assert.IsTrue(actual.Message.Contains("The number of nukes to launch cannot be less than one."));

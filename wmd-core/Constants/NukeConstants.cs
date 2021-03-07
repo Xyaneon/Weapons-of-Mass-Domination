@@ -6,6 +6,11 @@
     public static class NukeConstants
     {
         /// <summary>
+        /// The base probability that a given nuke turns out to be a dud.
+        /// </summary>
+        public const double BaseDudProbability = 0.1;
+
+        /// <summary>
         /// The maximum level for nukes research a player may attain.
         /// </summary>
         public const int MaxNukeResearchLevel = 10;

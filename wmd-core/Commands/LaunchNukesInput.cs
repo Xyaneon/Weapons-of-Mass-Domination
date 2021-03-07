@@ -16,7 +16,7 @@ namespace WMD.Game.Commands
         /// <exception cref="ArgumentOutOfRangeException">
         /// The provided value is less than one.
         /// </exception>
-        public int NumberOfNukes
+        public int NumberOfNukesLaunched
         {
             get => _numberOfNukes;
             init
