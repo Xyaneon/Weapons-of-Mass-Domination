@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wmd-core\wmd-core.csproj" />
+    <ProjectReference Include="..\..\src\wmd-core\wmd-core.csproj" />
   </ItemGroup>
 
 </Project>
