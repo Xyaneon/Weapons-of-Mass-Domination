@@ -12,7 +12,10 @@ namespace WMD.Console.UI
 {
     static class CommandInputRetrieval
     {
+        private const string ArgumentException_commandInputTypeNotRecognized = "Command input type not recognized.";
+
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
+        private const string NukesToLaunchPrompt = "Please enter how many nukes you would like to launch";
         private const string NukesToManufacturePrompt = "Please enter how many nukes you would like to manufacture";
         private const string UnclaimedLandPurchasePrompt = "Please enter how many square kilometers of land you would like to purchase";
 
@@ -23,6 +26,7 @@ namespace WMD.Console.UI
                 { typeof(AttackPlayerInput), GetAttackPlayerInput },
                 { typeof(BuildSecretBaseInput), GetBuildSecretBaseInput },
                 { typeof(HireHenchmenInput), GetHireHenchmenInput },
+                { typeof(LaunchNukesInput), GetLaunchNukesInput },
                 { typeof(ManufactureNukesInput), GetManufactureNukesInput },
                 { typeof(PurchaseUnclaimedLandInput), GetPurchaseUnclaimedLandInput },
                 { typeof(ResearchNukesInput), GetResearchNukesInput },
@@ -40,7 +44,7 @@ namespace WMD.Console.UI
         {
             if (!_inputDict.TryGetValue(commandInputType, out var commandFunction))
             {
-                throw new ArgumentException("Command input type not recognized.", nameof(commandInputType));
+                throw new ArgumentException(ArgumentException_commandInputTypeNotRecognized, nameof(commandInputType));
             }
             return commandFunction.Invoke(gameState);
         }
@@ -87,6 +91,26 @@ namespace WMD.Console.UI
             }
             return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
                 ? new HireHenchmenInput() with { OpenPositionsOffered = openPositionsToOffer }
+                : null;
+        }
+
+        private static LaunchNukesInput? GetLaunchNukesInput(GameState gameState)
+        {
+            int? targetPlayerIndex = UserInput.GetAttackTargetPlayerIndex(gameState);
+
+            var allowedAmounts = new IntRange(0, gameState.CurrentPlayer.State.Nukes);
+
+            string prompt = $"{NukesToLaunchPrompt} ({allowedAmounts.Minimum} to {allowedAmounts.Maximum})";
+            int nukesToLaunch = UserInput.GetInteger(prompt, allowedAmounts);
+
+            if (nukesToLaunch <= 0)
+            {
+                PrintingUtility.PrintNoNukesToLaunch();
+                return null;
+            }
+
+            return targetPlayerIndex.HasValue
+                ? new LaunchNukesInput() { TargetPlayerIndex = targetPlayerIndex.Value, NumberOfNukesLaunched = nukesToLaunch }
                 : null;
         }
 

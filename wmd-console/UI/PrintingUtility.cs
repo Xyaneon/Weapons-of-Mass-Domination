@@ -96,7 +96,12 @@ namespace WMD.Console.UI
         {
             System.Console.WriteLine("You apparently changed your mind.");
         }
-        
+
+        public static void PrintNoNukesToLaunch()
+        {
+            System.Console.WriteLine("You apparently changed your mind.");
+        }
+
         public static void PrintNoNukesToManufacture()
         {
             System.Console.WriteLine("You apparently changed your mind.");
