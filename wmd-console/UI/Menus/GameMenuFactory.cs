@@ -63,6 +63,16 @@ namespace WMD.Console.UI.Menus
 
             var secretBasePage = new MenuPage(menu, "Secret Base", secretBaseActionItems);
 
+            var nukeActionItems = new MenuItem[]
+            {
+                new MenuItem("Research", () => menu.SetResultAndClose(new ResearchNukesCommand())),
+                new MenuItem("Manufacture...", () => menu.SetResultAndClose(new ManufactureNukesCommand())),
+                new MenuItem("Launch...", () => menu.SetResultAndClose(new LaunchNukesCommand())),
+                new MenuItem("Back", () => menu.NavigateBack())
+            };
+
+            var nukePage = new MenuPage(menu, "Nukes", nukeActionItems);
+
             var mainActionItems = new MenuItem[]
             {
                 new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand())),
@@ -70,14 +80,12 @@ namespace WMD.Console.UI.Menus
                 new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand())),
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
-                new MenuItem("Research nukes", () => menu.SetResultAndClose(new ResearchNukesCommand())),
-                new MenuItem("Manufacture nukes", () => menu.SetResultAndClose(new ManufactureNukesCommand())),
-                new MenuItem("Launch nukes...", () => menu.SetResultAndClose(new LaunchNukesCommand())),
+                new MenuItem("Nukes...", () => menu.NavigateTo(nukePage)),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),
                 new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()))
             };
 
-            menu.AddPage("Actions", mainActionItems).AddPage(landActionsPage).AddPage(secretBasePage);
+            menu.AddPage("Actions", mainActionItems).AddPage(landActionsPage).AddPage(secretBasePage).AddPage(nukePage);
             return menu;
         }
     }
