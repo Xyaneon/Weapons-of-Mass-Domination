@@ -19,6 +19,9 @@ namespace WMD.Console.UI.Commands
                 case HireHenchmenResult result:
                     PrintHireHenchmenResult(result);
                     break;
+                case LaunchNukesResult result:
+                    PrintLaunchNukesResult(result);
+                    break;
                 case ManufactureNukesResult result:
                     PrintManufactureNukesResult(result);
                     break;
@@ -63,6 +66,23 @@ namespace WMD.Console.UI.Commands
         private static void PrintHireHenchmenResult(HireHenchmenResult result)
         {
             System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} managed to hire {result.HenchmenHired:N0} new henchmen.");
+        }
+        
+        private static void PrintLaunchNukesResult(LaunchNukesResult result)
+        {
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} launched {result.NukesLaunched:N0} nukes at {result.TargetPlayerName}.");
+            if (result.SuccessfulNukeHits == 0)
+            {
+                System.Console.WriteLine($"Not a single one of them worked, though! {result.TargetPlayerName}'s henchmen escaped without a scratch.");
+            }
+            else if (result.SuccessfulNukeHits < result.NukesLaunched)
+            {
+                System.Console.WriteLine($"{result.SuccessfulNukeHits:N0} of the nukes worked as designed. {result.TargetPlayerName} lost {result.HenchmenDefenderLost:N0} henchmen in the attack.");
+            }
+            else
+            {
+                System.Console.WriteLine($"Every nuke successfully detonated on contact! {result.TargetPlayerName} lost {result.HenchmenDefenderLost:N0} henchmen in the attack.");
+            }
         }
 
         private static void PrintManufactureNukesResult(ManufactureNukesResult result)
