@@ -2,6 +2,7 @@
 A console game for evil geniuses. Try to take over the world! :earth_americas: :boom:
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/master/LICENSE)
+![Workflow](https://github.com/Xyaneon/Weapons-of-Mass-Domination/actions/workflows/dotnet.yml/badge.svg)
 
 **:construction: This game is still under development.**
 
