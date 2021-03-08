@@ -15,7 +15,7 @@ namespace WMD.Console
                 throw new ArgumentException($"The supplied command does not inherit from {typeof(GameCommand<,>).Name}.", nameof(command));
             }
             Type inputType = baseCommandType.GenericTypeArguments[0];
-            CommandInput? retrievedInput = CommandInputRetrieval.GetCommandInput(gameState, inputType);
+            CommandInput? retrievedInput = CommandInputRetrieverFactory.CreateICommandInputRetriever(inputType).GetCommandInput(gameState);
 
             if (retrievedInput == null)
             {
