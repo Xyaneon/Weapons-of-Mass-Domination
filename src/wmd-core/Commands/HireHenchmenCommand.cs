@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -21,7 +22,7 @@ namespace WMD.Game.Commands
 
         public override HireHenchmenResult Execute([DisallowNull] GameState gameState, [DisallowNull] HireHenchmenInput input)
         {
-            int henchmenHired = input.OpenPositionsOffered;
+            int henchmenHired = HenchmenCalculator.CalculateNumberOfHenchmenHired(gameState, input.OpenPositionsOffered);
             GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, henchmenHired);
 
             return new HireHenchmenResult(updatedGameState, gameState.CurrentPlayerIndex, henchmenHired);
