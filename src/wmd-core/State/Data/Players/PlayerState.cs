@@ -30,6 +30,11 @@ namespace WMD.Game.State.Data.Players
         public int Nukes { get; init; } = 0;
 
         /// <summary>
+        /// Gets this player's reputation percentage.
+        /// </summary>
+        public int ReputationPercentage { get; init; } = 100;
+
+        /// <summary>
         /// Gets this player's current research state.
         /// </summary>
         public ResearchState ResearchState { get; init; } = new ResearchState();

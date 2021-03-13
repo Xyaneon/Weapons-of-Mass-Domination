@@ -80,7 +80,8 @@ namespace WMD.Console.UI
             {
                 $"Money: {state.Money:C}",
                 $"Henchmen: {state.WorkforceState.NumberOfHenchmen:N0}",
-                $"Land: {state.Land:N0} km²"
+                $"Land: {state.Land:N0} km²",
+                $"Reputation: {state.ReputationPercentage:N0}%"
             });
             if (state.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel)
             {

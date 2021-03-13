@@ -20,6 +20,8 @@ namespace WMD.Game.Test.State.Data.Players
             Assert.AreEqual(0, actual.Land);
             Assert.AreEqual(0, actual.Money);
             Assert.AreEqual(0, actual.Nukes);
+            // TODO: Re-enable this check once a mechanism for gaining repuattion is implemented (see issue #27).
+            //Assert.AreEqual(0, actual.ReputationPercentage);
             Assert.AreEqual(expectedResearchState, actual.ResearchState);
             Assert.IsNull(actual.SecretBase);
             Assert.AreEqual(expectedWorkforceState, actual.WorkforceState);
