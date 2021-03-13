@@ -20,6 +20,7 @@ namespace WMD.Game.Test.State.Data.Players
             Assert.AreEqual(0, actual.Land);
             Assert.AreEqual(0, actual.Money);
             Assert.AreEqual(0, actual.Nukes);
+            Assert.AreEqual(0, actual.ReputationPercentage);
             Assert.AreEqual(expectedResearchState, actual.ResearchState);
             Assert.IsNull(actual.SecretBase);
             Assert.AreEqual(expectedWorkforceState, actual.WorkforceState);
