@@ -34,7 +34,11 @@ namespace WMD.Game.State.Utility
             int currentReputation = gameState.Players[playerIndex].State.ReputationPercentage;
             int maxReputationToBeGained = ReputationConstants.MaxReputationPercentage - currentReputation;
 
-            return Math.Min(ReputationConstants.MaxGainableReputationFromPropagandaDistribution, maxReputationToBeGained);
+            double percentageOfEffectiveSpendingAmount = Math.Min((double)moneySpent / (double)ReputationConstants.MaxEffectiveSpendingAmountOnPropagandaDistribution, 1.0);
+            int maxGainableReputationFromAmountSpent = (int)Math.Floor(percentageOfEffectiveSpendingAmount * ReputationConstants.MaxGainableReputationFromPropagandaDistribution);
+            int actualReputationGained = (int)Math.Floor(_random.NextDouble() * maxGainableReputationFromAmountSpent);
+
+            return Math.Min(actualReputationGained, maxReputationToBeGained);
         }
 
         private static Random _random;

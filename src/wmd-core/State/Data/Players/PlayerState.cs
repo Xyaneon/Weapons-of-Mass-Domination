@@ -32,7 +32,7 @@ namespace WMD.Game.State.Data.Players
         /// <summary>
         /// Gets this player's reputation percentage.
         /// </summary>
-        public int ReputationPercentage { get; init; } = 100;
+        public int ReputationPercentage { get; init; } = 0;
 
         /// <summary>
         /// Gets this player's current research state.
