@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class ResignResultPrinter : CommandResultPrinter
+    class ResignResultPrinter : CommandResultPrinter<ResignResult>
     {
         private const string PrintFormatString = "{0} resigned.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(ResignResult result)
+        public override void PrintCommandResult(ResignResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,

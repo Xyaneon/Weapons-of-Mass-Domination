@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class SellLandResultPrinter : CommandResultPrinter
+    class SellLandResultPrinter : CommandResultPrinter<SellLandResult>
     {
         private const string PrintFormatString = "{0} sold {1:N0} km² of land for {2:C}.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(SellLandResult result)
+        public override void PrintCommandResult(SellLandResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,

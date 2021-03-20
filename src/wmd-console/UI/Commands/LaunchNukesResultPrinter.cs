@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class LaunchNukesResultPrinter : CommandResultPrinter
+    class LaunchNukesResultPrinter : CommandResultPrinter<LaunchNukesResult>
     {
         private const string LaunchedNukesFormatString = "{0} launched {1:N0} nukes at {2}.";
         private const string NoNukesHitFormatString = "Not a single one of them worked, though! {0}'s henchmen escaped without a scratch.";
@@ -21,7 +21,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(LaunchNukesResult result)
+        public override void PrintCommandResult(LaunchNukesResult result)
         {
             string launchedNukesFormattedString = string.Format(
                 LaunchedNukesFormatString,

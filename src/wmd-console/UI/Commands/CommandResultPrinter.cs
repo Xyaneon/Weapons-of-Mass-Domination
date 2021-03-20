@@ -4,9 +4,11 @@ using WMD.Game.State.Data.Players;
 
 namespace WMD.Console.UI.Commands
 {
-    abstract class CommandResultPrinter : ICommandResultPrinter
+    abstract class CommandResultPrinter<TCommandResult> : ICommandResultPrinter where TCommandResult : CommandResult
     {
         public abstract void PrintCommandResult(CommandResult result);
+
+        public abstract void PrintCommandResult(TCommandResult result);
 
         protected static Player RetrievePlayerWhoActed(CommandResult result)
         {

@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class ManufactureNukesResultPrinter : CommandResultPrinter
+    class ManufactureNukesResultPrinter : CommandResultPrinter<ManufactureNukesResult>
     {
         private const string PrintFormatString = "{0} manufactured {1:N0} nukes.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(ManufactureNukesResult result)
+        public override void PrintCommandResult(ManufactureNukesResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,

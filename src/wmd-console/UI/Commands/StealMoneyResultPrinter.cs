@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class StealMoneyResultPrinter : CommandResultPrinter
+    class StealMoneyResultPrinter : CommandResultPrinter<StealMoneyResult>
     {
         private const string PrintFormatString = "{0} stole {1:C}. They now have {2:C}.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(StealMoneyResult result)
+        public override void PrintCommandResult(StealMoneyResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,

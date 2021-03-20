@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class UpgradeSecretBaseResultPrinter : CommandResultPrinter
+    class UpgradeSecretBaseResultPrinter : CommandResultPrinter<UpgradeSecretBaseResult>
     {
         private const string PrintFormatString = "{0} upgraded their secret base to Level {1:N0} for {2:C}.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(UpgradeSecretBaseResult result)
+        public override void PrintCommandResult(UpgradeSecretBaseResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,

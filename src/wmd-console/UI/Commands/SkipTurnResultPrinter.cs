@@ -3,7 +3,7 @@ using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
-    class SkipTurnResultPrinter : CommandResultPrinter
+    class SkipTurnResultPrinter : CommandResultPrinter<SkipTurnResult>
     {
         private const string PrintFormatString = "{0} skipped their turn and wasted a whole day.";
 
@@ -18,7 +18,7 @@ namespace WMD.Console.UI.Commands
             PrintCommandResult(typedResult);
         }
 
-        private void PrintCommandResult(SkipTurnResult result)
+        public override void PrintCommandResult(SkipTurnResult result)
         {
             string formattedString = string.Format(
                 PrintFormatString,
