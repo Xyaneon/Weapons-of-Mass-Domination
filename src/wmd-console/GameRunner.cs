@@ -68,7 +68,7 @@ namespace WMD.Console
                     commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
                 }
                 CurrentGameState = commandResult.UpdatedGameState;
-                CommandResultPrinter.PrintCommandResult(commandResult);
+                CommandResultPrinterFactory.CreateICommandResultPrinter(commandResult.GetType()).PrintCommandResult(commandResult);
                 PrintingUtility.PrintEndOfTurn();
                 UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
             }
