@@ -40,6 +40,26 @@ namespace WMD.Console.UI.Core
             }
         }
 
+        public static decimal GetDecimal(string requestText, DecimalRange range)
+        {
+            decimal number = 0.0M;
+            bool result = false;
+
+            while (!result)
+            {
+                PrintPrompt(requestText);
+                string? input = System.Console.ReadLine();
+
+                result = decimal.TryParse(input, out number);
+                if (result && !range.ContainsValueInclusive(number))
+                {
+                    result = false;
+                }
+            }
+
+            return number;
+        }
+        
         public static int GetInteger(string requestText, IntRange range)
         {
             int number = 0;

@@ -51,6 +51,16 @@ namespace WMD.Game.State.Utility
         }
 
         /// <summary>
+        /// Determines whether the current player has no money.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns><see langword="true"/> if the current player has no money; otherwise, <see langword="false"/>.</returns>
+        public static bool CurrentPlayerHasNoMoney([DisallowNull] GameState gameState)
+        {
+            return gameState.CurrentPlayer.State.Money <= 0;
+        }
+
+        /// <summary>
         /// Determines whether the current player is attacking themselves.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>

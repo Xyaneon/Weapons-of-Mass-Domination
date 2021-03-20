@@ -16,6 +16,9 @@ namespace WMD.Console.UI.Commands
                 case BuildSecretBaseResult result:
                     PrintBuildSecretBaseResult(result);
                     break;
+                case DistributePropagandaResult result:
+                    PrintDistributePropagandaResult(result);
+                    break;
                 case HireHenchmenResult result:
                     PrintHireHenchmenResult(result);
                     break;
@@ -61,6 +64,11 @@ namespace WMD.Console.UI.Commands
         private static void PrintBuildSecretBaseResult(BuildSecretBaseResult result)
         {
             System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} built their own secret base for {result.BuildPrice:C}.");
+        }
+
+        private static void PrintDistributePropagandaResult(DistributePropagandaResult result)
+        {
+            System.Console.WriteLine($"{RetrievePlayerWhoActed(result).Identification.Name} spent {result.MoneySpent:C} and gained {result.ReputationGained}% additional reputation.");
         }
 
         private static void PrintHireHenchmenResult(HireHenchmenResult result)

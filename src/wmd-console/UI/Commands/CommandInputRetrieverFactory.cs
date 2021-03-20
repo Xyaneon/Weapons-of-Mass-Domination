@@ -13,6 +13,7 @@ namespace WMD.Console.UI.Commands
             {
                 _ when commandInputType == typeof(AttackPlayerInput) => new AttackPlayerInputRetriever(),
                 _ when commandInputType == typeof(BuildSecretBaseInput) => new BuildSecretBaseInputRetriever(),
+                _ when commandInputType == typeof(DistributePropagandaInput) => new DistributePropagandaInputRetriever(),
                 _ when commandInputType == typeof(HireHenchmenInput) => new HireHenchmenInputRetriever(),
                 _ when commandInputType == typeof(LaunchNukesInput) => new LaunchNukesInputRetriever(),
                 _ when commandInputType == typeof(ManufactureNukesInput) => new ManufactureNukesInputRetriever(),
