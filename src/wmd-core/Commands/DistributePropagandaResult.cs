@@ -5,7 +5,7 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Represents the result of a player distributing propaganda.
     /// </summary>
-    public record DistributePropagandaResult: CommandResult
+    public record DistributePropagandaResult : CommandResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DistributePropagandaResult"/> class.
