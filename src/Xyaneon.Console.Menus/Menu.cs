@@ -9,17 +9,14 @@ namespace Xyaneon.Console.Menus
         private const string ArgumentException_PageNotFoundInThisMenu = "The provided page was not found in this menu.";
         private const string InvalidOperationException_CannotRunMenuWithNoPages = "Cannot run a menu with no pages.";
         private const string InvalidOperationException_NoPagesInHistoryToNavigateBackTo = "There are no pages left in the history to navigate back to.";
-        
-        private const string BreadcrumbsSeparator = " > ";
 
-        public Menu(string? title = null)
+        public Menu(string? title = null, MenuTheme? theme = null)
         {
             Title = title;
+            Theme = theme ?? new MenuTheme();
             _pages = new List<MenuPage>();
             _history = new Stack<MenuPage>();
             HasClosed = false;
-            HighlightBackgroundColor = ConsoleColor.Gray;
-            HighlightForegroundColor = ConsoleColor.Black;
             Result = null;
         }
 
@@ -27,11 +24,9 @@ namespace Xyaneon.Console.Menus
 
         public bool HasClosed { get; private set; }
 
-        public ConsoleColor HighlightBackgroundColor { get; set; }
-
-        public ConsoleColor HighlightForegroundColor { get; set; }
-
         public IReadOnlyList<MenuPage> Pages { get => _pages.AsReadOnly(); }
+
+        public MenuTheme Theme { get; }
 
         public string? Title { get; }
 
@@ -146,13 +141,13 @@ namespace Xyaneon.Console.Menus
 
         private void ActivateHighlightColors()
         {
-            System.Console.BackgroundColor = HighlightBackgroundColor;
-            System.Console.ForegroundColor = HighlightForegroundColor;
+            System.Console.BackgroundColor = Theme.HighlightBackgroundColor;
+            System.Console.ForegroundColor = Theme.HighlightForegroundColor;
         }
 
         private string BuildBreadcrumbsString()
         {
-            return string.Join(BreadcrumbsSeparator, _history.Select(x => x.Title).Reverse());
+            return string.Join(Theme.BreadcrumbsSeparator, _history.Select(x => x.Title).Reverse());
         }
 
         private void ClearCurrentLine()
@@ -193,13 +188,13 @@ namespace Xyaneon.Console.Menus
             _width = totalContentWidth + 4;
             _height = borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
 
-            string topBorderLine = "╔" + new string('═', totalContentWidth + 2) + "╗";
-            string middleBorderLine = "╠" + new string('═', totalContentWidth + 2) + "╣";
-            string bottomBorderLine = "╚" + new string('═', totalContentWidth + 2) + "╝";
+            string topBorderLine = Theme.TopLeftBorderCorner + new string(Theme.TopBorderEdge, totalContentWidth + 2) + Theme.TopRightBorderCorner;
+            string middleBorderLine = Theme.MiddleLeftBorderIntersection + new string(Theme.MiddleBorderEdge, totalContentWidth + 2) + Theme.MiddleRightBorderIntersection;
+            string bottomBorderLine = Theme.BottomLeftBorderCorner + new string(Theme.BottomBorderEdge, totalContentWidth + 2) + Theme.BottomRightBorderCorner;
 
             System.Console.WriteLine(topBorderLine);
 
-            headerLines.ForEach(x => System.Console.WriteLine($"║ {x.PadRight(totalContentWidth, ' ')} ║"));
+            headerLines.ForEach(x => System.Console.WriteLine($"{Theme.HeaderLeftEdge} {x.PadRight(totalContentWidth, ' ')} {Theme.HeaderRightEdge}"));
 
             System.Console.WriteLine(middleBorderLine);
 
@@ -213,14 +208,14 @@ namespace Xyaneon.Console.Menus
 
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)
         {
-            System.Console.Write("║");
+            System.Console.Write(Theme.MenuItemLeftEdge);
             if (isHighlighted)
             {
                 ActivateHighlightColors();
             }
             System.Console.Write($" {menuItem.Text.PadRight(width, ' ')} ");
             System.Console.ResetColor();
-            System.Console.WriteLine("║");
+            System.Console.WriteLine(Theme.MenuItemRightEdge);
         }
     }
 }
