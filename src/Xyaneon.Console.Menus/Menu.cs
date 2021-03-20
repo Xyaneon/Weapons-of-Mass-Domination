@@ -6,6 +6,10 @@ namespace Xyaneon.Console.Menus
 {
     public class Menu
     {
+        private const string ArgumentException_PageNotFoundInThisMenu = "The provided page was not found in this menu.";
+        private const string InvalidOperationException_CannotRunMenuWithNoPages = "Cannot run a menu with no pages.";
+        private const string InvalidOperationException_NoPagesInHistoryToNavigateBackTo = "There are no pages left in the history to navigate back to.";
+        
         private const string BreadcrumbsSeparator = " > ";
 
         public Menu(string? title = null)
@@ -61,7 +65,7 @@ namespace Xyaneon.Console.Menus
         {
             if (_history.Count <= 1)
             {
-                throw new InvalidOperationException("There are no pages left in the history to navigate back to.");
+                throw new InvalidOperationException(InvalidOperationException_NoPagesInHistoryToNavigateBackTo);
             }
 
             _history.Pop();
@@ -71,7 +75,7 @@ namespace Xyaneon.Console.Menus
         {
             if (!Pages.Contains(page))
             {
-                throw new ArgumentException("The provided page was not found in this menu.", nameof(page));
+                throw new ArgumentException(ArgumentException_PageNotFoundInThisMenu, nameof(page));
             }
 
             _history.Push(page);
@@ -81,7 +85,7 @@ namespace Xyaneon.Console.Menus
         {
             if (Pages.Count < 1)
             {
-                throw new InvalidOperationException("Cannot run a menu with no pages.");
+                throw new InvalidOperationException(InvalidOperationException_CannotRunMenuWithNoPages);
             }
 
             NavigateTo(Pages.First());
