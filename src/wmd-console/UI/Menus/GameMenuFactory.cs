@@ -79,6 +79,7 @@ namespace WMD.Console.UI.Menus
                 new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
                 new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand())),
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
+                new MenuItem("Distribute propaganda", () => menu.SetResultAndClose(new DistributePropagandaCommand())),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
                 new MenuItem("Nukes...", () => menu.NavigateTo(nukePage)),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),
