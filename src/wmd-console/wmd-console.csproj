@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\wmd-core\wmd-core.csproj" />
+    <ProjectReference Include="..\Xyaneon.Console.Menus\Xyaneon.Console.Menus.csproj" />
   </ItemGroup>
 
 </Project>

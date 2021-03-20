@@ -1,14 +1,16 @@
 ﻿using System;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class MenuItem
+    public class MenuItem
     {
+        private const string ArgumentException_MenuItemText_CannotBeBlank = "The menu item text cannot be blank.";
+
         public MenuItem(string text, Action action)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
-                throw new ArgumentException("The menu item text cannot be blank.", nameof(text));
+                throw new ArgumentException(ArgumentException_MenuItemText_CannotBeBlank, nameof(text));
             }
 
             Text = text;

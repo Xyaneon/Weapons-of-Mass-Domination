@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class Menu
+    public class Menu
     {
-        private const string BreadcrumbsSeparator = " > ";
+        private const string ArgumentException_PageNotFoundInThisMenu = "The provided page was not found in this menu.";
+        private const string InvalidOperationException_CannotRunMenuWithNoPages = "Cannot run a menu with no pages.";
+        private const string InvalidOperationException_NoPagesInHistoryToNavigateBackTo = "There are no pages left in the history to navigate back to.";
 
-        public Menu(string? title = null)
+        public Menu(string? title = null, MenuTheme? theme = null)
         {
             Title = title;
+            Theme = theme ?? new MenuTheme();
             _pages = new List<MenuPage>();
             _history = new Stack<MenuPage>();
             HasClosed = false;
-            HighlightBackgroundColor = ConsoleColor.Gray;
-            HighlightForegroundColor = ConsoleColor.Black;
             Result = null;
         }
 
@@ -24,11 +24,9 @@ namespace WMD.Console.UI.Core
 
         public bool HasClosed { get; private set; }
 
-        public ConsoleColor HighlightBackgroundColor { get; set; }
-
-        public ConsoleColor HighlightForegroundColor { get; set; }
-
         public IReadOnlyList<MenuPage> Pages { get => _pages.AsReadOnly(); }
+
+        public MenuTheme Theme { get; }
 
         public string? Title { get; }
 
@@ -62,7 +60,7 @@ namespace WMD.Console.UI.Core
         {
             if (_history.Count <= 1)
             {
-                throw new InvalidOperationException("There are no pages left in the history to navigate back to.");
+                throw new InvalidOperationException(InvalidOperationException_NoPagesInHistoryToNavigateBackTo);
             }
 
             _history.Pop();
@@ -72,7 +70,7 @@ namespace WMD.Console.UI.Core
         {
             if (!Pages.Contains(page))
             {
-                throw new ArgumentException("The provided page was not found in this menu.", nameof(page));
+                throw new ArgumentException(ArgumentException_PageNotFoundInThisMenu, nameof(page));
             }
 
             _history.Push(page);
@@ -82,7 +80,7 @@ namespace WMD.Console.UI.Core
         {
             if (Pages.Count < 1)
             {
-                throw new InvalidOperationException("Cannot run a menu with no pages.");
+                throw new InvalidOperationException(InvalidOperationException_CannotRunMenuWithNoPages);
             }
 
             NavigateTo(Pages.First());
@@ -129,7 +127,7 @@ namespace WMD.Console.UI.Core
                                 System.Console.Beep();
                             }
                             break;
-                    } 
+                    }
                 }
             }
             System.Console.CursorVisible = cursorWasVisible;
@@ -143,13 +141,13 @@ namespace WMD.Console.UI.Core
 
         private void ActivateHighlightColors()
         {
-            System.Console.BackgroundColor = HighlightBackgroundColor;
-            System.Console.ForegroundColor = HighlightForegroundColor;
+            System.Console.BackgroundColor = Theme.HighlightBackgroundColor;
+            System.Console.ForegroundColor = Theme.HighlightForegroundColor;
         }
 
         private string BuildBreadcrumbsString()
         {
-            return string.Join(BreadcrumbsSeparator, _history.Select(x => x.Title).Reverse());
+            return string.Join(Theme.BreadcrumbsSeparator, _history.Select(x => x.Title).Reverse());
         }
 
         private void ClearCurrentLine()
@@ -190,13 +188,13 @@ namespace WMD.Console.UI.Core
             _width = totalContentWidth + 4;
             _height = borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
 
-            string topBorderLine = "╔" + new string('═', totalContentWidth + 2) + "╗";
-            string middleBorderLine = "╠" + new string('═', totalContentWidth + 2) + "╣";
-            string bottomBorderLine = "╚" + new string('═', totalContentWidth + 2) + "╝";
+            string topBorderLine = Theme.TopLeftBorderCorner + new string(Theme.TopBorderEdge, totalContentWidth + 2) + Theme.TopRightBorderCorner;
+            string middleBorderLine = Theme.MiddleLeftBorderIntersection + new string(Theme.MiddleBorderEdge, totalContentWidth + 2) + Theme.MiddleRightBorderIntersection;
+            string bottomBorderLine = Theme.BottomLeftBorderCorner + new string(Theme.BottomBorderEdge, totalContentWidth + 2) + Theme.BottomRightBorderCorner;
 
             System.Console.WriteLine(topBorderLine);
 
-            headerLines.ForEach(x => System.Console.WriteLine($"║ {x.PadRight(totalContentWidth, ' ')} ║"));
+            headerLines.ForEach(x => System.Console.WriteLine($"{Theme.HeaderLeftEdge} {x.PadRight(totalContentWidth, ' ')} {Theme.HeaderRightEdge}"));
 
             System.Console.WriteLine(middleBorderLine);
 
@@ -210,14 +208,14 @@ namespace WMD.Console.UI.Core
 
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)
         {
-            System.Console.Write("║");
+            System.Console.Write(Theme.MenuItemLeftEdge);
             if (isHighlighted)
             {
                 ActivateHighlightColors();
             }
             System.Console.Write($" {menuItem.Text.PadRight(width, ' ')} ");
             System.Console.ResetColor();
-            System.Console.WriteLine("║");
+            System.Console.WriteLine(Theme.MenuItemRightEdge);
         }
     }
 }

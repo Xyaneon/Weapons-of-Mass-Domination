@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class MenuPage
+    public class MenuPage
     {
+        private const string ArgumentException_MenuPageCannotBeEmpty = "The menu page must have at least one menu item.";
+        private const string ArgumentException_MenuPageTitleIsBlank = "The menu page title cannot be blank.";
+        private const string ArgumentOutOfRangeException_HighlightedMenuItemIndex_LessThanZero = "The highlighted menu item index cannot be less than zero.";
+        private const string ArgumentOutOfRangeException_HighlightedMenuItemIndex_OutsideEndOfMenu = "The highlighted menu item index cannot be greater than or equal to the number of menu items.";
+
         public MenuPage(Menu? menu, string title, params MenuItem[] menuItems)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new ArgumentException("The menu page title cannot be blank.", nameof(title));
+                throw new ArgumentException(ArgumentException_MenuPageTitleIsBlank, nameof(title));
             }
 
             if (menuItems.Length < 1)
             {
-                throw new ArgumentException("The menu page must have at least one menu item.", nameof(menuItems));
+                throw new ArgumentException(ArgumentException_MenuPageCannotBeEmpty, nameof(menuItems));
             }
 
             Menu = menu;
@@ -39,12 +44,12 @@ namespace WMD.Console.UI.Core
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), "The highlighted menu item index cannot be less than zero.");
+                    throw new ArgumentOutOfRangeException(nameof(value), ArgumentOutOfRangeException_HighlightedMenuItemIndex_LessThanZero);
                 }
 
                 if (value >= MenuItems.Count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), "The highlighted menu item index cannot be greater than or equal to the number of menu items.");
+                    throw new ArgumentOutOfRangeException(nameof(value), ArgumentOutOfRangeException_HighlightedMenuItemIndex_OutsideEndOfMenu);
                 }
 
                 _highlightedMenuItemIndex = value;
