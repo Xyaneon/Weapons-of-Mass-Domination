@@ -1,22 +1,10 @@
-﻿using System;
-using WMD.Game.Commands;
+﻿using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
     class SkipTurnResultPrinter : CommandResultPrinter<SkipTurnResult>
     {
         private const string PrintFormatString = "{0} skipped their turn and wasted a whole day.";
-
-        public override void PrintCommandResult(CommandResult result)
-        {
-            SkipTurnResult? typedResult = result as SkipTurnResult;
-            if (typedResult == null)
-            {
-                throw new ArgumentException($"The supplied {typeof(CommandResult).Name} is not an instance of the {typeof(SkipTurnResult).Name} class.", nameof(result));
-            }
-
-            PrintCommandResult(typedResult);
-        }
 
         public override void PrintCommandResult(SkipTurnResult result)
         {

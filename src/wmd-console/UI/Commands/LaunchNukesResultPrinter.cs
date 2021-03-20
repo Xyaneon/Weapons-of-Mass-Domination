@@ -1,5 +1,4 @@
-﻿using System;
-using WMD.Game.Commands;
+﻿using WMD.Game.Commands;
 
 namespace WMD.Console.UI.Commands
 {
@@ -9,17 +8,6 @@ namespace WMD.Console.UI.Commands
         private const string NoNukesHitFormatString = "Not a single one of them worked, though! {0}'s henchmen escaped without a scratch.";
         private const string SomeNukesHitFormatString = "{0:N0} of the nukes worked as designed. {1} lost {2:N0} henchmen in the attack.";
         private const string AllNukesHitFormatString = "Every nuke successfully detonated on contact! {0} lost {1:N0} henchmen in the attack.";
-
-        public override void PrintCommandResult(CommandResult result)
-        {
-            LaunchNukesResult? typedResult = result as LaunchNukesResult;
-            if (typedResult == null)
-            {
-                throw new ArgumentException($"The supplied {typeof(CommandResult).Name} is not an instance of the {typeof(LaunchNukesResult).Name} class.", nameof(result));
-            }
-
-            PrintCommandResult(typedResult);
-        }
 
         public override void PrintCommandResult(LaunchNukesResult result)
         {
