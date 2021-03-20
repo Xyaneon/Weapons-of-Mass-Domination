@@ -19,6 +19,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine("You apparently changed your mind.");
         }
 
+        public static void PrintCurrentPlayerHasNoMoneyToSpend()
+        {
+            System.Console.WriteLine("You do not have any money to spend.");
+        }
+
         public static void PrintCurrentPlayerHasResignedAndCannotTakeTurn(string playerName)
         {
             System.Console.WriteLine($"{playerName} resigned and cannot take any more actions.");

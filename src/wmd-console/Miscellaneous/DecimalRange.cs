@@ -2,11 +2,11 @@
 
 namespace WMD.Console.Miscellaneous
 {
-    class IntRange
+    class DecimalRange
     {
         private const string ArgumentException_minimumGreaterThanMaximum = "The range minimum cannot be greater than the range maximum.";
 
-        public IntRange(int minimum, int maximum)
+        public DecimalRange(decimal minimum, decimal maximum)
         {
             if (minimum > maximum)
             {
@@ -17,11 +17,11 @@ namespace WMD.Console.Miscellaneous
             Minimum = minimum;
         }
 
-        public int Maximum { get; }
+        public decimal Maximum { get; }
 
-        public int Minimum { get; }
+        public decimal Minimum { get; }
 
-        public bool ContainsValueInclusive(int value)
+        public bool ContainsValueInclusive(decimal value)
         {
             return value >= Minimum && value <= Maximum;
         }
