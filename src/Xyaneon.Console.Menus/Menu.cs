@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class Menu
+    public class Menu
     {
         private const string BreadcrumbsSeparator = " > ";
 
@@ -129,7 +128,7 @@ namespace WMD.Console.UI.Core
                                 System.Console.Beep();
                             }
                             break;
-                    } 
+                    }
                 }
             }
             System.Console.CursorVisible = cursorWasVisible;

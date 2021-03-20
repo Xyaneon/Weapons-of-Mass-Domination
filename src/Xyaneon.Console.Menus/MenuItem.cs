@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class MenuItem
+    public class MenuItem
     {
         public MenuItem(string text, Action action)
         {

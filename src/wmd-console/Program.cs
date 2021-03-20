@@ -1,6 +1,6 @@
 ﻿using WMD.Console.UI;
-using WMD.Console.UI.Core;
 using WMD.Console.UI.Menus;
+using Xyaneon.Console.Menus;
 
 namespace WMD.Console
 {

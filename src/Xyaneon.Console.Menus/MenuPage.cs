@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WMD.Console.UI.Core
+namespace Xyaneon.Console.Menus
 {
-    class MenuPage
+    public class MenuPage
     {
         public MenuPage(Menu? menu, string title, params MenuItem[] menuItems)
         {
