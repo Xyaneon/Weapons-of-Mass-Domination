@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Utility
@@ -31,9 +32,9 @@ namespace WMD.Game.State.Utility
             }
 
             int currentReputation = gameState.Players[playerIndex].State.ReputationPercentage;
-            int maxReputationToBeGained = 100 - currentReputation;
+            int maxReputationToBeGained = ReputationConstants.MaxReputationPercentage - currentReputation;
 
-            return Math.Min(20, maxReputationToBeGained);
+            return Math.Min(ReputationConstants.MaxGainableReputationFromPropagandaDistribution, maxReputationToBeGained);
         }
 
         private static Random _random;
