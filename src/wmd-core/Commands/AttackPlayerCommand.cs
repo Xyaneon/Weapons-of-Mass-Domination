@@ -12,20 +12,26 @@ namespace WMD.Game.Commands
     public class AttackPlayerCommand : GameCommand<AttackPlayerInput, AttackPlayerResult>
     {
         private const string InvalidOperationException_playerAttackingThemselves = "A player cannot attack themselves.";
+        private const string InvalidOperationException_playerHasNoHenchmen = "A player cannot attack when they have no henchmen.";
         private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
 
         public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            return true;
+            return GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState);
         }
 
         public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
-            return !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
+            return CanExecuteForState(gameState) && !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
         }
 
         public override AttackPlayerResult Execute([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
+            if (!GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState))
+            {
+                throw new InvalidOperationException(InvalidOperationException_playerHasNoHenchmen);
+            }
+
             if (CurrentPlayerIsAttackingThemselves(gameState, input))
             {
                 throw new InvalidOperationException(InvalidOperationException_playerAttackingThemselves);

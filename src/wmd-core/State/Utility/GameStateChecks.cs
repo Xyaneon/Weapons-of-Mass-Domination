@@ -31,15 +31,15 @@ namespace WMD.Game.State.Utility
         }
 
         /// <summary>
-        /// Determines whether the current player has completed their nukes research.
+        /// Determines whether the current player has any henchmen.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
-        /// <returns><see langword="true"/> if the current player has completed their nukes research; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasCompletedNukesResearch([DisallowNull] GameState gameState)
+        /// <returns><see langword="true"/> if the current player has any henchmen; otherwise, <see langword="false"/>.</returns>
+        public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState)
         {
-            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
+            return gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
         }
-        
+
         /// <summary>
         /// Determines whether the current player has any nukes in their inventory.
         /// </summary>
@@ -48,6 +48,16 @@ namespace WMD.Game.State.Utility
         public static bool CurrentPlayerHasAnyNukes([DisallowNull] GameState gameState)
         {
             return gameState.CurrentPlayer.State.Nukes > 0;
+        }
+
+        /// <summary>
+        /// Determines whether the current player has completed their nukes research.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns><see langword="true"/> if the current player has completed their nukes research; otherwise, <see langword="false"/>.</returns>
+        public static bool CurrentPlayerHasCompletedNukesResearch([DisallowNull] GameState gameState)
+        {
+            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
         }
 
         /// <summary>

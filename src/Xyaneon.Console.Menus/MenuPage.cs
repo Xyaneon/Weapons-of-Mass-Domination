@@ -61,7 +61,14 @@ namespace Xyaneon.Console.Menus
 
         public void ActivateSelection()
         {
-            HighlightedMenuItem.Action.Invoke();
+            if (HighlightedMenuItem.Enabled)
+            {
+                HighlightedMenuItem.Action.Invoke();
+            }
+            else
+            {
+                System.Console.Beep();
+            }
         }
 
         public void MoveSelectionDown()

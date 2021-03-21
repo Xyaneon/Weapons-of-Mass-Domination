@@ -139,10 +139,16 @@ namespace Xyaneon.Console.Menus
             Close();
         }
 
-        private void ActivateHighlightColors()
+        private void ActivateDisabledColors()
         {
-            System.Console.BackgroundColor = Theme.HighlightBackgroundColor;
-            System.Console.ForegroundColor = Theme.HighlightForegroundColor;
+            System.Console.BackgroundColor = Theme.DisabledBackgroundColor;
+            System.Console.ForegroundColor = Theme.DisabledForegroundColor;
+        }
+
+        private void ActivateHighlightColors(bool isEnabled)
+        {
+            System.Console.BackgroundColor = isEnabled ? Theme.HighlightEnabledBackgroundColor : Theme.HighlightDisabledBackgroundColor;
+            System.Console.ForegroundColor = isEnabled ? Theme.HighlightEnabledForegroundColor : Theme.HighlightDisabledForegroundColor;
         }
 
         private string BuildBreadcrumbsString()
@@ -209,9 +215,13 @@ namespace Xyaneon.Console.Menus
         private void PrintMenuItem(MenuItem menuItem, int width, bool isHighlighted)
         {
             System.Console.Write(Theme.MenuItemLeftEdge);
+            if (!menuItem.Enabled)
+            {
+                ActivateDisabledColors();
+            }
             if (isHighlighted)
             {
-                ActivateHighlightColors();
+                ActivateHighlightColors(menuItem.Enabled);
             }
             System.Console.Write($" {menuItem.Text.PadRight(width, ' ')} ");
             System.Console.ResetColor();

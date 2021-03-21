@@ -12,19 +12,25 @@ namespace WMD.Game.Commands
     public class DistributePropagandaCommand : GameCommand<DistributePropagandaInput, DistributePropagandaResult>
     {
         private const string InvalidOperationException_InsufficientFunds = "The current player does not have enough money to distribute the requested amount of propaganda.";
+        private const string InvalidOperationException_NoFunds = "The current player does not have any money to distribute propaganda.";
 
         public override bool CanExecuteForState([DisallowNull] GameState gameState)
         {
-            return true;
+            return !GameStateChecks.CurrentPlayerHasNoMoney(gameState);
         }
 
         public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, DistributePropagandaInput input)
         {
-            return !(CurrentPlayerHasInsufficientFunds(gameState, input));
+            return CanExecuteForState(gameState) && !(CurrentPlayerHasInsufficientFunds(gameState, input));
         }
 
         public override DistributePropagandaResult Execute([DisallowNull] GameState gameState, DistributePropagandaInput input)
         {
+            if (GameStateChecks.CurrentPlayerHasNoMoney(gameState))
+            {
+                throw new InvalidOperationException(InvalidOperationException_NoFunds);
+            }
+
             if (CurrentPlayerHasInsufficientFunds(gameState, input))
             {
                 throw new InvalidOperationException(InvalidOperationException_InsufficientFunds);
