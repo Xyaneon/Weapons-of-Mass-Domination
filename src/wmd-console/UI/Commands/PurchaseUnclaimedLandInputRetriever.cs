@@ -20,7 +20,7 @@ namespace WMD.Console.UI.Commands
 
             PrintingUtility.PrintCurrentUnclaimedLandAreaAndPrice(gameState);
 
-            if (GameStateChecks.CurrentPlayerCouldPurchaseLand(gameState))
+            if (!GameStateChecks.CurrentPlayerCouldPurchaseLand(gameState))
             {
                 PrintingUtility.PrintInsufficientFundsForAnyLandPurchase();
                 return null;
