@@ -50,7 +50,7 @@ namespace Xyaneon.Console.Menus
         /// <summary>
         /// Gets the background color for highlighted disabled menu items.
         /// </summary>
-        public ConsoleColor HighlightDisabledBackgroundColor { get; init; } = ConsoleColor.Gray;
+        public ConsoleColor HighlightDisabledBackgroundColor { get; init; } = ConsoleColor.DarkGray;
 
         /// <summary>
         /// Gets the foreground color for highlighted disabled menu items.
