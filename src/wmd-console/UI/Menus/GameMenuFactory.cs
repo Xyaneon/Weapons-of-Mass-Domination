@@ -76,12 +76,12 @@ namespace WMD.Console.UI.Menus
             var mainActionItems = new MenuItem[]
             {
                 new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand()), new StealMoneyCommand().CanExecuteForState(gameState)),
-                new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
+                new MenuItem("Land...", () => menu.NavigateTo(landActionsPage), new PurchaseUnclaimedLandCommand().CanExecuteForState(gameState) || new SellLandCommand().CanExecuteForState(gameState)),
                 new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand()), new AttackPlayerCommand().CanExecuteForState(gameState)),
                 new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand()), new HireHenchmenCommand().CanExecuteForState(gameState)),
                 new MenuItem("Distribute propaganda", () => menu.SetResultAndClose(new DistributePropagandaCommand()), new DistributePropagandaCommand().CanExecuteForState(gameState)),
-                new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
-                new MenuItem("Nukes...", () => menu.NavigateTo(nukePage)),
+                new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage), new BuildSecretBaseCommand().CanExecuteForState(gameState) || new UpgradeSecretBaseCommand().CanExecuteForState(gameState)),
+                new MenuItem("Nukes...", () => menu.NavigateTo(nukePage), new ResearchNukesCommand().CanExecuteForState(gameState) || new ManufactureNukesCommand().CanExecuteForState(gameState) || new LaunchNukesCommand().CanExecuteForState(gameState)),
                 new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand()), new SkipTurnCommand().CanExecuteForState(gameState)),
                 new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()), new ResignCommand().CanExecuteForState(gameState))
             };
