@@ -47,8 +47,8 @@ namespace WMD.Console.UI.Menus
 
             var landActionItems = new MenuItem[]
             {
-                new MenuItem("Purchase unclaimed land", () => menu.SetResultAndClose(new PurchaseUnclaimedLandCommand())),
-                new MenuItem("Sell land", () => menu.SetResultAndClose(new SellLandCommand())),
+                new MenuItem("Purchase unclaimed land", () => menu.SetResultAndClose(new PurchaseUnclaimedLandCommand()), new PurchaseUnclaimedLandCommand().CanExecuteForState(gameState)),
+                new MenuItem("Sell land", () => menu.SetResultAndClose(new SellLandCommand()), new SellLandCommand().CanExecuteForState(gameState)),
                 new MenuItem("Back", () => menu.NavigateBack())
             };
 
@@ -56,8 +56,8 @@ namespace WMD.Console.UI.Menus
 
             var secretBaseActionItems = new MenuItem[]
             {
-                new MenuItem("Build a secret base", () => menu.SetResultAndClose(new BuildSecretBaseCommand())),
-                new MenuItem("Upgrade your secret base", () => menu.SetResultAndClose(new UpgradeSecretBaseCommand())),
+                new MenuItem("Build a secret base", () => menu.SetResultAndClose(new BuildSecretBaseCommand()), new BuildSecretBaseCommand().CanExecuteForState(gameState)),
+                new MenuItem("Upgrade your secret base", () => menu.SetResultAndClose(new UpgradeSecretBaseCommand()), new UpgradeSecretBaseCommand().CanExecuteForState(gameState)),
                 new MenuItem("Back", () => menu.NavigateBack())
             };
 
@@ -65,9 +65,9 @@ namespace WMD.Console.UI.Menus
 
             var nukeActionItems = new MenuItem[]
             {
-                new MenuItem("Research", () => menu.SetResultAndClose(new ResearchNukesCommand())),
-                new MenuItem("Manufacture...", () => menu.SetResultAndClose(new ManufactureNukesCommand())),
-                new MenuItem("Launch...", () => menu.SetResultAndClose(new LaunchNukesCommand())),
+                new MenuItem("Research", () => menu.SetResultAndClose(new ResearchNukesCommand()), new ResearchNukesCommand().CanExecuteForState(gameState)),
+                new MenuItem("Manufacture...", () => menu.SetResultAndClose(new ManufactureNukesCommand()), new ManufactureNukesCommand().CanExecuteForState(gameState)),
+                new MenuItem("Launch...", () => menu.SetResultAndClose(new LaunchNukesCommand()), new LaunchNukesCommand().CanExecuteForState(gameState)),
                 new MenuItem("Back", () => menu.NavigateBack())
             };
 
@@ -75,15 +75,15 @@ namespace WMD.Console.UI.Menus
 
             var mainActionItems = new MenuItem[]
             {
-                new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand())),
+                new MenuItem("Steal money", () => menu.SetResultAndClose(new StealMoneyCommand()), new StealMoneyCommand().CanExecuteForState(gameState)),
                 new MenuItem("Land...", () => menu.NavigateTo(landActionsPage)),
-                new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand())),
-                new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand())),
-                new MenuItem("Distribute propaganda", () => menu.SetResultAndClose(new DistributePropagandaCommand())),
+                new MenuItem("Attack another player...", () => menu.SetResultAndClose(new AttackPlayerCommand()), new AttackPlayerCommand().CanExecuteForState(gameState)),
+                new MenuItem("Hire henchmen", () => menu.SetResultAndClose(new HireHenchmenCommand()), new HireHenchmenCommand().CanExecuteForState(gameState)),
+                new MenuItem("Distribute propaganda", () => menu.SetResultAndClose(new DistributePropagandaCommand()), new DistributePropagandaCommand().CanExecuteForState(gameState)),
                 new MenuItem("Secret base...", () => menu.NavigateTo(secretBasePage)),
                 new MenuItem("Nukes...", () => menu.NavigateTo(nukePage)),
-                new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand())),
-                new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()))
+                new MenuItem("Skip turn", () => menu.SetResultAndClose(new SkipTurnCommand()), new SkipTurnCommand().CanExecuteForState(gameState)),
+                new MenuItem("Resign", () => menu.SetResultAndClose(new ResignCommand()), new ResignCommand().CanExecuteForState(gameState))
             };
 
             menu.AddPage("Actions", mainActionItems).AddPage(landActionsPage).AddPage(secretBasePage).AddPage(nukePage);
