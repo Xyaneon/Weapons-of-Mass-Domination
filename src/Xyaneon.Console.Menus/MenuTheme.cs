@@ -13,16 +13,6 @@ namespace Xyaneon.Console.Menus
         public string BreadcrumbsSeparator { get; init; } = " > ";
 
         /// <summary>
-        /// Gets the background color for highlighted menu items.
-        /// </summary>
-        public ConsoleColor HighlightBackgroundColor { get; init; } = ConsoleColor.Gray;
-
-        /// <summary>
-        /// Gets the foreground color for highlighted menu items.
-        /// </summary>
-        public ConsoleColor HighlightForegroundColor { get; init; } = ConsoleColor.Black;
-
-        /// <summary>
         /// Gets the character used to display the bottom edge of the menu border.
         /// </summary>
         public char BottomBorderEdge { get; init; } = '═';
@@ -38,6 +28,16 @@ namespace Xyaneon.Console.Menus
         public char BottomRightBorderCorner { get; init; } = '╝';
 
         /// <summary>
+        /// Gets the background color for disabled menu items.
+        /// </summary>
+        public ConsoleColor DisabledBackgroundColor { get; init; } = ConsoleColor.Black;
+
+        /// <summary>
+        /// Gets the foreground color for disabled menu items.
+        /// </summary>
+        public ConsoleColor DisabledForegroundColor { get; init; } = ConsoleColor.DarkGray;
+
+        /// <summary>
         /// Gets the character used to display the left edge of the menu header.
         /// </summary>
         public char HeaderLeftEdge { get; init; } = '║';
@@ -46,6 +46,26 @@ namespace Xyaneon.Console.Menus
         /// Gets the character used to display the right edge of the menu header.
         /// </summary>
         public char HeaderRightEdge { get; init; } = '║';
+
+        /// <summary>
+        /// Gets the background color for highlighted disabled menu items.
+        /// </summary>
+        public ConsoleColor HighlightDisabledBackgroundColor { get; init; } = ConsoleColor.Gray;
+
+        /// <summary>
+        /// Gets the foreground color for highlighted disabled menu items.
+        /// </summary>
+        public ConsoleColor HighlightDisabledForegroundColor { get; init; } = ConsoleColor.Black;
+
+        /// <summary>
+        /// Gets the background color for highlighted enabled menu items.
+        /// </summary>
+        public ConsoleColor HighlightEnabledBackgroundColor { get; init; } = ConsoleColor.Gray;
+
+        /// <summary>
+        /// Gets the foreground color for highlighted enabled menu items.
+        /// </summary>
+        public ConsoleColor HighlightEnabledForegroundColor { get; init; } = ConsoleColor.Black;
 
         /// <summary>
         /// Gets the character used to display the left edge of a menu item.

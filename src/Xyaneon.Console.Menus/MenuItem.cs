@@ -6,7 +6,7 @@ namespace Xyaneon.Console.Menus
     {
         private const string ArgumentException_MenuItemText_CannotBeBlank = "The menu item text cannot be blank.";
 
-        public MenuItem(string text, Action action)
+        public MenuItem(string text, Action action, bool enabled = true)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -15,10 +15,13 @@ namespace Xyaneon.Console.Menus
 
             Text = text;
             Action = action;
+            Enabled = enabled;
         }
 
         public Action Action { get; }
 
         public string Text { get; }
+
+        public bool Enabled { get; }
     }
 }
