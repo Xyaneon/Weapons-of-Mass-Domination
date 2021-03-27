@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
-using WMD.Game.State.Updates.Rounds;
 
-namespace WMD.Game.State.Updates
+namespace WMD.Game.State.Updates.Rounds
 {
     internal static class GameStateRoundAdvancer
     {
