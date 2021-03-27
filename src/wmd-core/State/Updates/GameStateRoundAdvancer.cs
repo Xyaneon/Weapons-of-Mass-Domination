@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates.Rounds;
 
@@ -38,31 +39,40 @@ namespace WMD.Game.State.Updates
             return updatedGameState;
         }
 
-        private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate)
+        private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate) => roundUpdate switch
         {
-            return roundUpdate switch
-            {
-                PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
-                PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
-                _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
-            };
-        }
+            PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
+            PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
+            ReputationDecay reputationDecay => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationDecay.PlayerIndex, -1 * reputationDecay.ReputationPercentageLost),
+            _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
+        };
+
+        private static int CalculateReputationLost(GameState gameState, int playerIndex) =>
+            Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, ReputationConstants.ReputationDecayRate);
 
         private static IEnumerable<PlayerHenchmenPaid> CreateHenchmenPaidOccurrences(GameState gameState) =>
-            Enumerable.Range(0, gameState.Players.Count)
+            CreateRangeOfPlayerIndices(gameState)
                 .Where(index => gameState.Players[index].State.WorkforceState.NumberOfHenchmen > 0)
                 .Select(index => new PlayerHenchmenPaid(gameState, index));
 
         private static IEnumerable<PlayerHenchmenQuit> CreateHenchmenQuitOccurrences(GameState gameState) =>
-            Enumerable.Range(0, gameState.Players.Count)
+            CreateRangeOfPlayerIndices(gameState)
                 .Where(index => gameState.Players[index].State.Money <= 0 && gameState.Players[index].State.WorkforceState.NumberOfHenchmen > 0)
                 .Select(index => new PlayerHenchmenQuit(index, gameState.Players[index].State.WorkforceState.NumberOfHenchmen));
+
+        private static IEnumerable<int> CreateRangeOfPlayerIndices(GameState gameState) => Enumerable.Range(0, gameState.Players.Count);
+
+        private static IEnumerable<ReputationDecay> CreateReputationDecayInstances(GameState gameState) =>
+            CreateRangeOfPlayerIndices(gameState)
+                .Where(index => gameState.Players[index].State.ReputationPercentage > 0)
+                .Select(index => new ReputationDecay(index, CalculateReputationLost(gameState, index)));
 
         private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState)
         {
             var allUpdates = new List<RoundUpdateResultItem>()
                 .Concat(CreateHenchmenPaidOccurrences(gameState))
-                .Concat(CreateHenchmenQuitOccurrences(gameState));
+                .Concat(CreateHenchmenQuitOccurrences(gameState))
+                .Concat(CreateReputationDecayInstances(gameState));
 
             return new RoundUpdateResult(gameState, gameState.CurrentRound, allUpdates);
         }
