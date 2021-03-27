@@ -8,6 +8,8 @@ namespace WMD.Game.State.Updates
 {
     internal static class GameStateRoundAdvancer
     {
+        private const string ArgumentException_RoundUpdateResultContainedInvalidItem = "The provided round update result contained an invalid item.";
+
         public static (GameState, RoundUpdateResult) AdvanceToNextRound(GameState gameState)
         {
             var result = CreateRoundUpdateResult(gameState);
@@ -30,7 +32,7 @@ namespace WMD.Game.State.Updates
             }
             catch (ArgumentException ex)
             {
-                throw new ArgumentException("The provided round update result contained an invalid item.", nameof(roundUpdates), ex);
+                throw new ArgumentException(ArgumentException_RoundUpdateResultContainedInvalidItem, nameof(roundUpdates), ex);
             }
 
             return updatedGameState;
@@ -38,30 +40,29 @@ namespace WMD.Game.State.Updates
 
         private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate)
         {
-            switch (roundUpdate)
+            return roundUpdate switch
             {
-                case PlayerHenchmenPaid playerHenchmenPaid:
-                    return GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount);
-                case PlayerHenchmenQuit playerHenchmenQuit:
-                    return GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit);
-                default:
-                    throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}.");
-            }
+                PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
+                PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
+                _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
+            };
         }
 
-        private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState)
-        {
-            var henchmenPayments = Enumerable.Range(0, gameState.Players.Count)
+        private static IEnumerable<PlayerHenchmenPaid> CreateHenchmenPaidOccurrences(GameState gameState) =>
+            Enumerable.Range(0, gameState.Players.Count)
                 .Where(index => gameState.Players[index].State.WorkforceState.NumberOfHenchmen > 0)
                 .Select(index => new PlayerHenchmenPaid(gameState, index));
 
-            var henchmenQuittings = Enumerable.Range(0, gameState.Players.Count)
+        private static IEnumerable<PlayerHenchmenQuit> CreateHenchmenQuitOccurrences(GameState gameState) =>
+            Enumerable.Range(0, gameState.Players.Count)
                 .Where(index => gameState.Players[index].State.Money <= 0 && gameState.Players[index].State.WorkforceState.NumberOfHenchmen > 0)
                 .Select(index => new PlayerHenchmenQuit(index, gameState.Players[index].State.WorkforceState.NumberOfHenchmen));
 
+        private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState)
+        {
             var allUpdates = new List<RoundUpdateResultItem>()
-                .Concat(henchmenPayments)
-                .Concat(henchmenQuittings);
+                .Concat(CreateHenchmenPaidOccurrences(gameState))
+                .Concat(CreateHenchmenQuitOccurrences(gameState));
 
             return new RoundUpdateResult(gameState, gameState.CurrentRound, allUpdates);
         }
