@@ -20,5 +20,10 @@
         /// The maximum reputation percentage a player can attain.
         /// </summary>
         public const int MaxReputationPercentage = 100;
+
+        /// <summary>
+        /// The rate at which players lose reputation naturally between rounds.
+        /// </summary>
+        public const int ReputationDecayRate = 1;
     }
 }
