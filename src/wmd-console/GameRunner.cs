@@ -1,8 +1,10 @@
-﻿using WMD.Console.UI;
-using WMD.Console.UI.Commands;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WMD.AI.Default;
+using WMD.Console.UI;
 using WMD.Console.UI.Core;
-using WMD.Game.Commands;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
 using WMD.Game.State.Updates;
 using WMD.Game.State.Updates.Rounds;
 
@@ -13,6 +15,7 @@ namespace WMD.Console
         public GameRunner(GameState initialGameState)
         {
             CurrentGameState = initialGameState;
+            TurnRunners = CreateTurnRunners(initialGameState);
         }
 
         public GameState CurrentGameState { get; private set; }
@@ -32,7 +35,7 @@ namespace WMD.Console
 
             while (!CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
             {
-                RunTurn();
+                CurrentGameState = TurnRunners[CurrentGameState.CurrentPlayerIndex].RunTurn(CurrentGameState);
                 if (!CurrentGameState.GameHasBeenWon(out _))
                 {
                     GameState gameState = CurrentGameState;
@@ -51,27 +54,15 @@ namespace WMD.Console
             PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
         }
 
-        private void RunTurn()
-        {
-            StartOfTurnPrinter.PrintStartOfTurn(CurrentGameState);
+        private IReadOnlyList<PlayerTurnRunner> TurnRunners { get; set; }
 
-            if (CurrentGameState.CurrentPlayer.State.HasResigned)
-            {
-                PrintingUtility.PrintCurrentPlayerHasResignedAndCannotTakeTurn(CurrentGameState.CurrentPlayer.Identification.Name);
-            }
-            else
-            {
-                CommandResult? commandResult = null;
-                while (commandResult == null)
-                {
-                    var command = UserInput.GetCommand(CurrentGameState);
-                    commandResult = CommandRunner.RunSelectedCommand(CurrentGameState, command);
-                }
-                CurrentGameState = commandResult.UpdatedGameState;
-                CommandResultPrinterFactory.CreateICommandResultPrinter(commandResult.GetType()).PrintCommandResult(commandResult);
-                PrintingUtility.PrintEndOfTurn();
-                UserInput.WaitForPlayerAcknowledgementOfTurnEnd();
-            }
-        }
+        private static IReadOnlyList<PlayerTurnRunner> CreateTurnRunners(GameState gameState) =>
+            gameState.Players
+                .Select(player => CreateTurnRunnerForPlayer(player))
+                .ToList()
+                .AsReadOnly();
+
+        private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) =>
+            player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner(new CpuPlayerAI());
     }
 }

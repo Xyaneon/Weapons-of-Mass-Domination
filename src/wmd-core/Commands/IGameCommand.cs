@@ -40,7 +40,7 @@ namespace WMD.Game.Commands
         /// given <paramref name="gameState"/> and <paramref name="input"/>;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, object input);
+        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] object input);
 
         /// <summary>
         /// Executes this command using the given <see cref="GameState"/> and
@@ -56,7 +56,7 @@ namespace WMD.Game.Commands
         /// <returns>
         /// A new object describing the results of running the command.
         /// </returns>
-        object Execute([DisallowNull] GameState gameState, object input);
+        object Execute([DisallowNull] GameState gameState, [DisallowNull] object input);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ namespace WMD.Game.Commands
         /// given <paramref name="gameState"/> and <paramref name="input"/>;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, TInput input);
+        bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] TInput input);
 
         /// <summary>
         /// Executes this command using the given <see cref="GameState"/> and
@@ -101,6 +101,6 @@ namespace WMD.Game.Commands
         /// <returns>
         /// A new object describing the results of running the command.
         /// </returns>
-        TOutput Execute([DisallowNull] GameState gameState, TInput input);
+        TOutput Execute([DisallowNull] GameState gameState, [DisallowNull] TInput input);
     }
 }
