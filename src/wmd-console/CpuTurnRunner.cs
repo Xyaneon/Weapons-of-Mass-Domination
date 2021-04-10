@@ -1,4 +1,5 @@
-﻿using WMD.Console.UI;
+﻿using WMD.Console.AI;
+using WMD.Console.UI;
 using WMD.Console.UI.Commands;
 using WMD.Console.UI.Core;
 using WMD.Game.Commands;
@@ -8,6 +9,11 @@ namespace WMD.Console
 {
     sealed class CpuTurnRunner : PlayerTurnRunner
     {
+        public CpuTurnRunner()
+        {
+            AI = new CpuPlayerAI();
+        }
+
         public override GameState RunTurn(GameState gameState)
         {
             StartOfTurnPrinter.PrintStartOfTurn(gameState);
@@ -26,15 +32,12 @@ namespace WMD.Console
             return updatedGameState;
         }
 
-        private static CommandResult SelectCommandAndRetrieveResult(GameState gameState)
+        private ICpuPlayerAI AI { get; set; }
+
+        private CommandResult SelectCommandAndRetrieveResult(GameState gameState)
         {
-            (IGameCommand Command, object Input) = ChooseCommandAndInputForGameState(gameState);
-            return RunSelectedCommandWithInput(gameState, Command, Input);
+            AICommandSelection aiSelection = AI.ChooseCommandAndInputForGameState(gameState);
+            return (CommandResult)aiSelection.Command.Execute(gameState, aiSelection.Input);
         }
-
-        private static (IGameCommand, object) ChooseCommandAndInputForGameState(GameState gameState) => (new SkipTurnCommand(), new SkipTurnInput());
-
-        private static CommandResult RunSelectedCommandWithInput(GameState gameState, IGameCommand command, object commandInput) =>
-            (CommandResult)command.Execute(gameState, commandInput);
     }
 }
