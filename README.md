@@ -35,6 +35,13 @@ This new version of the game has the following improvements over the original:
 - UI improvements, including using arrow keys on command menus rather than entering numbers
 - More realistic Earth statistics
 
+### ❓ Frequently-Asked Questions
+
+See [here][faq] for a list of frequently-asked questions about this project.
+
 ## :scroll: License
 
 This project is open-source and provided under the MIT license. You can view it in the [LICENSE](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/master/LICENSE) file.
+
+
+[faq]: https://github.com/Xyaneon/Weapons-of-Mass-Domination/issues?q=is%3Aissue+label%3A%22%3Aquestion%3A+faq%22
