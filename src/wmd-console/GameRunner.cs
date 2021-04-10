@@ -61,6 +61,7 @@ namespace WMD.Console
                 .ToList()
                 .AsReadOnly();
 
-        private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) => new HumanTurnRunner();
+        private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) =>
+            player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner();
     }
 }

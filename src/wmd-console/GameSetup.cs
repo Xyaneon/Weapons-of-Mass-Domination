@@ -61,7 +61,7 @@ namespace WMD.Console
                 }
             }
 
-            return new Player(new PlayerIdentification(name, GetNextAvailableColor()));
+            return new Player(new PlayerIdentification(name, GetNextAvailableColor(), true));
         }
 
         private static IList<Player> CreatePlayerList(Player humanPlayer, int computerPlayerCount)
@@ -79,7 +79,7 @@ namespace WMD.Console
         private static IList<Player> CreateComputerPlayers(int computerPlayerCount)
         {
             return Enumerable.Range(1, computerPlayerCount)
-                .Select(playerNumber => new Player(new PlayerIdentification($"CPU {playerNumber}", GetNextAvailableColor())))
+                .Select(playerNumber => new Player(new PlayerIdentification($"CPU {playerNumber}", GetNextAvailableColor(), false)))
                 .ToList();
         }
 
