@@ -16,6 +16,7 @@ namespace WMD.Console
         private const string ComputerOpponentsQuantityPromptForMultiplayerFormatString = "Enter the number of computer opponents (zero or no more than {0:N0})";
         private const string ComputerOpponentsQuantityPromptForSinglePlayerFormatString = "Enter the number of computer opponents (at least 1, no more than {0:N0})";
         private const string ComputerPlayerNameFormatString = "CPU {0}";
+        private const string HumanPlayersQuantityPromptForMultiplayerFormatString = "Enter the number of human players (at least 1, no more than {0:N0})";
         private const string HumanPlayerNamePrompt = "Please enter your name";
         private const int MaximumNumberOfPlayers = 4;
 
@@ -26,6 +27,24 @@ namespace WMD.Console
             Player humanPlayer = SetUpHumanPlayer(Array.Empty<string>());
             int computerPlayerCount = AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1);
             IList<Player> players = CreatePlayerList(humanPlayer, computerPlayerCount);
+            return new GameState(players, new Earth());
+        }
+
+        public static GameState CreateInitialStateForMultiplayerGame()
+        {
+            int humanPlayerCount = AskForNumberOfHumanPlayers(MaximumNumberOfPlayers);
+            var humanPlayers = new Queue<Player>(humanPlayerCount);
+            for (int i = 0; i < humanPlayerCount; i++)
+            {
+                ICollection<string> takenNames = humanPlayers.Select(player => player.Identification.Name).ToList();
+                Player humanPlayer = SetUpHumanPlayer(takenNames);
+                humanPlayers.Enqueue(humanPlayer);
+            }
+
+            int maximumNumberOfComputerPlayers = MaximumNumberOfPlayers - humanPlayerCount;
+            int computerPlayerCount = maximumNumberOfComputerPlayers > 0 ? AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1) : 0;
+
+            IList<Player> players = CreatePlayerList(humanPlayers.ToList(), computerPlayerCount);
             return new GameState(players, new Earth());
         }
 
@@ -51,6 +70,19 @@ namespace WMD.Console
             }
 
             return UserInput.GetInteger(string.Format(requestText, maximumAllowed), allowedRange);
+        }
+
+        private static int AskForNumberOfHumanPlayers(int maximumAllowed)
+        {
+            if (maximumAllowed == 0)
+            {
+                return 0;
+            }
+
+            var prompt = string.Format(HumanPlayersQuantityPromptForMultiplayerFormatString, maximumAllowed);
+            IntRange allowedRange = new IntRange(1, maximumAllowed);
+
+            return UserInput.GetInteger(prompt, allowedRange);
         }
 
         private static Player SetUpHumanPlayer(ICollection<string> takenNames)
@@ -87,6 +119,16 @@ namespace WMD.Console
             IList<Player> players = CreateComputerPlayers(computerPlayerCount);
             players.Insert(0, humanPlayer);
             return players;
+        }
+
+        private static IList<Player> CreatePlayerList(IList<Player> humanPlayers, int computerPlayerCount)
+        {
+            if (computerPlayerCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame);
+            }
+
+            return humanPlayers.Concat(CreateComputerPlayers(computerPlayerCount).ToList()).ToList();
         }
 
         private static IList<Player> CreateComputerPlayers(int computerPlayerCount) =>
