@@ -7,6 +7,8 @@ namespace WMD.AI.Default
 {
     internal sealed class DistributePropagandaInputRetriever : ICommandInputRetriever
     {
+        private const int StopReputationIncreasesThreshold = 90;
+
         static DistributePropagandaInputRetriever()
         {
             _random = new Random();
@@ -14,7 +16,7 @@ namespace WMD.AI.Default
 
         public CommandInput? GetCommandInput(GameState gameState)
         {
-            if (GameStateChecks.CurrentPlayerHasNoMoney(gameState))
+            if (GameStateChecks.CurrentPlayerHasNoMoney(gameState) || !WantToIncreaseReputation(gameState))
             {
                 return null;
             }
@@ -24,8 +26,17 @@ namespace WMD.AI.Default
             return amountToSpend > 0.0M ? new DistributePropagandaInput() with { MoneyToSpend = amountToSpend } : null;
         }
 
-        private static decimal CalculateAmountToSpend(decimal maximum) =>
-            (decimal)Math.Round(_random.NextDouble() * (double)maximum, 2);
+        private static decimal CalculateAmountToSpend(decimal maximum)
+        {
+            decimal halfOfMaximum = Math.Round(maximum / 2, 2);
+            decimal baseAmount = halfOfMaximum;
+            decimal additionalAmount = (decimal)Math.Round(_random.NextDouble() * (double)halfOfMaximum, 2);
+
+            return baseAmount + additionalAmount;
+        }
+
+        private static bool WantToIncreaseReputation(GameState gameState) =>
+            gameState.CurrentPlayer.State.ReputationPercentage < StopReputationIncreasesThreshold;
 
         private static readonly Random _random;
     }

@@ -11,6 +11,10 @@ namespace WMD.AI.Default
 
         public CommandInput? GetCommandInput(GameState gameState)
         {
+            if (!HasHenchmenToAttackWith(gameState))
+            {
+                return null;
+            }
             int? targetPlayerIndex = ChooseTargetPlayerIndex(gameState);
             return targetPlayerIndex.HasValue ? new AttackPlayerInput() { TargetPlayerIndex = targetPlayerIndex.Value } : null;
         }
@@ -22,6 +26,8 @@ namespace WMD.AI.Default
                 .OrderBy(_ => _random.NextDouble())
                 .First();
         }
+
+        private static bool HasHenchmenToAttackWith(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
 
         private static readonly Random _random;
     }
