@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>WMD.AI</RootNamespace>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wmd-core\wmd-core.csproj" />
+  </ItemGroup>
+
+</Project>

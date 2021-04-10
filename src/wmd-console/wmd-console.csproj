@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\wmd-ai\wmd-ai.csproj" />
     <ProjectReference Include="..\wmd-core\wmd-core.csproj" />
     <ProjectReference Include="..\Xyaneon.Console.Menus\Xyaneon.Console.Menus.csproj" />
   </ItemGroup>

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{44BBE685-D31
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wmd-console", "src\wmd-console\wmd-console.csproj", "{0F6F5A59-34C8-4084-9F92-A2B677A49500}"
 	ProjectSection(ProjectDependencies) = postProject
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7} = {286B69B2-30E0-46E0-BAFA-301B6D2C03C7}
 		{B62B61E0-F831-4FEF-9E2C-63090C901803} = {B62B61E0-F831-4FEF-9E2C-63090C901803}
 	EndProjectSection
 EndProject
@@ -16,7 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{38467CFD-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wmd-core-test", "test\wmd-core-test\wmd-core-test.csproj", "{603BBA58-E912-4345-AAB3-E400F29A3F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xyaneon.Console.Menus", "src\Xyaneon.Console.Menus\Xyaneon.Console.Menus.csproj", "{B62B61E0-F831-4FEF-9E2C-63090C901803}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xyaneon.Console.Menus", "src\Xyaneon.Console.Menus\Xyaneon.Console.Menus.csproj", "{B62B61E0-F831-4FEF-9E2C-63090C901803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wmd-ai", "src\wmd-ai\wmd-ai.csproj", "{286B69B2-30E0-46E0-BAFA-301B6D2C03C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{715A5065-AC00-40B7-ACB6-986092F7704D} = {715A5065-AC00-40B7-ACB6-986092F7704D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +46,10 @@ Global
 		{B62B61E0-F831-4FEF-9E2C-63090C901803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62B61E0-F831-4FEF-9E2C-63090C901803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62B61E0-F831-4FEF-9E2C-63090C901803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +59,7 @@ Global
 		{0F6F5A59-34C8-4084-9F92-A2B677A49500} = {44BBE685-D31A-462C-B67A-32044506041C}
 		{603BBA58-E912-4345-AAB3-E400F29A3F99} = {38467CFD-7337-421F-8420-39B5C954A156}
 		{B62B61E0-F831-4FEF-9E2C-63090C901803} = {44BBE685-D31A-462C-B67A-32044506041C}
+		{286B69B2-30E0-46E0-BAFA-301B6D2C03C7} = {44BBE685-D31A-462C-B67A-32044506041C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0999B4DD-9593-4629-8309-9DB20E11DAF1}

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WMD.Console.AI;
+using WMD.AI;
 using WMD.Console.UI;
 using WMD.Console.UI.Core;
 using WMD.Game.State.Data;

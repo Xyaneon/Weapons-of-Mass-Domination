@@ -1,9 +1,9 @@
 ﻿using WMD.Game.Commands;
 using WMD.Game.State.Data;
 
-namespace WMD.Console.AI
+namespace WMD.AI
 {
-    class CpuPlayerAI : ICpuPlayerAI
+    public sealed class CpuPlayerAI : ICpuPlayerAI
     {
         public AICommandSelection ChooseCommandAndInputForGameState(GameState gameState) =>
             new(new SkipTurnCommand(), new SkipTurnInput());

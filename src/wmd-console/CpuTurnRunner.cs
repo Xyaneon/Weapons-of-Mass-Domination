@@ -1,4 +1,4 @@
-﻿using WMD.Console.AI;
+﻿using WMD.AI;
 using WMD.Console.UI;
 using WMD.Console.UI.Commands;
 using WMD.Console.UI.Core;

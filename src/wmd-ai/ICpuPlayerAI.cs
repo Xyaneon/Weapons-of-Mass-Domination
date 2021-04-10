@@ -1,8 +1,8 @@
 ﻿using WMD.Game.State.Data;
 
-namespace WMD.Console.AI
+namespace WMD.AI
 {
-    interface ICpuPlayerAI
+    public interface ICpuPlayerAI
     {
         AICommandSelection ChooseCommandAndInputForGameState(GameState gameState);
     }
