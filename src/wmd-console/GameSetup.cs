@@ -68,7 +68,7 @@ namespace WMD.Console
         {
             if (computerPlayerCount < 1)
             {
-                throw new ArgumentOutOfRangeException("There must be at least one computer player in a single-player game.");
+                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), "There must be at least one computer player in a single-player game.");
             }
 
             IList<Player> players = CreateComputerPlayers(computerPlayerCount);
