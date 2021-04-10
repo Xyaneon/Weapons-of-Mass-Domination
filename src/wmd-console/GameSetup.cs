@@ -12,6 +12,7 @@ namespace WMD.Console
     static class GameSetup
     {
         private const string ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame = "There must be at least one computer player in a single-player game.";
+        private const string ArgumentOutOfRangeException_NumberOfComputerPlayersCannotBeNegative = "The number of computer players in a multiplayer game cannot be negative.";
 
         private const string ComputerOpponentsQuantityPromptForMultiplayerFormatString = "Enter the number of computer opponents (zero or no more than {0:N0})";
         private const string ComputerOpponentsQuantityPromptForSinglePlayerFormatString = "Enter the number of computer opponents (at least 1, no more than {0:N0})";
@@ -24,14 +25,20 @@ namespace WMD.Console
 
         public static GameState CreateInitialStateForSinglePlayerGame()
         {
+            _nextAvailableColor = 0;
+
             Player humanPlayer = SetUpHumanPlayer(Array.Empty<string>());
+
             int computerPlayerCount = AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1);
+
             IList<Player> players = CreatePlayerList(humanPlayer, computerPlayerCount);
             return new GameState(players, new Earth());
         }
 
         public static GameState CreateInitialStateForMultiplayerGame()
         {
+            _nextAvailableColor = 0;
+
             int humanPlayerCount = AskForNumberOfHumanPlayers(MaximumNumberOfPlayers);
             var humanPlayers = new Queue<Player>(humanPlayerCount);
             for (int i = 0; i < humanPlayerCount; i++)
@@ -42,7 +49,7 @@ namespace WMD.Console
             }
 
             int maximumNumberOfComputerPlayers = MaximumNumberOfPlayers - humanPlayerCount;
-            int computerPlayerCount = maximumNumberOfComputerPlayers > 0 ? AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1) : 0;
+            int computerPlayerCount = maximumNumberOfComputerPlayers > 0 ? AskForNumberOfComputerPlayers(false, maximumNumberOfComputerPlayers) : 0;
 
             IList<Player> players = CreatePlayerList(humanPlayers.ToList(), computerPlayerCount);
             return new GameState(players, new Earth());
@@ -123,9 +130,9 @@ namespace WMD.Console
 
         private static IList<Player> CreatePlayerList(IList<Player> humanPlayers, int computerPlayerCount)
         {
-            if (computerPlayerCount < 1)
+            if (computerPlayerCount < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame);
+                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), ArgumentOutOfRangeException_NumberOfComputerPlayersCannotBeNegative);
             }
 
             return humanPlayers.Concat(CreateComputerPlayers(computerPlayerCount).ToList()).ToList();
