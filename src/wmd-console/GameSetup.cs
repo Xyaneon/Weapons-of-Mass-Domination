@@ -11,8 +11,9 @@ namespace WMD.Console
 {
     static class GameSetup
     {
+        private const string ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame = "There must be at least one computer player in a single-player game.";
+        private const string HumanPlayerNamePrompt = "Please enter your name";
         private const int MaximumNumberOfPlayers = 4;
-
         private static PlayerColor _nextAvailableColor = 0;
 
         public static GameState CreateInitialStateForSinglePlayerGame()
@@ -49,11 +50,18 @@ namespace WMD.Console
 
         private static Player SetUpHumanPlayer(ICollection<string> takenNames)
         {
+            var name = RetrieveHumanPlayerName(takenNames);
+
+            return new Player(new PlayerIdentification(name, GetNextAvailableColor(), true));
+        }
+
+        private static string RetrieveHumanPlayerName(ICollection<string> takenNames)
+        {
             string? name;
 
-            while(true)
+            while (true)
             {
-                name = UserInput.GetString("Please enter your name");
+                name = UserInput.GetString(HumanPlayerNamePrompt);
 
                 if (name != null && !takenNames.Contains(name))
                 {
@@ -61,14 +69,14 @@ namespace WMD.Console
                 }
             }
 
-            return new Player(new PlayerIdentification(name, GetNextAvailableColor(), true));
+            return name;
         }
 
         private static IList<Player> CreatePlayerList(Player humanPlayer, int computerPlayerCount)
         {
             if (computerPlayerCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), "There must be at least one computer player in a single-player game.");
+                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame);
             }
 
             IList<Player> players = CreateComputerPlayers(computerPlayerCount);
@@ -76,12 +84,13 @@ namespace WMD.Console
             return players;
         }
 
-        private static IList<Player> CreateComputerPlayers(int computerPlayerCount)
-        {
-            return Enumerable.Range(1, computerPlayerCount)
-                .Select(playerNumber => new Player(new PlayerIdentification($"CPU {playerNumber}", GetNextAvailableColor(), false)))
+        private static IList<Player> CreateComputerPlayers(int computerPlayerCount) =>
+            Enumerable.Range(1, computerPlayerCount)
+                .Select(playerNumber => CreateComputerPlayer(playerNumber))
                 .ToList();
-        }
+
+        private static Player CreateComputerPlayer(int playerNumber) =>
+            new(new PlayerIdentification($"CPU {playerNumber}", GetNextAvailableColor(), false));
 
         private static PlayerColor GetNextAvailableColor()
         {
