@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WMD.Console.AI;
 using WMD.Console.UI;
 using WMD.Console.UI.Core;
 using WMD.Game.State.Data;
@@ -62,6 +63,6 @@ namespace WMD.Console
                 .AsReadOnly();
 
         private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) =>
-            player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner();
+            player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner(new CpuPlayerAI());
     }
 }

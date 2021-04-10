@@ -9,9 +9,9 @@ namespace WMD.Console
 {
     sealed class CpuTurnRunner : PlayerTurnRunner
     {
-        public CpuTurnRunner()
+        public CpuTurnRunner(ICpuPlayerAI ai)
         {
-            AI = new CpuPlayerAI();
+            AI = ai;
         }
 
         public override GameState RunTurn(GameState gameState)
@@ -32,7 +32,7 @@ namespace WMD.Console
             return updatedGameState;
         }
 
-        private ICpuPlayerAI AI { get; set; }
+        private ICpuPlayerAI AI { get; }
 
         private CommandResult SelectCommandAndRetrieveResult(GameState gameState)
         {
