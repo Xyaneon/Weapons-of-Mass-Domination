@@ -15,13 +15,13 @@ namespace WMD.Console.UI.Menus
 
         public static void StartNewSinglePlayerGame()
         {
-            GameState gameState = GameSetup.CreateInitialStateForSinglePlayerGame();
+            GameState gameState = GameSetup.CreateInitialGameState(true);
             new GameRunner(gameState).Run();
         }
 
         public static void StartNewMultiplayerGame()
         {
-            GameState gameState = GameSetup.CreateInitialStateForMultiplayerGame();
+            GameState gameState = GameSetup.CreateInitialGameState(false);
             new GameRunner(gameState).Run();
         }
     }
