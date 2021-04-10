@@ -22,7 +22,7 @@ namespace WMD.AI
         /// -or-
         /// <paramref name="input"/> is <see langword="null"/>.
         /// </exception>
-        public AICommandSelection([DisallowNull] IGameCommand command, [DisallowNull] object input)
+        public AICommandSelection([DisallowNull] IGameCommand command, [DisallowNull] CommandInput input)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command), ArgumentNullException_Command);
             Input = input ?? throw new ArgumentNullException(nameof(input), ArgumentNullException_Input);
@@ -36,6 +36,6 @@ namespace WMD.AI
         /// <summary>
         /// Gets the additional input data the AI has specified for <see cref="Command"/>.
         /// </summary>
-        public object Input { get; }
+        public CommandInput Input { get; }
     }
 }

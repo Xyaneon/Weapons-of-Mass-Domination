@@ -34,12 +34,17 @@ namespace WMD.Console
 
         private static CommandResult? RunSelectedCommand(GameState gameState, IGameCommand command)
         {
-            Type? baseCommandType = command.GetType().BaseType;
-            if (baseCommandType == null)
+            Type inputType;
+
+            try
             {
-                throw new ArgumentException($"The supplied command does not inherit from {typeof(GameCommand<,>).Name}.", nameof(command));
+                inputType = CommandUtility.GetInputType(command);
             }
-            Type inputType = baseCommandType.GenericTypeArguments[0];
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message, nameof(command), ex);
+            }
+
             CommandInput? retrievedInput = CommandInputRetrieverFactory.CreateICommandInputRetriever(inputType).GetCommandInput(gameState);
 
             if (retrievedInput == null)
