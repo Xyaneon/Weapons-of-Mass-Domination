@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
@@ -11,21 +10,23 @@ namespace WMD.Console
 {
     static class GameSetup
     {
-        private const string ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame = "There must be at least one computer player in a single-player game.";
-
         private const string ComputerOpponentsQuantityPromptForMultiplayerFormatString = "Enter the number of computer opponents (zero or no more than {0:N0})";
         private const string ComputerOpponentsQuantityPromptForSinglePlayerFormatString = "Enter the number of computer opponents (at least 1, no more than {0:N0})";
         private const string ComputerPlayerNameFormatString = "CPU {0}";
-        private const string HumanPlayerNamePrompt = "Please enter your name";
+        private const string HumanPlayersQuantityPromptForMultiplayerFormatString = "Enter the number of human players (at least {0:N0}, no more than {1:N0})";
+        private const string HumanPlayerNamePromptFormatString = "Player {0:N0}, please enter your name";
         private const int MaximumNumberOfPlayers = 4;
 
         private static PlayerColor _nextAvailableColor = 0;
 
-        public static GameState CreateInitialStateForSinglePlayerGame()
+        public static GameState CreateInitialGameState(bool isSinglePlayer)
         {
-            Player humanPlayer = SetUpHumanPlayer(Array.Empty<string>());
-            int computerPlayerCount = AskForNumberOfComputerPlayers(true, MaximumNumberOfPlayers - 1);
-            IList<Player> players = CreatePlayerList(humanPlayer, computerPlayerCount);
+            _nextAvailableColor = 0;
+
+            IEnumerable<Player> humanPlayers = SetUpHumanPlayers(isSinglePlayer);
+            IEnumerable<Player> computerPlayers = SetUpComputerPlayers(isSinglePlayer, humanPlayers.Count());
+            IList<Player> players = humanPlayers.Concat(computerPlayers).ToList();
+
             return new GameState(players, new Earth());
         }
 
@@ -53,40 +54,17 @@ namespace WMD.Console
             return UserInput.GetInteger(string.Format(requestText, maximumAllowed), allowedRange);
         }
 
-        private static Player SetUpHumanPlayer(ICollection<string> takenNames)
+        private static int AskForNumberOfHumanPlayers(int minimumAllowed, int maximumAllowed)
         {
-            var name = RetrieveHumanPlayerName(takenNames);
-
-            return new Player(new PlayerIdentification(name, GetNextAvailableColor(), true));
-        }
-
-        private static string RetrieveHumanPlayerName(ICollection<string> takenNames)
-        {
-            string? name;
-
-            while (true)
+            if (maximumAllowed == 0)
             {
-                name = UserInput.GetString(HumanPlayerNamePrompt);
-
-                if (name != null && !takenNames.Contains(name))
-                {
-                    break;
-                }
+                return 0;
             }
 
-            return name;
-        }
+            var prompt = string.Format(HumanPlayersQuantityPromptForMultiplayerFormatString, minimumAllowed, maximumAllowed);
+            IntRange allowedRange = new IntRange(minimumAllowed, maximumAllowed);
 
-        private static IList<Player> CreatePlayerList(Player humanPlayer, int computerPlayerCount)
-        {
-            if (computerPlayerCount < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(computerPlayerCount), ArgumentOutOfRangeException_TooFewComputerPlayersForSinglePlayerGame);
-            }
-
-            IList<Player> players = CreateComputerPlayers(computerPlayerCount);
-            players.Insert(0, humanPlayer);
-            return players;
+            return UserInput.GetInteger(prompt, allowedRange);
         }
 
         private static IList<Player> CreateComputerPlayers(int computerPlayerCount) =>
@@ -102,6 +80,49 @@ namespace WMD.Console
             PlayerColor color = _nextAvailableColor;
             _nextAvailableColor++;
             return color;
+        }
+
+        private static string RetrieveHumanPlayerName(int playerNumber, ICollection<string> takenNames)
+        {
+            string? name;
+
+            while (true)
+            {
+                name = UserInput.GetString(string.Format(HumanPlayerNamePromptFormatString, playerNumber));
+
+                if (name != null && !takenNames.Contains(name))
+                {
+                    break;
+                }
+            }
+
+            return name;
+        }
+
+        private static IEnumerable<Player> SetUpComputerPlayers(bool isSinglePlayer, int numberOfHumanPlayers)
+        {
+            int maximumNumberOfComputerPlayers = MaximumNumberOfPlayers - numberOfHumanPlayers;
+            int computerPlayerCount = maximumNumberOfComputerPlayers > 0 ? AskForNumberOfComputerPlayers(isSinglePlayer, maximumNumberOfComputerPlayers) : 0;
+            return CreateComputerPlayers(computerPlayerCount);
+        }
+
+        private static Player CreateHumanPlayer(int playerNumber, ICollection<string> takenNames) =>
+            new(new PlayerIdentification(RetrieveHumanPlayerName(playerNumber, takenNames), GetNextAvailableColor(), true));
+
+        private static IEnumerable<Player> SetUpHumanPlayers(bool isSinglePlayer)
+        {
+            int minimumNumberOfHumanPlayers = isSinglePlayer ? 1 : 2;
+            int humanPlayerCount = isSinglePlayer ? 1 : AskForNumberOfHumanPlayers(minimumNumberOfHumanPlayers, MaximumNumberOfPlayers);
+            var humanPlayers = new Queue<Player>(humanPlayerCount);
+
+            for (int i = 0; i < humanPlayerCount; i++)
+            {
+                ICollection<string> takenNames = humanPlayers.Select(player => player.Identification.Name).ToList();
+                Player humanPlayer = CreateHumanPlayer(i + 1, takenNames);
+                humanPlayers.Enqueue(humanPlayer);
+            }
+
+            return humanPlayers;
         }
     }
 }

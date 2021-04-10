@@ -35,6 +35,7 @@ namespace WMD.Console.UI.Menus
             var mainMenuItems = new MenuItem[]
             {
                 new MenuItem("New single player game", MainMenuActions.StartNewSinglePlayerGame),
+                new MenuItem("New local multiplayer game", MainMenuActions.StartNewMultiplayerGame),
                 new MenuItem("Exit", MainMenuActions.ExitGame)
             };
 
