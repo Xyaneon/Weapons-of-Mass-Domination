@@ -18,7 +18,8 @@ Along the way, beware of attacks from other players, and try to get your hands o
 ### :floppy_disk: Background info
 
 As a high school student still new to programming, I created a command line turn-based strategy game called WMD: Weapons of Mass Domination.
-The original implementation used the Borland IDE and C++, and was stored and distributed on floppy disks.
+The original implementation used the Borland IDE and C++, and was stored and distributed on floppy disks. You can find the original source
+code archived [here](https://github.com/Xyaneon/WMD-Weapons-of-Mass-Domination-Original).
 
 Today, I hold a Master's degree in Computer Science and work as a professional software developer.
 This is a newer re-implementation of that game from many years ago, built using modern technologies and development practices I have learned since then.
