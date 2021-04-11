@@ -8,6 +8,7 @@ namespace WMD.Console
     {
         static void Main(string[] args)
         {
+            PrintingUtility.SetOutputEncoding();
             PrintingUtility.PrintTitle();
 
             Menu mainMenu = GameMenuFactory.CreateMainMenu();
