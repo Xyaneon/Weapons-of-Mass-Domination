@@ -19,6 +19,11 @@ namespace WMD.Console.UI
             System.Console.WriteLine("You apparently changed your mind.");
         }
 
+        public static void PrintCopyrightInfo()
+        {
+            System.Console.WriteLine("Copyright \u00a9 2021 Christopher K. Horton");
+        }
+
         public static void PrintCurrentPlayerHasNoMoneyToSpend()
         {
             System.Console.WriteLine("You do not have any money to spend.");
@@ -81,6 +86,33 @@ namespace WMD.Console.UI
             System.Console.WriteLine($"You do not have enough money to upgrade your secret base ({cost:C} needed).");
         }
 
+        public static void PrintMushroomCloud()
+        {
+            System.Console.WriteLine(
+@"                            0000000000                          
+     00                00000000000000000000                     
+      00             000000000000000000000000                   
+                   0000000000000000000000000000                 
+                  000000000000000000000000000000      00000     
+                 00000000000000000000000000000000      000      
+                 00000000000000000000000000000000               
+                  000000000000000000000000000000                
+                    00000000000000000000000000                  
+                        000000000000000000                      
+                            0000000000                          
+                             00000000                           
+                              000000                            
+                        000000000000000000                      
+                       0      000000      0                     
+                        000000000000000000                      
+                              000000                            
+                         \\   00000000   /                      
+                         _ 000000000000 _                       
+0 0 0 0 0 0 0 0 0 0 0 0 0 00000000000000 0 0 0 0 0 0 0 0 0 0 0 0
+0000000000000000000000000000000000000000000000000000000000000000"
+);
+        }
+
         public static void PrintNoLandToSell()
         {
             System.Console.WriteLine("You don't have any land to sell.");
@@ -111,9 +143,19 @@ namespace WMD.Console.UI
             System.Console.WriteLine($"Your nukes research has not yet been completed.");
         }
 
+        public static void SetOutputEncoding()
+        {
+            System.Console.OutputEncoding = System.Text.Encoding.Unicode;
+        }
+
         public static void PrintTitle()
         {
             System.Console.WriteLine("Weapons of Mass Domination");
+            System.Console.WriteLine("**************************");
+            PrintCopyrightInfo();
+            System.Console.WriteLine();
+            PrintMushroomCloud();
+            System.Console.WriteLine();
         }
     }
 }
