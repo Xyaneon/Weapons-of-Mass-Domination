@@ -16,7 +16,7 @@ namespace WMD.Game.State.Updates.Rounds
             {
                 new PlayerHenchmenPaidOccurrencesCreator(),
                 new PlayerHenchmenQuitOccurrencesCreator(),
-                new ReputationDecayOccurrencesCreator(),
+                new ReputationChangeOccurrencesCreator(),
                 new GovernmentInterventionOccurrencesCreator(),
             };
         }
@@ -59,7 +59,7 @@ namespace WMD.Game.State.Updates.Rounds
         {
             PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
             PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
-            ReputationDecay reputationDecay => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationDecay.PlayerIndex, -1 * reputationDecay.ReputationPercentageLost),
+            ReputationChange reputationDecay => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationDecay.PlayerIndex, -1 * reputationDecay.ReputationPercentageChanged),
             GovernmentIntervention governmentIntervention => ApplyGovernmentIntervention(gameState, governmentIntervention),
             _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
         };

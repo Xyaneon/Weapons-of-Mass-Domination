@@ -4,18 +4,18 @@ using WMD.Game.State.Updates.Rounds;
 namespace WMD.Game.Test.State.Updates.Rounds
 {
     [TestClass]
-    public class ReputationDecayTests
+    public class ReputationChangeTests
     {
         [TestMethod]
         public void Constructor_ShouldCreateObjectWithGivenValues()
         {
             int expectedPlayerIndex = 2;
-            int expectedReputationPercentageLost = 3;
+            int expectedReputationPercentageChange = 3;
 
-            var actualRecord = new ReputationDecay(expectedPlayerIndex, expectedReputationPercentageLost);
+            var actualRecord = new ReputationChange(expectedPlayerIndex, expectedReputationPercentageChange);
 
             Assert.AreEqual(expectedPlayerIndex, actualRecord.PlayerIndex);
-            Assert.AreEqual(expectedReputationPercentageLost, actualRecord.ReputationPercentageLost);
+            Assert.AreEqual(expectedReputationPercentageChange, actualRecord.ReputationPercentageChanged);
         }
     }
 }

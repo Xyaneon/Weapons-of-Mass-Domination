@@ -45,8 +45,15 @@ namespace WMD.Console.UI
                 case PlayerHenchmenQuit playerHenchmenQuit:
                     System.Console.WriteLine($"{playerHenchmenQuit.NumberOfHenchmenQuit:N0} of {gameState.Players[playerHenchmenQuit.PlayerIndex].Identification.Name}'s henchmen quit.");
                     break;
-                case ReputationDecay reputationDecay:
-                    System.Console.WriteLine($"{gameState.Players[reputationDecay.PlayerIndex].Identification.Name} lost {reputationDecay.ReputationPercentageLost}% reputation due to time.");
+                case ReputationChange reputationChange:
+                    if (reputationChange.ReputationPercentageChanged > 0)
+                    {
+                        System.Console.WriteLine($"{gameState.Players[reputationChange.PlayerIndex].Identification.Name} gained {reputationChange.ReputationPercentageChanged}% reputation due to their assets.");
+                    }
+                    else
+                    {
+                        System.Console.WriteLine($"{gameState.Players[reputationChange.PlayerIndex].Identification.Name} lost {-1 * reputationChange.ReputationPercentageChanged}% reputation due to time.");
+                    }
                     break;
                 case GovernmentIntervention intervention:
                     PrintGovernmentIntervention(gameState, intervention);

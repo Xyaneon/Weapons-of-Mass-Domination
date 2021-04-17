@@ -6,14 +6,14 @@ using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Updates.Rounds
 {
-    internal sealed class ReputationDecayOccurrencesCreator : RoundUpdateResultOccurrencesCreator
+    internal sealed class ReputationChangeOccurrencesCreator : RoundUpdateResultOccurrencesCreator
     {
         public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
             CreateRangeOfPlayerIndices(gameState)
                 .Where(index => gameState.Players[index].State.ReputationPercentage > 0)
-                .Select(index => new ReputationDecay(index, CalculateReputationLost(gameState, index)));
+                .Select(index => new ReputationChange(index, CalculateReputationLost(gameState, index)));
 
         private static int CalculateReputationLost(GameState gameState, int playerIndex) =>
-            Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, ReputationConstants.ReputationDecayRate);
+            Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, -1 * ReputationConstants.ReputationChangeRate);
     }
 }
