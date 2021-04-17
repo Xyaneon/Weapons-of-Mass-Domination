@@ -24,7 +24,7 @@ namespace WMD.Game.State.Updates.Rounds
 
             var interventions = new Queue<GovernmentIntervention>();
 
-            if (_random.NextDouble() > BaseChanceOfGovernmentIntervention && gameState.Players[playerIndex].State.Money > 0)
+            if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.Money > 0)
             {
                 interventions.Enqueue(CreateTakesBackMoneyOccurrence(gameState, playerIndex));
             }
@@ -34,6 +34,16 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static GovernmentTakesBackMoney CreateTakesBackMoneyOccurrence(GameState gameState, int playerIndex) =>
             new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, BaseAmountOfMoneyTakenBack));
+
+        private static bool GovernmentDecidesToTakeIntervention(GameState gameState, int playerIndex)
+        {
+            double additionalChanceOfIntervention = Math.Max(
+                (gameState.Players[playerIndex].State.ReputationPercentage - MinimumNoticeableReputationPercentage) / 100.0,
+                1 - BaseChanceOfGovernmentIntervention
+            );
+
+            return _random.NextDouble() < BaseChanceOfGovernmentIntervention + additionalChanceOfIntervention;
+        }
 
         private static readonly Random _random;
     }

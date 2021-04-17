@@ -17,6 +17,7 @@ namespace WMD.Game.State.Updates.Rounds
                 new PlayerHenchmenPaidOccurrencesCreator(),
                 new PlayerHenchmenQuitOccurrencesCreator(),
                 new ReputationDecayOccurrencesCreator(),
+                new GovernmentInterventionOccurrencesCreator(),
             };
         }
 
