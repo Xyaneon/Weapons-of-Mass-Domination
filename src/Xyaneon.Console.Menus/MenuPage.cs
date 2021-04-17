@@ -28,6 +28,24 @@ namespace Xyaneon.Console.Menus
             MenuItems = new List<MenuItem>(menuItems).AsReadOnly();
             HighlightedMenuItem = menuItems.First();
         }
+        
+        public MenuPage(Menu? menu, string title, IEnumerable<MenuItem> menuItems)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException(ArgumentException_MenuPageTitleIsBlank, nameof(title));
+            }
+
+            if (!menuItems.Any())
+            {
+                throw new ArgumentException(ArgumentException_MenuPageCannotBeEmpty, nameof(menuItems));
+            }
+
+            Menu = menu;
+            Title = title;
+            MenuItems = new List<MenuItem>(menuItems).AsReadOnly();
+            HighlightedMenuItem = menuItems.First();
+        }
 
         public string Title { get; }
 
