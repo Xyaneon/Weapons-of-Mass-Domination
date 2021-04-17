@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WMD.Game.State.Data;
+
+namespace WMD.Game.State.Updates.Rounds
+{
+    internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResultOccurrencesCreator
+    {
+        private const decimal BaseAmountOfMoneyTakenBack = 100;
+        private const double BaseChanceOfGovernmentIntervention = 0.1;
+        private const int MinimumNoticeableReputationPercentage = 10;
+
+        static GovernmentInterventionOccurrencesCreator() => _random = new Random();
+
+        public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
+            CreateRangeOfPlayerIndices(gameState)
+                .Where(playerIndex => gameState.Players[playerIndex].State.ReputationPercentage > MinimumNoticeableReputationPercentage)
+                .SelectMany(playerIndex => CreateOccurrencesForPlayer(gameState, playerIndex));
+
+        private static IEnumerable<RoundUpdateResultItem> CreateOccurrencesForPlayer(GameState gameState, int playerIndex)
+        {
+            // At most one occurrence of each intervention type can be created for a player.
+
+            var interventions = new Queue<GovernmentIntervention>();
+
+            if (_random.NextDouble() > BaseChanceOfGovernmentIntervention && gameState.Players[playerIndex].State.Money > 0)
+            {
+                interventions.Enqueue(CreateTakesBackMoneyOccurrence(gameState, playerIndex));
+            }
+
+            return interventions;
+        }
+
+        private static GovernmentTakesBackMoney CreateTakesBackMoneyOccurrence(GameState gameState, int playerIndex) =>
+            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, BaseAmountOfMoneyTakenBack));
+
+        private static readonly Random _random;
+    }
+}
