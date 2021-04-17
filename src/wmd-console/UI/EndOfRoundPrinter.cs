@@ -48,9 +48,24 @@ namespace WMD.Console.UI
                 case ReputationDecay reputationDecay:
                     System.Console.WriteLine($"{gameState.Players[reputationDecay.PlayerIndex].Identification.Name} lost {reputationDecay.ReputationPercentageLost}% reputation due to time.");
                     break;
+                case GovernmentIntervention intervention:
+                    PrintGovernmentIntervention(gameState, intervention);
+                    break;
                 default:
                     throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}.");
             }
+            System.Console.WriteLine();
+        }
+
+        private static void PrintGovernmentIntervention(GameState gameState, GovernmentIntervention intervention)
+        {
+            string interventionText = intervention switch
+            {
+                GovernmentTakesBackMoney occurrence => $"A government seized {occurrence.AmountTaken:C} from {gameState.Players[occurrence.PlayerIndex].Identification.Name}.",
+                _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
+            };
+
+            System.Console.WriteLine(interventionText);
             System.Console.WriteLine();
         }
     }

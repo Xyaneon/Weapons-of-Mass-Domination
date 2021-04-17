@@ -17,6 +17,7 @@ namespace WMD.Game.State.Updates.Rounds
                 new PlayerHenchmenPaidOccurrencesCreator(),
                 new PlayerHenchmenQuitOccurrencesCreator(),
                 new ReputationDecayOccurrencesCreator(),
+                new GovernmentInterventionOccurrencesCreator(),
             };
         }
 
@@ -28,6 +29,12 @@ namespace WMD.Game.State.Updates.Rounds
 
             return (updatedGameState, result);
         }
+
+        private static GameState ApplyGovernmentIntervention(GameState gameState, GovernmentIntervention intervention) => intervention switch
+        {
+            GovernmentTakesBackMoney occurrence => GameStateUpdater.AdjustMoneyForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.AmountTaken),
+            _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
+        };
 
         private static GameState ApplyRoundUpdates(GameState gameState, RoundUpdateResult roundUpdates)
         {
@@ -53,6 +60,7 @@ namespace WMD.Game.State.Updates.Rounds
             PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
             PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
             ReputationDecay reputationDecay => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationDecay.PlayerIndex, -1 * reputationDecay.ReputationPercentageLost),
+            GovernmentIntervention governmentIntervention => ApplyGovernmentIntervention(gameState, governmentIntervention),
             _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
         };
 
