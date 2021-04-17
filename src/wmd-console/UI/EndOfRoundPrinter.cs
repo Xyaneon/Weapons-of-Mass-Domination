@@ -8,8 +8,13 @@ namespace WMD.Console.UI
     {
         private const string EndOfRoundFooter = "The day has ended. Press any key to continue...";
         private const string EndOfRoundHeaderFormattingString = "End of Day {0:N0}";
+        private const string GovernmentTakesBackMoneyFormatString = "A government seized {0:C} from {1}.";
         private const char HeaderSeparator = '=';
         private const string NoEndOfRoundUpdateItems = "Nothing noteworthy happened today.";
+        private const string PlayerGainedReputationFormatString = "{0} gained {1}% reputation due to their assets.";
+        private const string PlayerHenchmenPaidFormatString = "{0} paid each of their {1:N0} henchmen their daily pay of {2:C}, for a total of {3:C}.";
+        private const string PlayerHenchmenQuitFormatString = "{0:N0} of {1}'s henchmen quit.";
+        private const string PlayerLostReputationFormatString = "{0} lost {1}% reputation due to time.";
 
         public static void PrintEndOfRound(RoundUpdateResult roundUpdate)
         {
@@ -37,36 +42,33 @@ namespace WMD.Console.UI
 
         private static void PrintEndOfRoundItem(GameState gameState, RoundUpdateResultItem item)
         {
-            switch (item)
-            {
-                case PlayerHenchmenPaid playerHenchmenPaid:
-                    System.Console.WriteLine($"{gameState.Players[playerHenchmenPaid.PlayerIndex].Identification.Name} paid each of their {playerHenchmenPaid.NumberOfHenchmenPaid:N0} henchmen their daily pay of {playerHenchmenPaid.DailyPayRate:C}, for a total of {playerHenchmenPaid.TotalPaidAmount:C}.");
-                    break;
-                case PlayerHenchmenQuit playerHenchmenQuit:
-                    System.Console.WriteLine($"{playerHenchmenQuit.NumberOfHenchmenQuit:N0} of {gameState.Players[playerHenchmenQuit.PlayerIndex].Identification.Name}'s henchmen quit.");
-                    break;
-                case ReputationDecay reputationDecay:
-                    System.Console.WriteLine($"{gameState.Players[reputationDecay.PlayerIndex].Identification.Name} lost {reputationDecay.ReputationPercentageLost}% reputation due to time.");
-                    break;
-                case GovernmentIntervention intervention:
-                    PrintGovernmentIntervention(gameState, intervention);
-                    break;
-                default:
-                    throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}.");
-            }
+            System.Console.WriteLine(CreateEndOfRoundItemText(gameState, item));
             System.Console.WriteLine();
         }
 
-        private static void PrintGovernmentIntervention(GameState gameState, GovernmentIntervention intervention)
+        private static string CreateEndOfRoundItemText(GameState gameState, RoundUpdateResultItem item) => item switch
         {
-            string interventionText = intervention switch
+            PlayerHenchmenPaid playerHenchmenPaid => string.Format(PlayerHenchmenPaidFormatString, gameState.Players[playerHenchmenPaid.PlayerIndex].Identification.Name, playerHenchmenPaid.NumberOfHenchmenPaid, playerHenchmenPaid.DailyPayRate, playerHenchmenPaid.TotalPaidAmount),
+            PlayerHenchmenQuit playerHenchmenQuit => string.Format(PlayerHenchmenQuitFormatString, playerHenchmenQuit.NumberOfHenchmenQuit, gameState.Players[playerHenchmenQuit.PlayerIndex].Identification.Name),
+            ReputationChange reputationChange => CreateReputationChangeText(gameState, reputationChange),
+            GovernmentIntervention intervention => CreateGovernmentInterventionText(gameState, intervention),
+            _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}."),
+        };
+
+        private static string CreateGovernmentInterventionText(GameState gameState, GovernmentIntervention intervention)
+        {
+            return intervention switch
             {
-                GovernmentTakesBackMoney occurrence => $"A government seized {occurrence.AmountTaken:C} from {gameState.Players[occurrence.PlayerIndex].Identification.Name}.",
+                GovernmentTakesBackMoney occurrence => string.Format(GovernmentTakesBackMoneyFormatString, occurrence.AmountTaken, gameState.Players[occurrence.PlayerIndex].Identification.Name),
                 _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
             };
+        }
 
-            System.Console.WriteLine(interventionText);
-            System.Console.WriteLine();
+        private static string CreateReputationChangeText(GameState gameState, ReputationChange reputationChange)
+        {
+            string playerName = gameState.Players[reputationChange.PlayerIndex].Identification.Name;
+            var changeAmount = reputationChange.ReputationPercentageChanged;
+            return string.Format(changeAmount > 0 ? PlayerGainedReputationFormatString : PlayerLostReputationFormatString, playerName, Math.Abs(changeAmount));
         }
     }
 }

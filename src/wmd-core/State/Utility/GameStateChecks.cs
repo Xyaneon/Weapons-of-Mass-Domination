@@ -1,6 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Game.State.Utility
 {
@@ -90,6 +93,60 @@ namespace WMD.Game.State.Utility
         public static bool PlayerIndexIsInBounds([DisallowNull] GameState gameState, int playerIndex)
         {
             return playerIndex >= 0 && playerIndex < gameState.Players.Count;
+        }
+
+        /// <summary>
+        /// Returns a collection of indices of the players with the most land area.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A collection of indices of the players with the most land area.</returns>
+        /// <remarks>The collection returned will be empty if all players have no land.</remarks>
+        public static IEnumerable<int> FindIndicesOfPlayersWithTheMostLand([DisallowNull] GameState gameState) =>
+            FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => playerState.Land);
+
+        /// <summary>
+        /// Returns a collection of indices of the players with the most money.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A collection of indices of the players with the most money.</returns>
+        /// <remarks>The collection returned will be empty if all players have no money.</remarks>
+        public static IEnumerable<int> FindIndicesOfPlayersWithTheMostMoney([DisallowNull] GameState gameState) =>
+            FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => (double)playerState.Money);
+
+        /// <summary>
+        /// Returns a collection of indices of the players with the most henchmen.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A collection of indices of the players with the most henchmen.</returns>
+        /// <remarks>The collection returned will be empty if all players have no henchmen.</remarks>
+        public static IEnumerable<int> FindIndicesOfPlayersWithTheMostHenchmen([DisallowNull] GameState gameState) =>
+            FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => playerState.WorkforceState.NumberOfHenchmen);
+
+        private static IEnumerable<int> FindIndicesOfPlayersWithLargestQuantity([DisallowNull] GameState gameState, Func<PlayerState, double> quantityFunction)
+        {
+            int numberOfPlayers = gameState.Players.Count;
+            double largestQuantity = 0;
+            var playerIndices = new Queue<int>(numberOfPlayers);
+
+            for (int i = 0; i < numberOfPlayers; i++)
+            {
+                double quantity = quantityFunction(gameState.Players[i].State);
+                if (quantity > 0)
+                {
+                    if (quantity == largestQuantity)
+                    {
+                        playerIndices.Enqueue(i);
+                    }
+                    else if (quantity > largestQuantity)
+                    {
+                        largestQuantity = quantity;
+                        playerIndices = new Queue<int>(numberOfPlayers - i);
+                        playerIndices.Enqueue(i);
+                    }
+                }
+            }
+
+            return playerIndices;
         }
     }
 }
