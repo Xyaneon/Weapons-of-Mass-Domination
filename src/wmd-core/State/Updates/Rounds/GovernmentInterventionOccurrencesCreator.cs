@@ -8,7 +8,7 @@ namespace WMD.Game.State.Updates.Rounds
     internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResultOccurrencesCreator
     {
         private const decimal BaseAmountOfMoneyTakenBack = 100;
-        private const decimal BaseAmountOfReputationLost = 5;
+        private const int BaseAmountOfReputationLost = 5;
         private const double BaseChanceOfGovernmentIntervention = 0.1;
         private const int MinimumNoticeableReputationPercentage = 10;
 
