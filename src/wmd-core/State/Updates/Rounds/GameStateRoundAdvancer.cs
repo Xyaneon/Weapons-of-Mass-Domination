@@ -34,7 +34,7 @@ namespace WMD.Game.State.Updates.Rounds
         {
             GovernmentTakesBackMoney occurrence => GameStateUpdater.AdjustMoneyForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.AmountTaken),
             GovernmentDenouncesPlayer occurrence => GameStateUpdater.AdjustReputationForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.ReputationDecrease),
-            _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
+            _ => throw new UnsupportedArgumentSubclassException(typeof(GovernmentIntervention), intervention.GetType()),
         };
 
         private static GameState ApplyRoundUpdates(GameState gameState, RoundUpdateResult roundUpdates)
@@ -62,7 +62,7 @@ namespace WMD.Game.State.Updates.Rounds
             PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
             ReputationChange reputationChange => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationChange.PlayerIndex, reputationChange.ReputationPercentageChanged),
             GovernmentIntervention governmentIntervention => ApplyGovernmentIntervention(gameState, governmentIntervention),
-            _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {roundUpdate.GetType().Name}."),
+            _ => throw new UnsupportedArgumentSubclassException(typeof(RoundUpdateResultItem), roundUpdate.GetType()),
         };
 
         private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState) =>
