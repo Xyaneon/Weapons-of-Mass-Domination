@@ -53,7 +53,7 @@ namespace WMD.Game.State.Updates.Rounds
                 return false;
             }
 
-            double additionalChanceOfIntervention = Math.Max(
+            double additionalChanceOfIntervention = Math.Min(
                 (reputationPercentage - MinimumNoticeableReputationPercentage) / 100.0,
                 1 - BaseChanceOfGovernmentIntervention
             );
