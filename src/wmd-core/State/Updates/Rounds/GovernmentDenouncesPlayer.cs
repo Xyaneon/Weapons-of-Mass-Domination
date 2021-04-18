@@ -19,7 +19,7 @@ namespace WMD.Game.State.Updates.Rounds
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="reputationLost"/> is greater than the amount of reputation the player actually has.
         /// </exception>
-        public GovernmentDenouncesPlayer(GameState gameState, int playerIndex, decimal reputationLost)
+        public GovernmentDenouncesPlayer(GameState gameState, int playerIndex, int reputationLost)
         {
             var playerState = gameState.Players[playerIndex].State;
             if (reputationLost > playerState.ReputationPercentage)
@@ -38,6 +38,6 @@ namespace WMD.Game.State.Updates.Rounds
         /// <summary>
         /// Gets the amount of reputation the player lost.
         /// </summary>
-        public decimal ReputationDecrease { get; init; }
+        public int ReputationDecrease { get; init; }
     }
 }
