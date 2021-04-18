@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 
@@ -13,8 +12,8 @@ namespace WMD.Game.State.Data
     public record GameState
     {
         private const int IndexNotFound = -1;
-        private const decimal LandBasePrice = 200;
-        private const decimal MaxLandPriceIncreaseFromScarcity = 1000000;
+        private const decimal LandBasePrice = 150;
+        private const decimal MaxLandPriceIncreaseFromScarcity = 1000;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameState"/> class.
@@ -57,15 +56,7 @@ namespace WMD.Game.State.Data
         /// <summary>
         /// Gets the current price per square kilometer of unclaimed land.
         /// </summary>
-        public decimal UnclaimedLandPurchasePrice
-        {
-            get
-            {
-                var percentageOfLandClaimed = 1 - Planet.PercentageOfLandStillUnclaimed;
-                var priceIncreaseFromScarcity = (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * percentageOfLandClaimed, 2);
-                return LandBasePrice + priceIncreaseFromScarcity;
-            }
-        }
+        public decimal UnclaimedLandPurchasePrice => LandBasePrice + LandPriceIncreaseFromScarcity;
 
         /// <summary>
         /// Determines whether the game has been won yet.
@@ -78,17 +69,7 @@ namespace WMD.Game.State.Data
             return winningPlayerIndex != IndexNotFound;
         }
 
-        private IReadOnlyList<Player> CreatePlayerListCopyWithUpdatedStateForPlayer(int playerIndex, PlayerState state)
-        {
-            var players = new Queue<Player>(Players.Count);
-
-            for (var i = 0; i < Players.Count; i++)
-            {
-                players.Enqueue(i == playerIndex ? Players[i] with { State = state } : Players[i]);
-            }
-
-            return players.ToList().AsReadOnly();
-        }
+        private decimal LandPriceIncreaseFromScarcity => (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * Planet.PercentageOfLandStillUnclaimed, 2);
 
         private int FindIndexOfLastRemainingPlayer()
         {
