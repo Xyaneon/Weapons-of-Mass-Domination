@@ -33,6 +33,7 @@ namespace WMD.Game.State.Updates.Rounds
         private static GameState ApplyGovernmentIntervention(GameState gameState, GovernmentIntervention intervention) => intervention switch
         {
             GovernmentTakesBackMoney occurrence => GameStateUpdater.AdjustMoneyForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.AmountTaken),
+            GovernmentDenouncesPlayer occurrence => GameStateUpdater.AdjustReputationForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.ReputationDecrease),
             _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
         };
 

@@ -8,6 +8,7 @@ namespace WMD.Game.State.Updates.Rounds
     internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResultOccurrencesCreator
     {
         private const decimal BaseAmountOfMoneyTakenBack = 100;
+        private const decimal BaseAmountOfReputationLost = 5;
         private const double BaseChanceOfGovernmentIntervention = 0.1;
         private const int MinimumNoticeableReputationPercentage = 10;
 
@@ -28,10 +29,18 @@ namespace WMD.Game.State.Updates.Rounds
             {
                 interventions.Enqueue(CreateTakesBackMoneyOccurrence(gameState, playerIndex));
             }
+            
+            if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.ReputationPercentage > 0)
+            {
+                interventions.Enqueue(CreateDenouncesPlayerOccurrence(gameState, playerIndex));
+            }
 
             return interventions;
         }
 
+        private static GovernmentDenouncesPlayer CreateDenouncesPlayerOccurrence(GameState gameState, int playerIndex) =>
+            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, BaseAmountOfReputationLost));
+        
         private static GovernmentTakesBackMoney CreateTakesBackMoneyOccurrence(GameState gameState, int playerIndex) =>
             new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, BaseAmountOfMoneyTakenBack));
 
