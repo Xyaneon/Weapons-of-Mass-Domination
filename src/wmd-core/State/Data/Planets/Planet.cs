@@ -70,12 +70,16 @@ namespace WMD.Game.State.Data.Planets
         public string Name { get; init; }
 
         /// <summary>
+        /// Gets the percentage of land claimed as a number between 0 and 1.
+        /// </summary>
+        /// <seealso cref="PercentageOfLandStillUnclaimed"/>
+        public double PercentageOfLandClaimed => 1 - PercentageOfLandStillUnclaimed;
+
+        /// <summary>
         /// Gets the percentage of land still unclaimed as a number between 0 and 1.
         /// </summary>
-        public double PercentageOfLandStillUnclaimed
-        {
-            get => UnclaimedLandArea / (double)TotalLandArea;
-        }
+        /// <seealso cref="PercentageOfLandClaimed"/>
+        public double PercentageOfLandStillUnclaimed => UnclaimedLandArea / (double)TotalLandArea;
 
         /// <summary>
         /// Gets the total land area in square kilometers.
