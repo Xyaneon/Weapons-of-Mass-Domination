@@ -46,8 +46,15 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static bool GovernmentDecidesToTakeIntervention(GameState gameState, int playerIndex)
         {
+            int reputationPercentage = gameState.Players[playerIndex].State.ReputationPercentage;
+
+            if (reputationPercentage < MinimumNoticeableReputationPercentage)
+            {
+                return false;
+            }
+
             double additionalChanceOfIntervention = Math.Max(
-                (gameState.Players[playerIndex].State.ReputationPercentage - MinimumNoticeableReputationPercentage) / 100.0,
+                (reputationPercentage - MinimumNoticeableReputationPercentage) / 100.0,
                 1 - BaseChanceOfGovernmentIntervention
             );
 
