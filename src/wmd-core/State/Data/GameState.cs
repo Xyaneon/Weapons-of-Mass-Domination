@@ -69,7 +69,7 @@ namespace WMD.Game.State.Data
             return winningPlayerIndex != IndexNotFound;
         }
 
-        private decimal LandPriceIncreaseFromScarcity => (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * Planet.PercentageOfLandStillUnclaimed, 2);
+        private decimal LandPriceIncreaseFromScarcity => (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * Planet.PercentageOfLandClaimed, 2);
 
         private int FindIndexOfLastRemainingPlayer()
         {

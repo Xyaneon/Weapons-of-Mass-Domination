@@ -30,9 +30,7 @@ namespace WMD.Game.State.Utility
         /// <param name="areaToPurchase">The unclaimed land area to purchase, in square kilometers.</param>
         /// <returns>The total purchase price for the given area of unclaimed land.</returns>
         /// <remarks>This method does not take into account the actual amount of remaining land area available for purchase.</remarks>
-        public static decimal CalculateTotalPurchasePrice([DisallowNull] GameState gameState, int areaToPurchase)
-        {
-            return gameState.UnclaimedLandPurchasePrice * areaToPurchase;
-        }
+        public static decimal CalculateTotalPurchasePrice([DisallowNull] GameState gameState, int areaToPurchase) =>
+            gameState.UnclaimedLandPurchasePrice * areaToPurchase;
     }
 }
