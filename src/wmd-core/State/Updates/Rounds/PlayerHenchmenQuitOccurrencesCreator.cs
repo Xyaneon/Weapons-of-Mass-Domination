@@ -12,25 +12,22 @@ namespace WMD.Game.State.Updates.Rounds
     {
         public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
             CreateRangeOfPlayerIndices(gameState)
-                .Where(index => PlayerCannotPayTheirHenchmen(gameState.Players[index].State) || PlayerHenchmenAreUnderpaid(gameState.Players[index].State))
-                .Select(index => CreatePlayerHenchmenQuitOccurrence(gameState, index));
+                .Select(index => CreatePlayerHenchmenQuitOccurrence(gameState, index))
+                .Where(occurrence => occurrence != null)
+                .Select(occurrence => occurrence!);
 
-        private static PlayerHenchmenQuit CreatePlayerHenchmenQuitOccurrence(GameState gameState, int index)
+        private static PlayerHenchmenQuit? CreatePlayerHenchmenQuitOccurrence(GameState gameState, int index)
         {
             PlayerState playerState = gameState.Players[index].State;
 
-            if (PlayerCannotPayTheirHenchmen(playerState))
+            int henchmenQuit = playerState switch
             {
-                return new(index, playerState.WorkforceState.NumberOfHenchmen);
-            }
+                _ when PlayerCannotPayTheirHenchmen(playerState) => playerState.WorkforceState.NumberOfHenchmen,
+                _ when PlayerHenchmenAreUnderpaid(playerState) => CalculateHenchmenQuitDueToUnderpay(playerState.WorkforceState),
+                _ => 0,
+            };
 
-            if (PlayerHenchmenAreUnderpaid(playerState))
-            {
-                int henchmenQuit = CalculateHenchmenQuitDueToUnderpay(playerState.WorkforceState);
-                return new(index, henchmenQuit);
-            }
-
-            throw new InvalidOperationException($"Conditions not met for player's henchmen to quit (index={index}).");
+            return henchmenQuit > 0 ? new(index, henchmenQuit) : null;
         }
 
         private static bool PlayerCannotPayTheirHenchmen(PlayerState playerState) =>
