@@ -8,32 +8,41 @@ namespace WMD.Console.UI.Menus
 {
     static class GameMenuFactory
     {
-        private const string MenuItemLabel_AttackPlayer = "Attack another player...";
-        private const string MenuItemLabel_Back = "Back";
-        private const string MenuItemLabel_BuildSecretBase = "Build a secret base";
-        private const string MenuItemLabel_Cancel = "Cancel";
-        private const string MenuItemLabel_ChangeDailyWage = "Change daily wage...";
-        private const string MenuItemLabel_DistributePropaganda = "Distribute propaganda";
-        private const string MenuItemLabel_Exit = "Exit";
-        private const string MenuItemLabel_HireHenchmen = "Hire henchmen...";
-        private const string MenuItemLabel_Launch = "Launch...";
-        private const string MenuItemLabel_Manufacture = "Manufacture...";
-        private const string MenuItemLabel_NewLocalMultiplayerGame = "New local multiplayer game";
-        private const string MenuItemLabel_NewSinglePlayerGame = "New single player game";
-        private const string MenuItemLabel_PurchaseUnclaimedLand = "Purchase unclaimed land";
-        private const string MenuItemLabel_Research = "Research";
-        private const string MenuItemLabel_Resign = "Resign";
-        private const string MenuItemLabel_SellLand = "Sell land";
-        private const string MenuItemLabel_SkipTurn = "Skip turn";
-        private const string MenuItemLabel_StealMoney = "Steal money";
-        private const string MenuItemLabel_UpgradeSecretBase = "Upgrade your secret base";
-        private const string MenuPageTitle_Actions = "Actions";
-        private const string MenuPageTitle_ChooseTargetPlayer = "Choose a target player";
-        private const string MenuPageTitle_Henchmen = "Henchmen";
-        private const string MenuPageTitle_Land = "Land";
-        private const string MenuPageTitle_MainMenu = "Main menu";
-        private const string MenuPageTitle_Nukes = "Nukes";
-        private const string MenuPageTitle_SecretBase = "Secret base";
+        private const string MenuPageItemLabelFormatString = "{0} >";
+
+        private static class MenuItemLabels
+        {
+            public const string AttackPlayer = "Attack another player...";
+            public const string Back = "Back";
+            public const string BuildSecretBase = "Build a secret base";
+            public const string Cancel = "Cancel";
+            public const string ChangeDailyWage = "Change daily wage...";
+            public const string DistributePropaganda = "Distribute propaganda";
+            public const string Exit = "Exit";
+            public const string HireHenchmen = "Hire henchmen...";
+            public const string Launch = "Launch...";
+            public const string Manufacture = "Manufacture...";
+            public const string NewLocalMultiplayerGame = "New local multiplayer game";
+            public const string NewSinglePlayerGame = "New single player game";
+            public const string PurchaseUnclaimedLand = "Purchase unclaimed land";
+            public const string Research = "Research";
+            public const string Resign = "Resign";
+            public const string SellLand = "Sell land";
+            public const string SkipTurn = "Skip turn";
+            public const string StealMoney = "Steal money";
+            public const string UpgradeSecretBase = "Upgrade your secret base";
+        }
+
+        private static class MenuPageTitles
+        {
+            public const string Actions = "Actions";
+            public const string ChooseTargetPlayer = "Choose a target player";
+            public const string Henchmen = "Henchmen";
+            public const string Land = "Land";
+            public const string MainMenu = "Main menu";
+            public const string Nukes = "Nukes";
+            public const string SecretBase = "Secret base";
+        }
 
         public static Menu CreateAttackTargetPlayerMenu(GameState gameState)
         {
@@ -49,10 +58,10 @@ namespace WMD.Console.UI.Menus
                 }
             });
 
-            var playerChoiceMenuItem = new MenuItem(MenuItemLabel_Cancel, () => menu.SetResultAndClose(null));
+            var playerChoiceMenuItem = new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null));
             menuItems.Enqueue(playerChoiceMenuItem);
 
-            menu.AddPage(MenuPageTitle_ChooseTargetPlayer, menuItems.ToArray());
+            menu.AddPage(MenuPageTitles.ChooseTargetPlayer, menuItems.ToArray());
 
             return menu;
         }
@@ -61,12 +70,12 @@ namespace WMD.Console.UI.Menus
         {
             var mainMenuItems = new MenuItem[]
             {
-                new MenuItem(MenuItemLabel_NewSinglePlayerGame, MainMenuActions.StartNewSinglePlayerGame),
-                new MenuItem(MenuItemLabel_NewLocalMultiplayerGame, MainMenuActions.StartNewMultiplayerGame),
-                new MenuItem(MenuItemLabel_Exit, MainMenuActions.ExitGame)
+                new MenuItem(MenuItemLabels.NewSinglePlayerGame, MainMenuActions.StartNewSinglePlayerGame),
+                new MenuItem(MenuItemLabels.NewLocalMultiplayerGame, MainMenuActions.StartNewMultiplayerGame),
+                new MenuItem(MenuItemLabels.Exit, MainMenuActions.ExitGame)
             };
 
-            return new Menu().AddPage(MenuPageTitle_MainMenu, mainMenuItems);
+            return new Menu().AddPage(MenuPageTitles.MainMenu, mainMenuItems);
         }
 
         public static Menu CreatePlayerActionMenu(GameState gameState)
@@ -83,18 +92,18 @@ namespace WMD.Console.UI.Menus
 
             var mainActionItems = new MenuItem[]
             {
-                CreateGameCommandMenuItem(MenuItemLabel_StealMoney, menu, gameState, new StealMoneyCommand()),
-                CreateGameCommandsPageMenuItem(MenuPageTitle_Land, menu, landActionsPage, gameState, new PurchaseUnclaimedLandCommand(), new SellLandCommand()),
-                CreateGameCommandsPageMenuItem(MenuPageTitle_Henchmen, menu, henchmenActionsPage, gameState, new HireHenchmenCommand(), new ChangeDailyWageCommand()),
-                CreateGameCommandMenuItem(MenuItemLabel_AttackPlayer, menu, gameState, new AttackPlayerCommand()),
-                CreateGameCommandMenuItem(MenuItemLabel_DistributePropaganda, menu, gameState, new DistributePropagandaCommand()),
-                CreateGameCommandsPageMenuItem(MenuPageTitle_SecretBase, menu, secretBasePage, gameState, new BuildSecretBaseCommand(), new UpgradeSecretBaseCommand()),
-                CreateGameCommandsPageMenuItem(MenuPageTitle_Nukes, menu, nukePage, gameState, new ResearchNukesCommand(), new ManufactureNukesCommand(), new LaunchNukesCommand()),
-                CreateGameCommandMenuItem(MenuItemLabel_SkipTurn, menu, gameState, new SkipTurnCommand()),
-                CreateGameCommandMenuItem(MenuItemLabel_Resign, menu, gameState, new ResignCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.StealMoney, menu, gameState, new StealMoneyCommand()),
+                CreateGameCommandsPageMenuItem(MenuPageTitles.Land, menu, landActionsPage, gameState, new PurchaseUnclaimedLandCommand(), new SellLandCommand()),
+                CreateGameCommandsPageMenuItem(MenuPageTitles.Henchmen, menu, henchmenActionsPage, gameState, new HireHenchmenCommand(), new ChangeDailyWageCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.AttackPlayer, menu, gameState, new AttackPlayerCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.DistributePropaganda, menu, gameState, new DistributePropagandaCommand()),
+                CreateGameCommandsPageMenuItem(MenuPageTitles.SecretBase, menu, secretBasePage, gameState, new BuildSecretBaseCommand(), new UpgradeSecretBaseCommand()),
+                CreateGameCommandsPageMenuItem(MenuPageTitles.Nukes, menu, nukePage, gameState, new ResearchNukesCommand(), new ManufactureNukesCommand(), new LaunchNukesCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.SkipTurn, menu, gameState, new SkipTurnCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.Resign, menu, gameState, new ResignCommand()),
             };
 
-            menu.AddPage(MenuPageTitle_Actions, mainActionItems)
+            menu.AddPage(MenuPageTitles.Actions, mainActionItems)
                 .AddPage(landActionsPage)
                 .AddPage(henchmenActionsPage)
                 .AddPage(secretBasePage)
@@ -105,13 +114,13 @@ namespace WMD.Console.UI.Menus
 
         private static MenuItem CreateBackMenuItem(Menu menu)
         {
-            return new MenuItem(MenuItemLabel_Back, () => menu.NavigateBack());
+            return new MenuItem(MenuItemLabels.Back, () => menu.NavigateBack());
         }
 
         private static MenuItem CreateGameCommandsPageMenuItem(string menuItemLabel, Menu menu, MenuPage menuPage, GameState gameState, params IGameCommand[] gameCommands)
         {
             bool canExecuteAnyCommand = gameCommands.Any(gameCommand => gameCommand.CanExecuteForState(gameState));
-            return new MenuItem($"{menuItemLabel} >", () => menu.NavigateTo(menuPage), canExecuteAnyCommand);
+            return new MenuItem(string.Format(MenuPageItemLabelFormatString, menuItemLabel), () => menu.NavigateTo(menuPage), canExecuteAnyCommand);
         }
         
         private static MenuItem CreateGameCommandMenuItem(string menuItemLabel, Menu menu, GameState gameState, IGameCommand gameCommand)
@@ -130,32 +139,32 @@ namespace WMD.Console.UI.Menus
         }
 
         private static MenuPage CreateHenchmenCommandsMenuPage(Menu menu, GameState gameState) => CreateGameCommandsMenuPage(
-            MenuPageTitle_Henchmen,
+            MenuPageTitles.Henchmen,
             menu,
-            CreateGameCommandMenuItem(MenuItemLabel_HireHenchmen, menu, gameState, new HireHenchmenCommand()),
-            CreateGameCommandMenuItem(MenuItemLabel_ChangeDailyWage, menu, gameState, new ChangeDailyWageCommand())
+            CreateGameCommandMenuItem(MenuItemLabels.HireHenchmen, menu, gameState, new HireHenchmenCommand()),
+            CreateGameCommandMenuItem(MenuItemLabels.ChangeDailyWage, menu, gameState, new ChangeDailyWageCommand())
         );
         
         private static MenuPage CreateLandCommandsMenuPage(Menu menu, GameState gameState) => CreateGameCommandsMenuPage(
-            MenuPageTitle_Land,
+            MenuPageTitles.Land,
             menu,
-            CreateGameCommandMenuItem(MenuItemLabel_PurchaseUnclaimedLand, menu, gameState, new PurchaseUnclaimedLandCommand()),
-            CreateGameCommandMenuItem(MenuItemLabel_SellLand, menu, gameState, new SellLandCommand())
+            CreateGameCommandMenuItem(MenuItemLabels.PurchaseUnclaimedLand, menu, gameState, new PurchaseUnclaimedLandCommand()),
+            CreateGameCommandMenuItem(MenuItemLabels.SellLand, menu, gameState, new SellLandCommand())
         );
 
         private static MenuPage CreateNukeCommandsMenuPage(Menu menu, GameState gameState) => CreateGameCommandsMenuPage(
-            MenuPageTitle_Nukes,
+            MenuPageTitles.Nukes,
             menu,
-            CreateGameCommandMenuItem(MenuItemLabel_Research, menu, gameState, new ResearchNukesCommand()),
-            CreateGameCommandMenuItem(MenuItemLabel_Manufacture, menu, gameState, new ManufactureNukesCommand()),
-            CreateGameCommandMenuItem(MenuItemLabel_Launch, menu, gameState, new LaunchNukesCommand())
+            CreateGameCommandMenuItem(MenuItemLabels.Research, menu, gameState, new ResearchNukesCommand()),
+            CreateGameCommandMenuItem(MenuItemLabels.Manufacture, menu, gameState, new ManufactureNukesCommand()),
+            CreateGameCommandMenuItem(MenuItemLabels.Launch, menu, gameState, new LaunchNukesCommand())
         );
 
         private static MenuPage CreateSecretBaseCommandsMenuPage(Menu menu, GameState gameState) => CreateGameCommandsMenuPage(
-            MenuPageTitle_SecretBase,
+            MenuPageTitles.SecretBase,
             menu,
-            CreateGameCommandMenuItem(MenuItemLabel_BuildSecretBase, menu, gameState, new BuildSecretBaseCommand()),
-            CreateGameCommandMenuItem(MenuItemLabel_UpgradeSecretBase, menu, gameState, new UpgradeSecretBaseCommand())
+            CreateGameCommandMenuItem(MenuItemLabels.BuildSecretBase, menu, gameState, new BuildSecretBaseCommand()),
+            CreateGameCommandMenuItem(MenuItemLabels.UpgradeSecretBase, menu, gameState, new UpgradeSecretBaseCommand())
         );
     }
 }
