@@ -13,6 +13,7 @@ namespace WMD.Console.UI.Commands
             {
                 _ when commandResultType == typeof(AttackPlayerResult) => new AttackPlayerResultPrinter(),
                 _ when commandResultType == typeof(BuildSecretBaseResult) => new BuildSecretBaseResultPrinter(),
+                _ when commandResultType == typeof(ChangeDailyWageResult) => new ChangeDailyWageResultPrinter(),
                 _ when commandResultType == typeof(DistributePropagandaResult) => new DistributePropagandaResultPrinter(),
                 _ when commandResultType == typeof(HireHenchmenResult) => new HireHenchmenResultPrinter(),
                 _ when commandResultType == typeof(LaunchNukesResult) => new LaunchNukesResultPrinter(),
