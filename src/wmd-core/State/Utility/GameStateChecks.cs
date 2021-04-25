@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Players;
@@ -94,6 +95,14 @@ namespace WMD.Game.State.Utility
         {
             return playerIndex >= 0 && playerIndex < gameState.Players.Count;
         }
+
+        /// <summary>
+        /// Returns a collection of indices of all players other than the current player.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A collection of indices of all players other than the current player.</returns>
+        public static IEnumerable<int> FindIndicesOfPlayersOtherThanCurrent([DisallowNull] GameState gameState) =>
+            Enumerable.Range(0, gameState.Players.Count).Where(index => index != gameState.CurrentPlayerIndex);
 
         /// <summary>
         /// Returns a collection of indices of the players with the highest pay rate.

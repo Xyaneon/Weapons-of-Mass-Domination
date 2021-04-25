@@ -2,6 +2,7 @@
 using System.Linq;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
+using WMD.Game.State.Utility;
 using Xyaneon.Console.Menus;
 
 namespace WMD.Console.UI.Menus
@@ -47,19 +48,15 @@ namespace WMD.Console.UI.Menus
         public static Menu CreateAttackTargetPlayerMenu(GameState gameState)
         {
             var menu = new Menu();
-            Queue<MenuItem> menuItems = new Queue<MenuItem>();
+            var menuItems = new Queue<MenuItem>();
 
-            Enumerable.Range(0, gameState.Players.Count).ToList().ForEach(index =>
+            GameStateChecks.FindIndicesOfPlayersOtherThanCurrent(gameState).ToList().ForEach(index =>
             {
-                if (index != gameState.CurrentPlayerIndex)
-                {
-                    var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Identification.Name, () => menu.SetResultAndClose(index));
-                    menuItems.Enqueue(playerChoiceMenuItem);
-                }
+                var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Identification.Name, () => menu.SetResultAndClose(index));
+                menuItems.Enqueue(playerChoiceMenuItem);
             });
 
-            var playerChoiceMenuItem = new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null));
-            menuItems.Enqueue(playerChoiceMenuItem);
+            menuItems.Enqueue(new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null)));
 
             menu.AddPage(MenuPageTitles.ChooseTargetPlayer, menuItems.ToArray());
 
@@ -103,40 +100,32 @@ namespace WMD.Console.UI.Menus
                 CreateGameCommandMenuItem(MenuItemLabels.Resign, menu, gameState, new ResignCommand()),
             };
 
-            menu.AddPage(MenuPageTitles.Actions, mainActionItems)
-                .AddPage(landActionsPage)
-                .AddPage(henchmenActionsPage)
-                .AddPage(secretBasePage)
-                .AddPage(nukePage);
+            MenuPage mainPage = new MenuPage(menu, MenuPageTitles.Actions, mainActionItems);
+
+            menu.AddPages(
+                mainPage,
+                landActionsPage,
+                henchmenActionsPage,
+                secretBasePage,
+                nukePage
+            );
 
             return menu;
         }
 
-        private static MenuItem CreateBackMenuItem(Menu menu)
-        {
-            return new MenuItem(MenuItemLabels.Back, () => menu.NavigateBack());
-        }
+        private static MenuItem CreateBackMenuItem(Menu menu) => new(MenuItemLabels.Back, () => menu.NavigateBack());
 
         private static MenuItem CreateGameCommandsPageMenuItem(string menuItemLabel, Menu menu, MenuPage menuPage, GameState gameState, params IGameCommand[] gameCommands)
         {
             bool canExecuteAnyCommand = gameCommands.Any(gameCommand => gameCommand.CanExecuteForState(gameState));
             return new MenuItem(string.Format(MenuPageItemLabelFormatString, menuItemLabel), () => menu.NavigateTo(menuPage), canExecuteAnyCommand);
         }
-        
-        private static MenuItem CreateGameCommandMenuItem(string menuItemLabel, Menu menu, GameState gameState, IGameCommand gameCommand)
-        {
-            return new MenuItem(menuItemLabel, () => menu.SetResultAndClose(gameCommand), gameCommand.CanExecuteForState(gameState));
-        }
 
-        private static MenuPage CreateGameCommandsMenuPage(string menuPageTitle, Menu menu, params MenuItem[] menuItems)
-        {
-            var standardMenuItems = new MenuItem[]
-            {
-                CreateBackMenuItem(menu),
-            };
+        private static MenuItem CreateGameCommandMenuItem(string menuItemLabel, Menu menu, GameState gameState, IGameCommand gameCommand) =>
+            new(menuItemLabel, () => menu.SetResultAndClose(gameCommand), gameCommand.CanExecuteForState(gameState));
 
-            return new MenuPage(menu, menuPageTitle, menuItems.Concat(standardMenuItems));
-        }
+        private static MenuPage CreateGameCommandsMenuPage(string menuPageTitle, Menu menu, params MenuItem[] menuItems) =>
+            new(menu, menuPageTitle, menuItems.Concat(new MenuItem[] { CreateBackMenuItem(menu) }));
 
         private static MenuPage CreateHenchmenCommandsMenuPage(Menu menu, GameState gameState) => CreateGameCommandsMenuPage(
             MenuPageTitles.Henchmen,
