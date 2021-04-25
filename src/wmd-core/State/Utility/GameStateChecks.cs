@@ -96,6 +96,15 @@ namespace WMD.Game.State.Utility
         }
 
         /// <summary>
+        /// Returns a collection of indices of the players with the highest pay rate.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A collection of indices of the players with the highest pay rate.</returns>
+        /// <remarks>The collection returned will be empty if all players pay nothing.</remarks>
+        public static IEnumerable<int> FindIndicesOfPlayersWithTheHighestPayRate([DisallowNull] GameState gameState) =>
+            FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => (double)playerState.WorkforceState.DailyPayRate);
+
+        /// <summary>
         /// Returns a collection of indices of the players with the most land area.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
