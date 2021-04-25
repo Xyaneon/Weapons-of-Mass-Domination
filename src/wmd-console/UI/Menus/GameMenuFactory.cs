@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WMD.Console.Extensions;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
 using WMD.Game.State.Utility;
@@ -50,7 +51,7 @@ namespace WMD.Console.UI.Menus
             var menu = new Menu();
             var menuItems = new Queue<MenuItem>();
 
-            GameStateChecks.FindIndicesOfPlayersOtherThanCurrent(gameState).ToList().ForEach(index =>
+            GameStateChecks.FindIndicesOfPlayersOtherThanCurrent(gameState).ForEach(index =>
             {
                 var playerChoiceMenuItem = new MenuItem(gameState.Players[index].Identification.Name, () => menu.SetResultAndClose(index));
                 menuItems.Enqueue(playerChoiceMenuItem);

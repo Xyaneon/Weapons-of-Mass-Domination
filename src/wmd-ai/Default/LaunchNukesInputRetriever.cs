@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
 using WMD.Game.State.Utility;
@@ -17,19 +16,16 @@ namespace WMD.AI.Default
                 return null;
             }
 
-            int? targetPlayerIndex = ChooseTargetPlayerIndex(gameState);
+            int targetPlayerIndex = ChooseTargetPlayerIndex(gameState);
             int nukesToLaunch = CalculateNumberOfNukesToLaunch(gameState);
 
-            return targetPlayerIndex.HasValue && nukesToLaunch > 0
-                ? new LaunchNukesInput() { TargetPlayerIndex = targetPlayerIndex.Value, NumberOfNukesLaunched = nukesToLaunch }
+            return nukesToLaunch > 0
+                ? new LaunchNukesInput() { TargetPlayerIndex = targetPlayerIndex, NumberOfNukesLaunched = nukesToLaunch }
                 : null;
         }
 
-        private static int? ChooseTargetPlayerIndex(GameState gameState) =>
-            Enumerable.Range(0, gameState.Players.Count)
-                .Where(playerIndex => playerIndex != gameState.CurrentPlayerIndex)
-                .OrderBy(_ => _random.NextDouble())
-                .First();
+        private static int ChooseTargetPlayerIndex(GameState gameState) =>
+            GameStateChecks.SelectRandomNonCurrentPlayerIndex(gameState);
 
         private static int CalculateNumberOfNukesToLaunch(GameState gameState) =>
             _random.Next(0, gameState.CurrentPlayer.State.Nukes);

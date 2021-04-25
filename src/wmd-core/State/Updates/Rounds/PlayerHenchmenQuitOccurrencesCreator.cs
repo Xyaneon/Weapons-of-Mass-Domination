@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WMD.Game.Constants;
+using WMD.Game.Extensions;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Players;
@@ -13,8 +14,7 @@ namespace WMD.Game.State.Updates.Rounds
         public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
             CreateRangeOfPlayerIndices(gameState)
                 .Select(index => CreatePlayerHenchmenQuitOccurrence(gameState, index))
-                .Where(occurrence => occurrence != null)
-                .Select(occurrence => occurrence!);
+                .WhereNotNull();
 
         private static PlayerHenchmenQuit? CreatePlayerHenchmenQuitOccurrence(GameState gameState, int index)
         {

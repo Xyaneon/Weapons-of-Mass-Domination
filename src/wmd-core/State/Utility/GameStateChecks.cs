@@ -14,65 +14,58 @@ namespace WMD.Game.State.Utility
     public static class GameStateChecks
     {
         /// <summary>
+        /// Initializes static members of the <see cref="GameStateChecks"/> class.
+        /// </summary>
+        static GameStateChecks() => _random = new Random();
+
+        /// <summary>
         /// Determines whether the current player could purchase any unclaimed land with their current funds.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player could purchase any unclaimed land with their current funds; otherwise, <see langword="false"/>.</returns>
         /// <remarks>This method does not take into account the actual amount of remaining land area available for purchase.</remarks>
-        public static bool CurrentPlayerCouldPurchaseLand([DisallowNull] GameState gameState)
-        {
-            return LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState) > 0;
-        }
+        public static bool CurrentPlayerCouldPurchaseLand([DisallowNull] GameState gameState) =>
+            LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState) > 0;
 
         /// <summary>
         /// Determines whether the current player has a secret base.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player has a secret base; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasASecretBase([DisallowNull] GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.SecretBase != null;
-        }
+        public static bool CurrentPlayerHasASecretBase([DisallowNull] GameState gameState) =>
+            gameState.CurrentPlayer.State.SecretBase != null;
 
         /// <summary>
         /// Determines whether the current player has any henchmen.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player has any henchmen; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
-        }
+        public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState) =>
+            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
 
         /// <summary>
         /// Determines whether the current player has any nukes in their inventory.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player has any nukes in their inventory; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasAnyNukes([DisallowNull] GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.Nukes > 0;
-        }
+        public static bool CurrentPlayerHasAnyNukes([DisallowNull] GameState gameState) =>
+            gameState.CurrentPlayer.State.Nukes > 0;
 
         /// <summary>
         /// Determines whether the current player has completed their nukes research.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player has completed their nukes research; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasCompletedNukesResearch([DisallowNull] GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
-        }
+        public static bool CurrentPlayerHasCompletedNukesResearch([DisallowNull] GameState gameState) =>
+            gameState.CurrentPlayer.State.ResearchState.NukeResearchLevel >= NukeConstants.MaxNukeResearchLevel;
 
         /// <summary>
         /// Determines whether the current player has no money.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns><see langword="true"/> if the current player has no money; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerHasNoMoney([DisallowNull] GameState gameState)
-        {
-            return gameState.CurrentPlayer.State.Money <= 0;
-        }
+        public static bool CurrentPlayerHasNoMoney([DisallowNull] GameState gameState) =>
+            gameState.CurrentPlayer.State.Money <= 0;
 
         /// <summary>
         /// Determines whether the current player is attacking themselves.
@@ -80,10 +73,8 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <param name="targetPlayerIndex">The index of the player being attacked.</param>
         /// <returns><see langword="true"/> if the current player is attacking themselves; otherwise, <see langword="false"/>.</returns>
-        public static bool CurrentPlayerIsAttackingThemselves([DisallowNull] GameState gameState, int targetPlayerIndex)
-        {
-            return gameState.CurrentPlayerIndex == targetPlayerIndex;
-        }
+        public static bool CurrentPlayerIsAttackingThemselves([DisallowNull] GameState gameState, int targetPlayerIndex) =>
+            gameState.CurrentPlayerIndex == targetPlayerIndex;
 
         /// <summary>
         /// Determines whether the provided <paramref name="playerIndex"/> is in bounds.
@@ -91,10 +82,16 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <param name="targetPlayerIndex">The index of the player.</param>
         /// <returns><see langword="true"/> if the player index is in bounds; otherwise, <see langword="false"/>.</returns>
-        public static bool PlayerIndexIsInBounds([DisallowNull] GameState gameState, int playerIndex)
-        {
-            return playerIndex >= 0 && playerIndex < gameState.Players.Count;
-        }
+        public static bool PlayerIndexIsInBounds([DisallowNull] GameState gameState, int playerIndex) =>
+            playerIndex >= 0 && playerIndex < gameState.Players.Count;
+
+        /// <summary>
+        /// Gets a random player index other than that of the current player.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns>A random player index other than that of the current player.</returns>
+        public static int SelectRandomNonCurrentPlayerIndex([DisallowNull] GameState gameState) =>
+            FindIndicesOfPlayersOtherThanCurrent(gameState).OrderBy(_ => _random.NextDouble()).First();
 
         /// <summary>
         /// Returns a collection of indices of all players other than the current player.
@@ -166,5 +163,7 @@ namespace WMD.Game.State.Utility
 
             return playerIndices;
         }
+
+        private static readonly Random _random;
     }
 }
