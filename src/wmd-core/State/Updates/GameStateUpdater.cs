@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 using WMD.Game.State.Utility;
@@ -169,6 +170,18 @@ namespace WMD.Game.State.Updates
             var currentSecretBase = currentPlayerState.SecretBase ?? throw new InvalidOperationException(InvalidOperationException_playerDoesNotHaveASecretBaseToLevelUp);
             var updatedSecretBase = currentSecretBase with { Level = currentSecretBase.Level + 1 };
             var updatedPlayerState = currentPlayerState with { SecretBase = updatedSecretBase };
+
+            return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
+        }
+
+        public static GameState SetDailyWageForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal dailyWage)
+        {
+            ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
+
+            PlayerState currentPlayerState = gameState.Players[playerIndex].State;
+            WorkforceState currentWorkforceState = currentPlayerState.WorkforceState;
+            WorkforceState updatedWorkforceState = currentWorkforceState with { DailyPayRate = dailyWage };
+            PlayerState updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }

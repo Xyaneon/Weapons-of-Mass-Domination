@@ -35,7 +35,6 @@ namespace Xyaneon.Console.Menus
         private int _height;
         private Stack<MenuPage> _history;
         private List<MenuPage> _pages;
-        private int _width;
 
         public Menu AddPage(string title, params MenuItem[] menuItems)
         {
@@ -48,6 +47,15 @@ namespace Xyaneon.Console.Menus
         {
             page.Menu = this;
             _pages.Add(page);
+            return this;
+        }
+
+        public Menu AddPages(params MenuPage[] pages)
+        {
+            foreach (MenuPage page in pages)
+            {
+                _pages.Add(page);
+            }
             return this;
         }
 
@@ -191,7 +199,7 @@ namespace Xyaneon.Console.Menus
                 breadcrumbs
             });
 
-            _width = totalContentWidth + 4;
+            int width = totalContentWidth + 4;
             _height = borderLinesCount + headerLines.Count + ActivePage.MenuItems.Count;
 
             string topBorderLine = Theme.TopLeftBorderCorner + new string(Theme.TopBorderEdge, totalContentWidth + 2) + Theme.TopRightBorderCorner;

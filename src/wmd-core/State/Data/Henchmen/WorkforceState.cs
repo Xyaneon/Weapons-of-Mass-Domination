@@ -1,4 +1,5 @@
 ﻿using System;
+using WMD.Game.Constants;
 
 namespace WMD.Game.State.Data.Henchmen
 {
@@ -7,17 +8,17 @@ namespace WMD.Game.State.Data.Henchmen
     /// </summary>
     public record WorkforceState
     {
-        /// <summary>
-        /// The minimum daily wage. If a player chooses to pay less than this
-        /// amount, then their henchmen will be much more likely to quit.
-        /// </summary>
-        public const decimal MinimumDailyWage = 7;
-
-        private const decimal DefaultDailyPayRate = MinimumDailyWage;
+        private const string ArgumentOutOfRangeException_DailyPayRateLessThanZero = "The daily pay rate cannot be less than zero.";
+        private const string ArgumentOutOfRangeException_NumberOfHenchmenLessThanZero = "The number of henchmen cannot be less than zero.";
+        
+        private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkforceState"/> class.
         /// </summary>
+        /// <remarks>
+        /// This will set the value of the <see cref="DailyPayRate"/> property to <see cref="HenchmenConstants.MinimumDailyWage"/> by default.
+        /// </remarks>
         public WorkforceState()
         {
             DailyPayRate = DefaultDailyPayRate;
@@ -33,6 +34,11 @@ namespace WMD.Game.State.Data.Henchmen
         /// <param name="numberOfHenchmen">
         /// The number of henchmen in this workforce.
         /// </param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="dailyPayRate"/> is less than zero.
+        /// -or-
+        /// <paramref name="numberOfHenchmen"/> is less than zero.
+        /// </exception>
         public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, int numberOfHenchmen = 0)
         {
             DailyPayRate = dailyPayRate;
@@ -42,6 +48,12 @@ namespace WMD.Game.State.Data.Henchmen
         /// <summary>
         /// Gets the daily pay rate of each henchman.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The value to initialize this property with is less than zero.
+        /// </exception>
+        /// <remarks>
+        /// The default constructor will initialize this property value to <see cref="HenchmenConstants.MinimumDailyWage"/> by default.
+        /// </remarks>
         public decimal DailyPayRate
         {
             get => _dailyPayRate;
@@ -49,7 +61,7 @@ namespace WMD.Game.State.Data.Henchmen
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "The daily pay rate cannot be less than zero.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_DailyPayRateLessThanZero);
                 }
 
                 _dailyPayRate = value;
@@ -59,6 +71,9 @@ namespace WMD.Game.State.Data.Henchmen
         /// <summary>
         /// Gets the number of henchmen in this workforce.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The value to initialize this property with is less than zero.
+        /// </exception>
         public int NumberOfHenchmen
         {
             get => _numberOfHenchmen;
@@ -66,7 +81,7 @@ namespace WMD.Game.State.Data.Henchmen
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "The number of henchmen cannot be less than zero.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_NumberOfHenchmenLessThanZero);
                 }
 
                 _numberOfHenchmen = value;

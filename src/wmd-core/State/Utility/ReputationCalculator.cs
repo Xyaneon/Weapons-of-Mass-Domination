@@ -14,6 +14,9 @@ namespace WMD.Game.State.Utility
     {
         private const string ArgumentOutOfRangeException_playerIndex_outOfBounds = "The index of the player to calculate for was not in bounds.";
 
+        /// <summary>
+        /// Initializes static members of the <see cref="ReputationCalculator"/> class.
+        /// </summary>
         static ReputationCalculator()
         {
             _random = new Random();
@@ -25,6 +28,18 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <param name="playerIndex">The index of the player to calculate for.</param>
         /// <returns>The player's current base reputation percentage.</returns>
+        /// <remarks>
+        /// A player's base reputation percentage is affected by the following factors:
+        /// <list type="bullet">
+        /// <item>Whether the player has a secret base, and how far they have leveled it up</item>
+        /// <item>Whether the player owns the most land area</item>
+        /// <item>Whether the player has the most money</item>
+        /// <item>Whether the player has the highest pay rate for their henchmen</item>
+        /// <item>Whether the player has the most henchmen</item>
+        /// <item>The player's current nukes research level</item>
+        /// <item>How many nukes the player currently has in their stockpile</item>
+        /// </list>
+        /// </remarks>
         public static int CalculateBaseReputationPercentage([DisallowNull] GameState gameState, int playerIndex)
         {
             if (!GameStateChecks.PlayerIndexIsInBounds(gameState, playerIndex))
@@ -37,6 +52,7 @@ namespace WMD.Game.State.Utility
             int percentageAmountFromSecretBase = playerState.SecretBase != null ? 10 + Math.Min(playerState.SecretBase.Level, 10) : 0;
             int percentageAmountFromMostLand = GameStateChecks.FindIndicesOfPlayersWithTheMostLand(gameState).Contains(playerIndex) ? 5 : 0;
             int percentageAmountFromMostMoney = GameStateChecks.FindIndicesOfPlayersWithTheMostMoney(gameState).Contains(playerIndex) ? 5 : 0;
+            int percentageAmountFromHighestPayRate = GameStateChecks.FindIndicesOfPlayersWithTheHighestPayRate(gameState).Contains(playerIndex) ? 5 : 0;
             int percentageAmountFromMostHenchmen = GameStateChecks.FindIndicesOfPlayersWithTheMostHenchmen(gameState).Contains(playerIndex) ? 5 : 0;
             int percentageAmountFromNukeResearch = playerState.ResearchState.NukeResearchLevel;
             int percentageAmountFromNukes = playerState.Nukes > 0 ? 10 : 0;
@@ -44,6 +60,7 @@ namespace WMD.Game.State.Utility
             return percentageAmountFromSecretBase
                 + percentageAmountFromMostLand
                 + percentageAmountFromMostMoney
+                + percentageAmountFromHighestPayRate
                 + percentageAmountFromMostHenchmen
                 + percentageAmountFromNukeResearch
                 + percentageAmountFromNukes;
