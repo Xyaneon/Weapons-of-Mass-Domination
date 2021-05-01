@@ -49,13 +49,24 @@ namespace WMD.Game.State.Utility
         {
             int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
-            if (defenderNumberOfHenchmenBeforeAttack > 0 && henchmenDefenderLost == 0)
+            if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {
-                int changeFactor = henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack ? AttackConstants.ReputationChangeFactorForDefeatedDefender : 1;
-                return -1 * changeFactor * AttackConstants.BaseReputationChangeAmountForAttacker;
+                // Defender had no henchmen to lose.
+                return AttackConstants.BaseReputationChangeAmountForAttacker;
+            }
+            else if (henchmenDefenderLost == 0)
+            {
+                // All defending henchmen survived.
+                return -1 * AttackConstants.BaseReputationChangeAmountForAttacker;
+            }
+            else if (henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack)
+            {
+                // All defending henchmen were lost.
+                return AttackConstants.ReputationChangeFactorForDefeatedDefender * AttackConstants.BaseReputationChangeAmountForAttacker;
             }
             else
             {
+                // Some defending henchmen were lost, but not all.
                 return AttackConstants.BaseReputationChangeAmountForAttacker;
             }
         }
@@ -64,13 +75,24 @@ namespace WMD.Game.State.Utility
         {
             int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
-            if (defenderNumberOfHenchmenBeforeAttack > 0 && henchmenDefenderLost == 0)
+            if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {
-                int changeFactor = henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack ? AttackConstants.ReputationChangeFactorForDefeatedDefender : 1;
-                return changeFactor * AttackConstants.BaseReputationChangeAmountForDefender;
+                // Defender had no henchmen to lose.
+                return -1 * AttackConstants.BaseReputationChangeAmountForDefender;
+            }
+            else if (henchmenDefenderLost == 0)
+            {
+                // All defending henchmen survived.
+                return AttackConstants.BaseReputationChangeAmountForDefender;
+            }
+            else if (henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack)
+            {
+                // All defending henchmen were lost.
+                return -1 * AttackConstants.ReputationChangeFactorForDefeatedDefender * AttackConstants.BaseReputationChangeAmountForDefender;
             }
             else
             {
+                // Some defending henchmen were lost, but not all.
                 return -1 * AttackConstants.BaseReputationChangeAmountForDefender;
             }
         }
