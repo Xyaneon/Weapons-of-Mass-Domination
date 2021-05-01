@@ -41,13 +41,13 @@ namespace WMD.Game.State.Utility
 
         private static int CalculateReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
             (GetDefenderNumberOfHenchmen(gameState, input) > 0 && henchmenDefenderLost == 0)
-                ? Math.Max(-5, ReputationConstants.MinReputationPercentage - GetAttackerReputation(gameState))
-                : Math.Min(5, ReputationConstants.MaxReputationPercentage - GetAttackerReputation(gameState));
+                ? Math.Max(-1 * AttackConstants.BaseReputationChangeAmountForAttacker, ReputationConstants.MinReputationPercentage - GetAttackerReputation(gameState))
+                : Math.Min(AttackConstants.BaseReputationChangeAmountForAttacker, ReputationConstants.MaxReputationPercentage - GetAttackerReputation(gameState));
 
         private static int CalculateReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
             (GetDefenderNumberOfHenchmen(gameState, input) > 0 && henchmenDefenderLost == 0)
-                ? Math.Min(5, ReputationConstants.MaxReputationPercentage - GetDefenderReputation(gameState, input))
-                : Math.Max(-5, ReputationConstants.MinReputationPercentage - GetDefenderReputation(gameState, input));
+                ? Math.Min(AttackConstants.BaseReputationChangeAmountForDefender, ReputationConstants.MaxReputationPercentage - GetDefenderReputation(gameState, input))
+                : Math.Max(-1 * AttackConstants.BaseReputationChangeAmountForDefender, ReputationConstants.MinReputationPercentage - GetDefenderReputation(gameState, input));
 
         private static int GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 
