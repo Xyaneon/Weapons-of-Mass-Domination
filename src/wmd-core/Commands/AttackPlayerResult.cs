@@ -1,6 +1,7 @@
 ﻿using System;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Players;
+using WMD.Game.State.Utility;
 
 namespace WMD.Game.Commands
 {
@@ -61,6 +62,18 @@ namespace WMD.Game.Commands
             ReputationChangeForDefender = reputationChangeForDefender;
             TargetPlayerIndex = targetPlayerIndex;
         }
+
+        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, AttackCalculationsResult calculationsResult)
+            : this(
+                  updatedGameState,
+                  playerIndex,
+                  targetPlayerIndex,
+                  calculationsResult.HenchmenAttackerLost,
+                  calculationsResult.HenchmenDefenderLost,
+                  calculationsResult.ReputationChangeForAttacker,
+                  calculationsResult.ReputationChangeForDefender
+        )
+        { }
 
         /// <summary>
         /// Gets the number of henchmen the attacker lost.

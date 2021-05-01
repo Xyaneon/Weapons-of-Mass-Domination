@@ -38,24 +38,23 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            int henchmenAttackerLost = AttacksCalculator.CalculateNumberOfHenchmenAttackerLost(gameState);
-            int henchmenDefenderLost = AttacksCalculator.CalculateNumberOfHenchmenDefenderLost(gameState, input);
-
-            int reputationChangeForAttacker = 0;
-            int reputationChangeForDefender = 0;
-
-            GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * henchmenAttackerLost);
-            updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * henchmenDefenderLost);
+            AttackCalculationsResult calculationsResult = AttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
+            GameState updatedGameState = CreateUpdatedGameState(gameState, input, calculationsResult);
 
             return new AttackPlayerResult(
                 updatedGameState,
                 gameState.CurrentPlayerIndex,
                 input.TargetPlayerIndex,
-                henchmenAttackerLost,
-                henchmenDefenderLost,
-                reputationChangeForAttacker,
-                reputationChangeForDefender
+                calculationsResult
             );
+        }
+
+        private static GameState CreateUpdatedGameState(GameState gameState, AttackPlayerInput input, AttackCalculationsResult calculationsResult)
+        {
+            GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * calculationsResult.HenchmenAttackerLost);
+            updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * calculationsResult.HenchmenDefenderLost);
+
+            return updatedGameState;
         }
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
