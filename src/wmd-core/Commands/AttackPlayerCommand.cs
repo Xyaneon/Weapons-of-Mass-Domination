@@ -49,13 +49,8 @@ namespace WMD.Game.Commands
             );
         }
 
-        private static GameState CreateUpdatedGameState(GameState gameState, AttackPlayerInput input, AttackCalculationsResult calculationsResult)
-        {
-            GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * calculationsResult.HenchmenAttackerLost);
-            updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * calculationsResult.HenchmenDefenderLost);
-
-            return updatedGameState;
-        }
+        private static GameState CreateUpdatedGameState(GameState gameState, AttackPlayerInput input, AttackCalculationsResult calculationsResult) =>
+            GameStateUpdater.AdjustPlayerStatesAfterAttack(gameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult);
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
             GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);

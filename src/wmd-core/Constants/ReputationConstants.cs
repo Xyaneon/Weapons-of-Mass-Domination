@@ -20,6 +20,11 @@
         /// The maximum reputation percentage a player can attain.
         /// </summary>
         public const int MaxReputationPercentage = 100;
+        
+        /// <summary>
+        /// The minimum reputation percentage a player can have.
+        /// </summary>
+        public const int MinReputationPercentage = 0;
 
         /// <summary>
         /// The rate at which players' reputation changes naturally between rounds.

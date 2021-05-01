@@ -13,7 +13,7 @@ namespace WMD.Console.UI.Commands
         {
             string launchedNukesFormattedString = string.Format(
                 LaunchedNukesFormatString,
-                RetrievePlayerWhoActed(result).Identification.Name,
+                RetrieveNameOfPlayerWhoActed(result),
                 result.NukesLaunched,
                 result.TargetPlayerName
             );
