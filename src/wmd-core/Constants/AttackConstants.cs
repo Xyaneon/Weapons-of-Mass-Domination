@@ -34,5 +34,10 @@
         /// The maximum additional percentage of henchmen the defender will lose.
         /// </summary>
         public const double MaxAdditionalPercentageOfHenchmenDefenderLost = 0.7;
+
+        /// <summary>
+        /// The amount by which to multiply reputation changes when the defender loses all of their henchmen in an attack.
+        /// </summary>
+        public const int ReputationChangeFactorForDefeatedDefender = 2;
     }
 }

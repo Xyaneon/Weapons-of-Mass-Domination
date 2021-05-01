@@ -40,14 +40,47 @@ namespace WMD.Game.State.Utility
             AttackConstants.BasePercentageOfHenchmenDefenderLost + _random.NextDouble() * AttackConstants.MaxAdditionalPercentageOfHenchmenDefenderLost;
 
         private static int CalculateReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
-            (GetDefenderNumberOfHenchmen(gameState, input) > 0 && henchmenDefenderLost == 0)
-                ? Math.Max(-1 * AttackConstants.BaseReputationChangeAmountForAttacker, ReputationConstants.MinReputationPercentage - GetAttackerReputation(gameState))
-                : Math.Min(AttackConstants.BaseReputationChangeAmountForAttacker, ReputationConstants.MaxReputationPercentage - GetAttackerReputation(gameState));
+            ClampReputationChangeAmount(CalculatePotentialReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetAttackerReputation(gameState));
 
         private static int CalculateReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
-            (GetDefenderNumberOfHenchmen(gameState, input) > 0 && henchmenDefenderLost == 0)
-                ? Math.Min(AttackConstants.BaseReputationChangeAmountForDefender, ReputationConstants.MaxReputationPercentage - GetDefenderReputation(gameState, input))
-                : Math.Max(-1 * AttackConstants.BaseReputationChangeAmountForDefender, ReputationConstants.MinReputationPercentage - GetDefenderReputation(gameState, input));
+            ClampReputationChangeAmount(CalculatePotentialReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetDefenderReputation(gameState, input));
+
+        private static int CalculatePotentialReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
+        {
+            int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+
+            if (defenderNumberOfHenchmenBeforeAttack > 0 && henchmenDefenderLost == 0)
+            {
+                int changeFactor = henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack ? AttackConstants.ReputationChangeFactorForDefeatedDefender : 1;
+                return -1 * changeFactor * AttackConstants.BaseReputationChangeAmountForAttacker;
+            }
+            else
+            {
+                return AttackConstants.BaseReputationChangeAmountForAttacker;
+            }
+        }
+
+        private static int CalculatePotentialReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
+        {
+            int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+
+            if (defenderNumberOfHenchmenBeforeAttack > 0 && henchmenDefenderLost == 0)
+            {
+                int changeFactor = henchmenDefenderLost >= defenderNumberOfHenchmenBeforeAttack ? AttackConstants.ReputationChangeFactorForDefeatedDefender : 1;
+                return changeFactor * AttackConstants.BaseReputationChangeAmountForDefender;
+            }
+            else
+            {
+                return -1 * AttackConstants.BaseReputationChangeAmountForDefender;
+            }
+        }
+
+        private static int ClampReputationChangeAmount(int potentialChangeAmount, int currentReputation) => potentialChangeAmount switch
+        {
+            _ when potentialChangeAmount < 0 => Math.Max(potentialChangeAmount, ReputationConstants.MinReputationPercentage - currentReputation),
+            _ when potentialChangeAmount > 0 => Math.Min(potentialChangeAmount, ReputationConstants.MaxReputationPercentage - currentReputation),
+            _ => 0,
+        };
 
         private static int GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 
