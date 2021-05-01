@@ -12,6 +12,6 @@
         /// This creates a relatively realistic depiction of Earth using
         /// figures from https://en.wikipedia.org/wiki/Earth .
         /// </remarks>
-        public Earth() : base("Earth", 148940000, 510072000, 361132000) { }
+        public Earth() : base("Earth", 148940000, 510072000, 361132000, 7000000000) { }
     }
 }

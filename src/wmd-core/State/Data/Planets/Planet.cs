@@ -18,9 +18,10 @@ namespace WMD.Game.State.Data.Planets
         /// <param name="totalLandArea">The total land area in square kilometers.</param>
         /// <param name="totalSurfaceArea">The total surface area in square kilometers.</param>
         /// <param name="totalWaterArea">The total water area in square kilometers.</param>
+        /// <param name="population">The planet's total population.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="totalLandArea"/>, <paramref name="totalSurfaceArea"/>, or
-        /// <paramref name="totalWaterArea"/> are less than zero.
+        /// <paramref name="totalLandArea"/>, <paramref name="totalSurfaceArea"/>,
+        /// <paramref name="totalWaterArea"/>, or <paramref name="population"/> are less than zero.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="name"/> is empty or all whitespace.
@@ -28,7 +29,7 @@ namespace WMD.Game.State.Data.Planets
         /// <paramref name="totalSurfaceArea"/> is not equal to the total of
         /// <paramref name="totalLandArea"/> and <paramref name="totalWaterArea"/>.
         /// </exception>
-        public Planet([DisallowNull] string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea)
+        public Planet([DisallowNull] string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea, long population)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -55,11 +56,17 @@ namespace WMD.Game.State.Data.Planets
                 throw new ArgumentException("The land and water areas do not add up to the total surface area.");
             }
 
+            if (population < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(population), "The population cannot be negative.");
+            }
+
             Name = name.Trim();
 
             TotalLandArea = totalLandArea;
             TotalSurfaceArea = totalSurfaceArea;
             TotalWaterArea = totalWaterArea;
+            Population = population;
 
             UnclaimedLandArea = totalLandArea;
         }
@@ -80,6 +87,11 @@ namespace WMD.Game.State.Data.Planets
         /// </summary>
         /// <seealso cref="PercentageOfLandClaimed"/>
         public double PercentageOfLandStillUnclaimed => UnclaimedLandArea / (double)TotalLandArea;
+
+        /// <summary>
+        /// Gets the total population.
+        /// </summary>
+        public long Population { get; }
 
         /// <summary>
         /// Gets the total land area in square kilometers.
