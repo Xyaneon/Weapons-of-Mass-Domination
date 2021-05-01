@@ -10,7 +10,7 @@ namespace WMD.Console.UI.Commands
         {
             string formattedString = string.Format(
                 PrintFormatString,
-                RetrievePlayerWhoActed(result).Identification.Name,
+                RetrieveNameOfPlayerWhoActed(result),
                 result.LandAreaPurchased,
                 result.TotalPurchasePrice
             );

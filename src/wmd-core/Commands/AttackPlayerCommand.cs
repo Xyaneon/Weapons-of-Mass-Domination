@@ -15,15 +15,11 @@ namespace WMD.Game.Commands
         private const string InvalidOperationException_playerHasNoHenchmen = "A player cannot attack when they have no henchmen.";
         private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
 
-        public override bool CanExecuteForState([DisallowNull] GameState gameState)
-        {
-            return GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState);
-        }
+        public override bool CanExecuteForState([DisallowNull] GameState gameState) =>
+            GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState);
 
-        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
-        {
-            return CanExecuteForState(gameState) && !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
-        }
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input) =>
+            CanExecuteForState(gameState) && !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
 
         public override AttackPlayerResult Execute([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
@@ -42,23 +38,24 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            int henchmenAttackerLost = AttacksCalculator.CalculateNumberOfHenchmenAttackerLost(gameState);
-            int henchmenDefenderLost = AttacksCalculator.CalculateNumberOfHenchmenDefenderLost(gameState, input);
+            AttackCalculationsResult calculationsResult = AttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
+            GameState updatedGameState = CreateUpdatedGameState(gameState, input, calculationsResult);
 
-            GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * henchmenAttackerLost);
-            updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * henchmenDefenderLost);
-
-            return new AttackPlayerResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
+            return new AttackPlayerResult(
+                updatedGameState,
+                gameState.CurrentPlayerIndex,
+                input.TargetPlayerIndex,
+                calculationsResult
+            );
         }
 
-        private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input)
-        {
-            return GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);
-        }
+        private static GameState CreateUpdatedGameState(GameState gameState, AttackPlayerInput input, AttackCalculationsResult calculationsResult) =>
+            GameStateUpdater.AdjustPlayerStatesAfterAttack(gameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult);
 
-        private static bool TargetPlayerFound(GameState gameState, AttackPlayerInput input)
-        {
-            return GameStateChecks.PlayerIndexIsInBounds(gameState, input.TargetPlayerIndex);
-        }
+        private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
+            GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);
+
+        private static bool TargetPlayerFound(GameState gameState, AttackPlayerInput input) =>
+            GameStateChecks.PlayerIndexIsInBounds(gameState, input.TargetPlayerIndex);
     }
 }

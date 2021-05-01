@@ -23,8 +23,19 @@ namespace WMD.Game.State.Updates
         private const string InvalidOperationException_playerNukesQuantity_cannotBeNegative = "The player cannot have a negative quantity of nukes.";
         private const string InvalidOperationException_playerNukesResearch_alreadyMaxedOut = "The player has already maxed out their nukes research.";
         private const string InvalidOperationException_reputationPercentage_wouldBeAboveMaximum = "The player cannot have a reputation percentage above 100%.";
+        private const string InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString = "Planet state after unclaimed land area adjustment would be invalid: {0}";
 
-        public static GameState GiveUnclaimedLandToPlayer([DisallowNull] GameState gameState, int playerIndex, int area)
+        public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, AttackCalculationsResult calculationsResult)
+        {
+            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
+            updatedGameState = AdjustHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);
+            updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
+            updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
+
+            return updatedGameState;
+        }
+
+        public static GameState GiveUnclaimedLandToPlayer(GameState gameState, int playerIndex, int area)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -45,7 +56,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
 
-        public static GameState HavePlayerGiveUpLand([DisallowNull] GameState gameState, int playerIndex, int area)
+        public static GameState HavePlayerGiveUpLand(GameState gameState, int playerIndex, int area)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -66,7 +77,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameStateWithAdjustedUnclaimedLand, playerIndex, updatedPlayerState);
         }
 
-        public static GameState IncrementPlayerNukesResearchLevel([DisallowNull] GameState gameState, int playerIndex)
+        public static GameState IncrementPlayerNukesResearchLevel(GameState gameState, int playerIndex)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -82,7 +93,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustMoneyForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal adjustmentAmount)
+        public static GameState AdjustMoneyForPlayer(GameState gameState, int playerIndex, decimal adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -92,7 +103,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustNukesForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
+        public static GameState AdjustNukesForPlayer(GameState gameState, int playerIndex, int adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -109,7 +120,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustHenchmenForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentAmount)
+        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, int adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -128,7 +139,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustReputationForPlayer([DisallowNull] GameState gameState, int playerIndex, int adjustmentPercentage)
+        public static GameState AdjustReputationForPlayer(GameState gameState, int playerIndex, int adjustmentPercentage)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -145,7 +156,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustUnclaimedLandArea([DisallowNull] GameState gameState, int adjustmentAmount)
+        public static GameState AdjustUnclaimedLandArea(GameState gameState, int adjustmentAmount)
         {
             var currentPlanetState = gameState.Planet;
             Planet updatedPlanetState;
@@ -156,13 +167,13 @@ namespace WMD.Game.State.Updates
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw new InvalidOperationException($"Planet state after unclaimed land area adjustment would be invalid: {ex.Message}", ex);
+                throw new InvalidOperationException(string.Format(InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString, ex.Message), ex);
             }
 
             return UpdatePlanetState(gameState, updatedPlanetState);
         }
 
-        public static GameState IncrementSecretBaseLevel([DisallowNull] GameState gameState, int playerIndex)
+        public static GameState IncrementSecretBaseLevel(GameState gameState, int playerIndex)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -174,7 +185,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState SetDailyWageForPlayer([DisallowNull] GameState gameState, int playerIndex, decimal dailyWage)
+        public static GameState SetDailyWageForPlayer(GameState gameState, int playerIndex, decimal dailyWage)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -186,12 +197,10 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState UpdatePlanetState([DisallowNull] GameState gameState, [DisallowNull] Planet planet)
-        {
-            return gameState with { Planet = planet };
-        }
+        public static GameState UpdatePlanetState(GameState gameState, Planet planet) =>
+            gameState with { Planet = planet };
 
-        public static GameState UpdatePlayerState([DisallowNull] GameState gameState, int playerIndex, [DisallowNull] PlayerState playerState)
+        public static GameState UpdatePlayerState(GameState gameState, int playerIndex, PlayerState playerState)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 

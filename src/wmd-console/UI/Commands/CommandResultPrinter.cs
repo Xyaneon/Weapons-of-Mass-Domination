@@ -17,10 +17,9 @@ namespace WMD.Console.UI.Commands
 
         public abstract void PrintCommandResult(TCommandResult result);
 
-        protected static Player RetrievePlayerWhoActed(CommandResult result)
-        {
-            return result.UpdatedGameState.Players[result.PlayerIndex];
-        }
+        protected static string RetrieveNameOfPlayerWhoActed(CommandResult result) => RetrievePlayerWhoActed(result).Identification.Name;
+
+        protected static Player RetrievePlayerWhoActed(CommandResult result) => result.UpdatedGameState.Players[result.PlayerIndex];
 
         private static void ThrowIfCommandResultArgumentIsNotOfSubclass(CommandResult result, string nameOfResultArgument, Type commandResultSubclassType)
         {
