@@ -6,9 +6,6 @@ using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Utility
 {
-    /// <summary>
-    /// Provides methods for performing attack-related calculations.
-    /// </summary>
     internal static class AttacksCalculator
     {
         static AttacksCalculator()
@@ -20,7 +17,7 @@ namespace WMD.Game.State.Utility
 
         public static AttackCalculationsResult CalculateChangesResultingFromAttack([DisallowNull] GameState gameState, AttackPlayerInput input)
         {
-            int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState);
+            int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, input);
             int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input);
             int reputationChangeForAttacker = 0;
             int reputationChangeForDefender = 0;
@@ -28,16 +25,21 @@ namespace WMD.Game.State.Utility
             return new(henchmenAttackerLost, henchmenDefenderLost, reputationChangeForAttacker, reputationChangeForDefender);
         }
 
-        private static int CalculateNumberOfHenchmenAttackerLost([DisallowNull] GameState gameState) =>
-            (int)Math.Round(gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * CalculatePercentageOfHenchmenAttackerLost());
+        private static int CalculateNumberOfHenchmenAttackerLost([DisallowNull] GameState gameState, AttackPlayerInput input) =>
+            GetDefenderNumberOfHenchmen(gameState, input) == 0
+                ? 0
+                : (int)Math.Round(GetAttackerNumberOfHenchmen(gameState) * CalculatePercentageOfHenchmenAttackerLost());
 
         private static int CalculateNumberOfHenchmenDefenderLost([DisallowNull] GameState gameState, AttackPlayerInput input) =>
-            (int)Math.Round(gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen * CalculatePercentageOfHenchmenDefenderLost());
+            (int)Math.Round(GetDefenderNumberOfHenchmen(gameState, input) * CalculatePercentageOfHenchmenDefenderLost());
 
         private static double CalculatePercentageOfHenchmenAttackerLost() =>
             AttackConstants.BasePercentageOfHenchmenAttackerLost + _random.NextDouble() * AttackConstants.MaxAdditionalPercentageOfHenchmenAttackerLost;
 
         private static double CalculatePercentageOfHenchmenDefenderLost() =>
             AttackConstants.BasePercentageOfHenchmenDefenderLost + _random.NextDouble() * AttackConstants.MaxAdditionalPercentageOfHenchmenDefenderLost;
+
+        private static int GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
+        private static int GetDefenderNumberOfHenchmen(GameState gameState, AttackPlayerInput input) => gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen;
     }
 }
