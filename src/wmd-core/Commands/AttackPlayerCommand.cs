@@ -41,10 +41,21 @@ namespace WMD.Game.Commands
             int henchmenAttackerLost = AttacksCalculator.CalculateNumberOfHenchmenAttackerLost(gameState);
             int henchmenDefenderLost = AttacksCalculator.CalculateNumberOfHenchmenDefenderLost(gameState, input);
 
+            int reputationChangeForAttacker = 0;
+            int reputationChangeForDefender = 0;
+
             GameState updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * henchmenAttackerLost);
             updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * henchmenDefenderLost);
 
-            return new AttackPlayerResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, henchmenAttackerLost, henchmenDefenderLost);
+            return new AttackPlayerResult(
+                updatedGameState,
+                gameState.CurrentPlayerIndex,
+                input.TargetPlayerIndex,
+                henchmenAttackerLost,
+                henchmenDefenderLost,
+                reputationChangeForAttacker,
+                reputationChangeForDefender
+            );
         }
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>

@@ -7,7 +7,7 @@ namespace WMD.Game.Commands
     /// <summary>
     /// Represents the result of a player attacking another player.
     /// </summary>
-    public record AttackPlayerResult: CommandResult
+    public record AttackPlayerResult : CommandResult
     {
         private const string ArgumentOutOfRangeException_henchmenAttackerLost = "The number of henchmen the attacker lost cannot be less than zero.";
         private const string ArgumentOutOfRangeException_henchmenDefenderLost = "The number of henchmen the defender lost cannot be less than zero.";
@@ -21,6 +21,8 @@ namespace WMD.Game.Commands
         /// <param name="targetPlayerIndex">The index of the player who was attacked.</param>
         /// <param name="henchmenAttackerLost">The number of henchmen the attacker lost.</param>
         /// <param name="henchmenDefenderLost">The number of henchmen the defender lost.</param>
+        /// <param name="reputationChangeForAttacker">The amount by which the attacker's reputation changed because of the attack.</param>
+        /// <param name="reputationChangeForDefender">The amount by which the defender's reputation changed because of the attack.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="targetPlayerIndex"/> is less than zero.
         /// -or-
@@ -28,7 +30,15 @@ namespace WMD.Game.Commands
         /// -or-
         /// <paramref name="henchmenDefenderLost"/> is less than zero.
         /// </exception>
-        public AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, int henchmenAttackerLost, int henchmenDefenderLost) : base(updatedGameState, playerIndex)
+        public AttackPlayerResult(
+            GameState updatedGameState,
+            int playerIndex,
+            int targetPlayerIndex,
+            int henchmenAttackerLost,
+            int henchmenDefenderLost,
+            int reputationChangeForAttacker,
+            int reputationChangeForDefender
+        ) : base(updatedGameState, playerIndex)
         {
             if (targetPlayerIndex < 0)
             {
@@ -47,6 +57,8 @@ namespace WMD.Game.Commands
 
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
+            ReputationChangeForAttacker = reputationChangeForAttacker;
+            ReputationChangeForDefender = reputationChangeForDefender;
             TargetPlayerIndex = targetPlayerIndex;
         }
 
@@ -59,6 +71,16 @@ namespace WMD.Game.Commands
         /// Gets the number of henchmen the defender lost.
         /// </summary>
         public int HenchmenDefenderLost { get; init; }
+
+        /// <summary>
+        /// Gets the amount by which the attacker's reputation changed because of the attack.
+        /// </summary>
+        public int ReputationChangeForAttacker { get; init; }
+
+        /// <summary>
+        /// Gets the amount by which the defender's reputation changed because of the attack.
+        /// </summary>
+        public int ReputationChangeForDefender { get; init; }
 
         /// <summary>
         /// Gets the index of the player who was attacked.
