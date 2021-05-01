@@ -28,6 +28,9 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <param name="playerIndex">The index of the player to calculate for.</param>
         /// <returns>The player's current base reputation percentage.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="playerIndex"/> is out of range for the provided <paramref name="gameState"/>.
+        /// </exception>
         /// <remarks>
         /// A player's base reputation percentage is affected by the following factors:
         /// <list type="bullet">
@@ -73,6 +76,9 @@ namespace WMD.Game.State.Utility
         /// <param name="playerIndex">The index of the player spending on propaganda.</param>
         /// <param name="moneySpent">The amount of money the player is spending on propaganda.</param>
         /// <returns>The amount of reputation the player will gain.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="playerIndex"/> is out of range for the provided <paramref name="gameState"/>.
+        /// </exception>
         public static int CalculateReputationGainedFromSpendingOnPropaganda([DisallowNull] GameState gameState, int playerIndex, decimal moneySpent)
         {
             if (!GameStateChecks.PlayerIndexIsInBounds(gameState, playerIndex))
