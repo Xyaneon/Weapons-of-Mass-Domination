@@ -11,6 +11,8 @@ namespace WMD.Game.State.Data.Planets
     /// </remarks>
     public abstract record Planet
     {
+        private const string ArgumentOutOfRangeException_NeutralPopulationCannotBeNegative = "The neutral population cannot be negative.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Planet"/> class.
         /// </summary>
@@ -18,9 +20,10 @@ namespace WMD.Game.State.Data.Planets
         /// <param name="totalLandArea">The total land area in square kilometers.</param>
         /// <param name="totalSurfaceArea">The total surface area in square kilometers.</param>
         /// <param name="totalWaterArea">The total water area in square kilometers.</param>
+        /// <param name="neutralPopulation">The planet's total neutral population.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="totalLandArea"/>, <paramref name="totalSurfaceArea"/>, or
-        /// <paramref name="totalWaterArea"/> are less than zero.
+        /// <paramref name="totalLandArea"/>, <paramref name="totalSurfaceArea"/>,
+        /// <paramref name="totalWaterArea"/>, or <paramref name="neutralPopulation"/> are less than zero.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="name"/> is empty or all whitespace.
@@ -28,7 +31,7 @@ namespace WMD.Game.State.Data.Planets
         /// <paramref name="totalSurfaceArea"/> is not equal to the total of
         /// <paramref name="totalLandArea"/> and <paramref name="totalWaterArea"/>.
         /// </exception>
-        public Planet([DisallowNull] string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea)
+        public Planet([DisallowNull] string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea, long neutralPopulation)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -55,11 +58,17 @@ namespace WMD.Game.State.Data.Planets
                 throw new ArgumentException("The land and water areas do not add up to the total surface area.");
             }
 
+            if (neutralPopulation < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(neutralPopulation), ArgumentOutOfRangeException_NeutralPopulationCannotBeNegative);
+            }
+
             Name = name.Trim();
 
             TotalLandArea = totalLandArea;
             TotalSurfaceArea = totalSurfaceArea;
             TotalWaterArea = totalWaterArea;
+            NeutralPopulation = neutralPopulation;
 
             UnclaimedLandArea = totalLandArea;
         }
@@ -80,6 +89,25 @@ namespace WMD.Game.State.Data.Planets
         /// </summary>
         /// <seealso cref="PercentageOfLandClaimed"/>
         public double PercentageOfLandStillUnclaimed => UnclaimedLandArea / (double)TotalLandArea;
+
+        /// <summary>
+        /// Gets or initializes the total neutral population.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The provided value is less than zero.
+        /// </exception>
+        public long NeutralPopulation
+        {
+            get => _neutralPopulation;
+            init
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), ArgumentOutOfRangeException_NeutralPopulationCannotBeNegative);
+                }
+                _neutralPopulation = value;
+            }
+        }
 
         /// <summary>
         /// Gets the total land area in square kilometers.
@@ -124,6 +152,7 @@ namespace WMD.Game.State.Data.Planets
             }
         }
 
+        private long _neutralPopulation;
         private int _unclaimedLandArea;
     }
 }

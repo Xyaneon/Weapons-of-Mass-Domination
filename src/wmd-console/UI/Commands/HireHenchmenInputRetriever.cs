@@ -7,18 +7,19 @@ namespace WMD.Console.UI.Commands
 {
     class HireHenchmenInputRetriever : ICommandInputRetriever
     {
+        private const string ConfirmationPromptFormatString = "You will be looking to fill {0:N0} positions. Continue?";
         private const string PositionsToOfferPrompt = "Please enter how many open positions you would like to offer";
 
         public CommandInput? GetCommandInput(GameState gameState)
         {
-            var allowedPositionsToOffer = new IntRange(0, int.MaxValue);
-            var openPositionsToOffer = UserInput.GetInteger(PositionsToOfferPrompt, allowedPositionsToOffer);
+            var allowedPositionsToOffer = new LongRange(0, long.MaxValue);
+            var openPositionsToOffer = UserInput.GetLong(PositionsToOfferPrompt, allowedPositionsToOffer);
             if (openPositionsToOffer <= 0)
             {
                 PrintingUtility.PrintNoPositionsToOffer();
                 return null;
             }
-            return UserInput.GetConfirmation($"You will be looking to fill {openPositionsToOffer:N0} positions. Continue?")
+            return UserInput.GetConfirmation(string.Format(ConfirmationPromptFormatString, openPositionsToOffer))
                 ? new HireHenchmenInput() with { OpenPositionsOffered = openPositionsToOffer }
                 : null;
         }

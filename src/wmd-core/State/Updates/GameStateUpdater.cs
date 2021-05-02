@@ -23,6 +23,7 @@ namespace WMD.Game.State.Updates
         private const string InvalidOperationException_playerNukesQuantity_cannotBeNegative = "The player cannot have a negative quantity of nukes.";
         private const string InvalidOperationException_playerNukesResearch_alreadyMaxedOut = "The player has already maxed out their nukes research.";
         private const string InvalidOperationException_reputationPercentage_wouldBeAboveMaximum = "The player cannot have a reputation percentage above 100%.";
+        private const string InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString = "Planet state after population adjustment would be invalid: {0}";
         private const string InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString = "Planet state after unclaimed land area adjustment would be invalid: {0}";
 
         public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, AttackCalculationsResult calculationsResult)
@@ -31,6 +32,22 @@ namespace WMD.Game.State.Updates
             updatedGameState = AdjustHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);
             updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
             updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
+
+            return updatedGameState;
+        }
+
+        public static GameState ConvertNeutralPopulationToPlayerHenchmen(GameState gameState, int playerIndex, long numberOfHenchmen)
+        {
+            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, numberOfHenchmen);
+            updatedGameState = AdjustNeutralPopulation(updatedGameState, -1 * numberOfHenchmen);
+
+            return updatedGameState;
+        }
+        
+        public static GameState ConvertPlayerHenchmenToNeutralPopulation(GameState gameState, int playerIndex, long numberOfHenchmen)
+        {
+            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, -1 * numberOfHenchmen);
+            updatedGameState = AdjustNeutralPopulation(updatedGameState, numberOfHenchmen);
 
             return updatedGameState;
         }
@@ -120,7 +137,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, int adjustmentAmount)
+        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, long adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -146,7 +163,7 @@ namespace WMD.Game.State.Updates
             var currentPlayerState = gameState.Players[playerIndex].State;
             int updatedReputationPercentage = currentPlayerState.ReputationPercentage + adjustmentPercentage;
 
-            if (updatedReputationPercentage > 100)
+            if (updatedReputationPercentage > ReputationConstants.MaxReputationPercentage)
             {
                 throw new InvalidOperationException(InvalidOperationException_reputationPercentage_wouldBeAboveMaximum);
             }
@@ -168,6 +185,23 @@ namespace WMD.Game.State.Updates
             catch (ArgumentOutOfRangeException ex)
             {
                 throw new InvalidOperationException(string.Format(InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString, ex.Message), ex);
+            }
+
+            return UpdatePlanetState(gameState, updatedPlanetState);
+        }
+
+        public static GameState AdjustNeutralPopulation(GameState gameState, long adjustmentAmount)
+        {
+            var currentPlanetState = gameState.Planet;
+            Planet updatedPlanetState;
+
+            try
+            {
+                updatedPlanetState = currentPlanetState with { NeutralPopulation = currentPlanetState.NeutralPopulation + adjustmentAmount };
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                throw new InvalidOperationException(string.Format(InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString, ex.Message), ex);
             }
 
             return UpdatePlanetState(gameState, updatedPlanetState);

@@ -59,7 +59,7 @@ namespace WMD.Game.State.Updates.Rounds
         private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate) => roundUpdate switch
         {
             PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
-            PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.AdjustHenchmenForPlayer(gameState, playerHenchmenQuit.PlayerIndex, -1 * playerHenchmenQuit.NumberOfHenchmenQuit),
+            PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.ConvertPlayerHenchmenToNeutralPopulation(gameState, playerHenchmenQuit.PlayerIndex, playerHenchmenQuit.NumberOfHenchmenQuit),
             ReputationChange reputationChange => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationChange.PlayerIndex, reputationChange.ReputationPercentageChanged),
             GovernmentIntervention governmentIntervention => ApplyGovernmentIntervention(gameState, governmentIntervention),
             _ => throw new UnsupportedArgumentSubclassException(typeof(RoundUpdateResultItem), roundUpdate.GetType()),

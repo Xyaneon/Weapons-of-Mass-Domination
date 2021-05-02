@@ -7,25 +7,27 @@ namespace WMD.Game.Commands
     /// </summary>
     public record HireHenchmenInput : CommandInput
     {
+        private const string ArgumentOutOfRangeException_OpenPositionsOfferedLessThanOne = "The number of open positions offered must be greater than zero.";
+
         /// <summary>
         /// Gets or initializes the number of open positions to offer.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         /// The provided value is less than one.
         /// </exception>
-        public int OpenPositionsOffered
+        public long OpenPositionsOffered
         {
             get => _openPositionsOffered;
             init
             {
                 if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "The number of open positions offered must be greater than zero.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_OpenPositionsOfferedLessThanOne);
                 }
                 _openPositionsOffered = value;
             }
         }
 
-        private int _openPositionsOffered;
+        private long _openPositionsOffered;
     }
 }

@@ -39,7 +39,7 @@ namespace WMD.Game.State.Data.Henchmen
         /// -or-
         /// <paramref name="numberOfHenchmen"/> is less than zero.
         /// </exception>
-        public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, int numberOfHenchmen = 0)
+        public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long numberOfHenchmen = 0)
         {
             DailyPayRate = dailyPayRate;
             NumberOfHenchmen = numberOfHenchmen;
@@ -74,7 +74,7 @@ namespace WMD.Game.State.Data.Henchmen
         /// <exception cref="ArgumentOutOfRangeException">
         /// The value to initialize this property with is less than zero.
         /// </exception>
-        public int NumberOfHenchmen
+        public long NumberOfHenchmen
         {
             get => _numberOfHenchmen;
             init
@@ -89,6 +89,6 @@ namespace WMD.Game.State.Data.Henchmen
         }
 
         private decimal _dailyPayRate;
-        private int _numberOfHenchmen;
+        private long _numberOfHenchmen;
     }
 }

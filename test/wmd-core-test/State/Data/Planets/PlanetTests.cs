@@ -9,7 +9,8 @@ namespace WMD.Game.Test.State.Data.Planets
     {
         private record TestPlanet : Planet
         {
-            public TestPlanet(string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea) : base(name, totalLandArea, totalSurfaceArea, totalWaterArea) { }
+            public TestPlanet(string name, int totalLandArea, int totalSurfaceArea, int totalWaterArea, long neutralPopulation)
+                : base(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation) { }
         }
 
         [TestMethod]
@@ -19,10 +20,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The name of the planet cannot be empty or all whitespace."));
@@ -35,10 +37,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The name of the planet cannot be empty or all whitespace."));
@@ -51,10 +54,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = -1;
             int totalSurfaceArea = 1;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The total land area cannot be negative."));
@@ -67,10 +71,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = -1;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The total surface area cannot be negative."));
@@ -83,10 +88,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = -2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The total water area cannot be negative."));
@@ -99,10 +105,11 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 5;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
             var actual = Assert.ThrowsException<ArgumentException>(() =>
             {
-                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+                _ = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
             });
 
             Assert.IsTrue(actual.Message.Contains("The land and water areas do not add up to the total surface area."));
@@ -115,15 +122,17 @@ namespace WMD.Game.Test.State.Data.Planets
             int expectedTotalLandArea = 1;
             int expectedTotalSurfaceArea = 3;
             int expectedTotalWaterArea = 2;
+            long expectedNeutralPopulation = 1;
             int expectedUnclaimedLandArea = 1;
             double expectedPercentageOfLandStillUnclaimed = 1.0;
 
-            var actual = new TestPlanet(expectedName, expectedTotalLandArea, expectedTotalSurfaceArea, expectedTotalWaterArea);
+            var actual = new TestPlanet(expectedName, expectedTotalLandArea, expectedTotalSurfaceArea, expectedTotalWaterArea, expectedNeutralPopulation);
 
             Assert.AreEqual(expectedName, actual.Name);
             Assert.AreEqual(expectedTotalLandArea, actual.TotalLandArea);
             Assert.AreEqual(expectedTotalSurfaceArea, actual.TotalSurfaceArea);
             Assert.AreEqual(expectedTotalWaterArea, actual.TotalWaterArea);
+            Assert.AreEqual(expectedNeutralPopulation, actual.NeutralPopulation);
             Assert.AreEqual(expectedUnclaimedLandArea, actual.UnclaimedLandArea);
             Assert.AreEqual(expectedPercentageOfLandStillUnclaimed, actual.PercentageOfLandStillUnclaimed);
         }
@@ -136,10 +145,30 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
-            var actual = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+            var actual = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
 
             Assert.AreEqual(expectedName, actual.Name);
+        }
+
+        [TestMethod]
+        public void NeutralPopulation_Init_ShouldThrowIfValueIsNegative()
+        {
+            string name = "MyPlanet";
+            int totalLandArea = 1;
+            int totalSurfaceArea = 3;
+            int totalWaterArea = 2;
+            long neutralPopulation = 1;
+
+            var initialPlanet = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
+
+            var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            {
+                _ = initialPlanet with { NeutralPopulation = -1 };
+            });
+
+            Assert.IsTrue(actual.Message.Contains("The neutral population cannot be negative."));
         }
 
         [TestMethod]
@@ -149,8 +178,9 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
-            var initialPlanet = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+            var initialPlanet = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
 
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
@@ -167,8 +197,9 @@ namespace WMD.Game.Test.State.Data.Planets
             int totalLandArea = 1;
             int totalSurfaceArea = 3;
             int totalWaterArea = 2;
+            long neutralPopulation = 1;
 
-            var initialPlanet = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea);
+            var initialPlanet = new TestPlanet(name, totalLandArea, totalSurfaceArea, totalWaterArea, neutralPopulation);
 
             var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {

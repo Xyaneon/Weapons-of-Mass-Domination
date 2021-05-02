@@ -1,5 +1,4 @@
-﻿using System;
-using WMD.Console.Miscellaneous;
+﻿using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Core;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
@@ -23,14 +22,12 @@ namespace WMD.Console.UI.Commands
                 return null;
             }
 
-            int currentNumberOfHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
+            long currentNumberOfHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 
             var confirmationPrompt = string.Format(ConfirmationPromptFormatString, newDailyWage, currentNumberOfHenchmen, currentNumberOfHenchmen * newDailyWage);
             return UserInput.GetConfirmation(confirmationPrompt)
                 ? new ChangeDailyWageInput() with { NewDailyWage = newDailyWage }
                 : null;
-
-            throw new NotImplementedException();
         }
     }
 }
