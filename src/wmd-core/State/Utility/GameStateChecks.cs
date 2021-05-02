@@ -137,6 +137,14 @@ namespace WMD.Game.State.Utility
         public static IEnumerable<int> FindIndicesOfPlayersWithTheMostHenchmen([DisallowNull] GameState gameState) =>
             FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => playerState.WorkforceState.NumberOfHenchmen);
 
+        /// <summary>
+        /// Determines whether the planet's neutral population has been depleted.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <returns><see langword="true"/> if the planet's neutral population has been depleted; otherwise, <see langword="false"/>.</returns>
+        public static bool NeutralPopulationIsDepleted([DisallowNull] GameState gameState) =>
+            gameState.Planet.NeutralPopulation == 0;
+
         private static IEnumerable<int> FindIndicesOfPlayersWithLargestQuantity([DisallowNull] GameState gameState, Func<PlayerState, double> quantityFunction)
         {
             int numberOfPlayers = gameState.Players.Count;

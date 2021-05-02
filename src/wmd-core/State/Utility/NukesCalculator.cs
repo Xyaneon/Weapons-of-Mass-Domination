@@ -44,7 +44,7 @@ namespace WMD.Game.State.Utility
         /// -or-
         /// <paramref name="numberOfSuccessfulHits"/> is less than zero.
         /// </exception>
-        public static int CalculateNumberOfHenchmenLostToNukes([DisallowNull] GameState gameState, int playerIndex, int numberOfSuccessfulHits)
+        public static long CalculateNumberOfHenchmenLostToNukes([DisallowNull] GameState gameState, int playerIndex, int numberOfSuccessfulHits)
         {
             if (!GameStateChecks.PlayerIndexIsInBounds(gameState, playerIndex))
             {
@@ -61,11 +61,11 @@ namespace WMD.Game.State.Utility
                 return 0;
             }
 
-            int initialHenchmenCount = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
-            int newHenchmenCount = initialHenchmenCount;
+            long initialHenchmenCount = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
+            long newHenchmenCount = initialHenchmenCount;
             for (int i = 0; i < numberOfSuccessfulHits; i++)
             {
-                newHenchmenCount = (int)Math.Floor((double)newHenchmenCount / 2);
+                newHenchmenCount = (long)Math.Floor((double)newHenchmenCount / 2);
             }
 
             return initialHenchmenCount - newHenchmenCount;
@@ -109,9 +109,7 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns>The total manufacturing price for the given quantity of nukes the current player will manufacture.</returns>
         /// <remarks>This method does not take the current status of nuke manufacturing prerequisites for the current player into account; it assumes they are already met.</remarks>
-        public static decimal CalculateTotalManufacturingPrice([DisallowNull] GameState gameState, int quantity)
-        {
-            return NukeConstants.ManufacturingPrice * quantity;
-        }
+        public static decimal CalculateTotalManufacturingPrice([DisallowNull] GameState gameState, int quantity) =>
+            NukeConstants.ManufacturingPrice * quantity;
     }
 }

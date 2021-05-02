@@ -26,9 +26,9 @@ namespace WMD.Game.State.Utility
         }
 
         private static int CalculateNumberOfHenchmenAttackerLost(GameState gameState, AttackPlayerInput input) =>
-            GetDefenderNumberOfHenchmen(gameState, input) == 0
-                ? 0
-                : (int)Math.Round(GetAttackerNumberOfHenchmen(gameState) * CalculatePercentageOfHenchmenAttackerLost());
+            GetDefenderNumberOfHenchmen(gameState, input) != 0
+                ? (int)Math.Round(GetAttackerNumberOfHenchmen(gameState) * CalculatePercentageOfHenchmenAttackerLost())
+                : 0;
 
         private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input) =>
             (int)Math.Round(GetDefenderNumberOfHenchmen(gameState, input) * CalculatePercentageOfHenchmenDefenderLost());
@@ -47,7 +47,7 @@ namespace WMD.Game.State.Utility
 
         private static int CalculatePotentialReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {
-            int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+            long defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
             if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {
@@ -73,7 +73,7 @@ namespace WMD.Game.State.Utility
 
         private static int CalculatePotentialReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {
-            int defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+            long defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
             if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {
@@ -104,9 +104,9 @@ namespace WMD.Game.State.Utility
             _ => 0,
         };
 
-        private static int GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
+        private static long GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 
-        private static int GetDefenderNumberOfHenchmen(GameState gameState, AttackPlayerInput input) => gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen;
+        private static long GetDefenderNumberOfHenchmen(GameState gameState, AttackPlayerInput input) => gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen;
 
         private static int GetAttackerReputation(GameState gameState) => gameState.CurrentPlayer.State.ReputationPercentage;
 

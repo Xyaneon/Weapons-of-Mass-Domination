@@ -28,7 +28,7 @@ namespace WMD.Game.State.Updates.Rounds
         /// <summary>
         /// Gets the number of henchmen the player paid.
         /// </summary>
-        public int NumberOfHenchmenPaid { get; init; }
+        public long NumberOfHenchmenPaid { get; init; }
 
         /// <summary>
         /// Gets the index of the player who paid their henchmen.

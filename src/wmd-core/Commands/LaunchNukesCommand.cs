@@ -16,18 +16,13 @@ namespace WMD.Game.Commands
         private const string InvalidOperationException_playerHasNoSecretBase = "A player cannot launch nukes without a secret base to launch them from.";
         private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
 
-        public override bool CanExecuteForState([DisallowNull] GameState gameState)
-        {
-            return GameStateChecks.CurrentPlayerHasAnyNukes(gameState)
-                && GameStateChecks.CurrentPlayerHasASecretBase(gameState);
-        }
+        public override bool CanExecuteForState([DisallowNull] GameState gameState) =>
+            GameStateChecks.CurrentPlayerHasAnyNukes(gameState) && GameStateChecks.CurrentPlayerHasASecretBase(gameState);
 
-        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, LaunchNukesInput input)
-        {
-            return CanExecuteForState(gameState)
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, LaunchNukesInput input) =>
+            CanExecuteForState(gameState)
                 && !GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex)
                 && GameStateChecks.PlayerIndexIsInBounds(gameState, input.TargetPlayerIndex);
-        }
 
         public override LaunchNukesResult Execute([DisallowNull] GameState gameState, LaunchNukesInput input)
         {
@@ -52,7 +47,7 @@ namespace WMD.Game.Commands
             }
 
             int numberOfSuccessfulHits = NukesCalculator.CalculateNumberOfSuccessfulNukeHits(gameState, input.NumberOfNukesLaunched);
-            int numberOfHenchmenDefenderLost = NukesCalculator.CalculateNumberOfHenchmenLostToNukes(gameState, input.TargetPlayerIndex, numberOfSuccessfulHits);
+            long numberOfHenchmenDefenderLost = NukesCalculator.CalculateNumberOfHenchmenLostToNukes(gameState, input.TargetPlayerIndex, numberOfSuccessfulHits);
 
             GameState updatedGameState = GameStateUpdater.AdjustNukesForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * input.NumberOfNukesLaunched);
             updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * numberOfHenchmenDefenderLost);

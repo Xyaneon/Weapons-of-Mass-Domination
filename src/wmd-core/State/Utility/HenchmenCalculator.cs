@@ -27,7 +27,7 @@ namespace WMD.Game.State.Utility
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="numberOfPositionsOffered"/> is less than zero.
         /// </exception>
-        public static int CalculateNumberOfHenchmenHired([DisallowNull] GameState gameState, int numberOfPositionsOffered)
+        public static long CalculateNumberOfHenchmenHired([DisallowNull] GameState gameState, long numberOfPositionsOffered)
         {
             if (numberOfPositionsOffered < 0)
             {
@@ -36,8 +36,9 @@ namespace WMD.Game.State.Utility
 
             double reputationPercentage = gameState.CurrentPlayer.State.ReputationPercentage / 100.0;
             double percentageOfPositionsFilled = Math.Min(_random.NextDouble(), reputationPercentage);
+            var numberOfPositionsWouldBeFilled = (long)Math.Floor(percentageOfPositionsFilled * numberOfPositionsOffered);
 
-            return (int)Math.Floor(percentageOfPositionsFilled * numberOfPositionsOffered);
+            return Math.Min(numberOfPositionsWouldBeFilled, gameState.Planet.NeutralPopulation);
         }
     }
 }

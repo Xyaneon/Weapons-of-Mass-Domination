@@ -34,7 +34,8 @@ namespace WMD.Game.Commands
         /// -or-
         /// <paramref name="henchmenDefenderLost"/> is less than zero.
         /// </exception>
-        public LaunchNukesResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, int nukesLaunched, int successfulNukeHits, int henchmenDefenderLost) : base(updatedGameState, playerIndex)
+        public LaunchNukesResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, int nukesLaunched, int successfulNukeHits, long henchmenDefenderLost)
+            : base(updatedGameState, playerIndex)
         {
             if (targetPlayerIndex < 0)
             {
@@ -75,7 +76,7 @@ namespace WMD.Game.Commands
         /// <summary>
         /// Gets the number of henchmen the defender lost.
         /// </summary>
-        public int HenchmenDefenderLost { get; init; }
+        public long HenchmenDefenderLost { get; init; }
 
         /// <summary>
         /// Gets the number of nukes which successfully hit.

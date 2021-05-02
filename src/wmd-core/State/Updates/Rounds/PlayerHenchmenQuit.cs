@@ -16,7 +16,7 @@ namespace WMD.Game.State.Updates.Rounds
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="numberOfHenchmenQuit"/> is less than one.
         /// </exception>
-        public PlayerHenchmenQuit(int playerIndex, int numberOfHenchmenQuit)
+        public PlayerHenchmenQuit(int playerIndex, long numberOfHenchmenQuit)
         {
             if (numberOfHenchmenQuit <= 0)
             {
@@ -30,7 +30,7 @@ namespace WMD.Game.State.Updates.Rounds
         /// <summary>
         /// Gets the number of henchmen who quit.
         /// </summary>
-        public int NumberOfHenchmenQuit { get; init; }
+        public long NumberOfHenchmenQuit { get; init; }
 
         /// <summary>
         /// Gets the index of the <see cref="Player"/> who lost henchmen.

@@ -36,6 +36,22 @@ namespace WMD.Game.State.Updates
             return updatedGameState;
         }
 
+        public static GameState ConvertNeutralPopulationToPlayerHenchmen(GameState gameState, int playerIndex, long numberOfHenchmen)
+        {
+            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, numberOfHenchmen);
+            updatedGameState = AdjustNeutralPopulation(updatedGameState, -1 * numberOfHenchmen);
+
+            return updatedGameState;
+        }
+        
+        public static GameState ConvertPlayerHenchmenToNeutralPopulation(GameState gameState, int playerIndex, long numberOfHenchmen)
+        {
+            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, -1 * numberOfHenchmen);
+            updatedGameState = AdjustNeutralPopulation(updatedGameState, numberOfHenchmen);
+
+            return updatedGameState;
+        }
+
         public static GameState GiveUnclaimedLandToPlayer(GameState gameState, int playerIndex, int area)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
@@ -121,7 +137,7 @@ namespace WMD.Game.State.Updates
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, int adjustmentAmount)
+        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, long adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -147,7 +163,7 @@ namespace WMD.Game.State.Updates
             var currentPlayerState = gameState.Players[playerIndex].State;
             int updatedReputationPercentage = currentPlayerState.ReputationPercentage + adjustmentPercentage;
 
-            if (updatedReputationPercentage > 100)
+            if (updatedReputationPercentage > ReputationConstants.MaxReputationPercentage)
             {
                 throw new InvalidOperationException(InvalidOperationException_reputationPercentage_wouldBeAboveMaximum);
             }

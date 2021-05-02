@@ -20,7 +20,7 @@ namespace WMD.Game.State.Updates.Rounds
         {
             PlayerState playerState = gameState.Players[index].State;
 
-            int henchmenQuit = playerState switch
+            long henchmenQuit = playerState switch
             {
                 _ when PlayerCannotPayTheirHenchmen(playerState) => playerState.WorkforceState.NumberOfHenchmen,
                 _ when PlayerHenchmenAreUnderpaid(playerState) => CalculateHenchmenQuitDueToUnderpay(playerState.WorkforceState),
