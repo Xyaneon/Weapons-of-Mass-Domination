@@ -81,6 +81,26 @@ namespace WMD.Console.UI.Core
             return number;
         }
 
+        public static long GetLong(string requestText, LongRange range)
+        {
+            long number = 0;
+            bool result = false;
+
+            while (!result)
+            {
+                PrintPrompt(requestText);
+                string? input = System.Console.ReadLine();
+
+                result = long.TryParse(input, out number);
+                if (result && !range.ContainsValueInclusive(number))
+                {
+                    result = false;
+                }
+            }
+
+            return number;
+        }
+
         public static string? GetString(string requestText)
         {
             PrintPrompt(requestText);
