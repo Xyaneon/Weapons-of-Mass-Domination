@@ -23,7 +23,13 @@ namespace WMD.AI.Default
             {
                 return 0;
             }
-            return _random.Next(1, MaximumPositionsToOffer);
+            int maximum = (int)Math.Floor(gameState.CurrentPlayer.State.Money / gameState.CurrentPlayer.State.WorkforceState.DailyPayRate);
+            if (maximum < 1)
+            {
+                return 0;
+            }
+
+            return _random.Next(1, Math.Min(maximum, MaximumPositionsToOffer));
         }
 
         private static readonly Random _random;
