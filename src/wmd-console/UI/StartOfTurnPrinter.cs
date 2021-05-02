@@ -107,7 +107,7 @@ namespace WMD.Console.UI
 
         private static void PrintSummary(Planet planet)
         {
-            string summaryString = $"{planet.UnclaimedLandArea:N0} km² of land on {planet.Name} remains uncontrolled ({planet.PercentageOfLandStillUnclaimed:P2}).";
+            string summaryString = $"{planet.UnclaimedLandArea:N0} km² of land and {planet.NeutralPopulation:N0} people on {planet.Name} remain uncontrolled ({planet.PercentageOfLandStillUnclaimed:P2}).";
             System.Console.WriteLine(summaryString);
         }
 
