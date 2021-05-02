@@ -23,6 +23,7 @@ namespace WMD.Game.State.Updates
         private const string InvalidOperationException_playerNukesQuantity_cannotBeNegative = "The player cannot have a negative quantity of nukes.";
         private const string InvalidOperationException_playerNukesResearch_alreadyMaxedOut = "The player has already maxed out their nukes research.";
         private const string InvalidOperationException_reputationPercentage_wouldBeAboveMaximum = "The player cannot have a reputation percentage above 100%.";
+        private const string InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString = "Planet state after population adjustment would be invalid: {0}";
         private const string InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString = "Planet state after unclaimed land area adjustment would be invalid: {0}";
 
         public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, AttackCalculationsResult calculationsResult)
@@ -168,6 +169,23 @@ namespace WMD.Game.State.Updates
             catch (ArgumentOutOfRangeException ex)
             {
                 throw new InvalidOperationException(string.Format(InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString, ex.Message), ex);
+            }
+
+            return UpdatePlanetState(gameState, updatedPlanetState);
+        }
+
+        public static GameState AdjustNeutralPopulation(GameState gameState, long adjustmentAmount)
+        {
+            var currentPlanetState = gameState.Planet;
+            Planet updatedPlanetState;
+
+            try
+            {
+                updatedPlanetState = currentPlanetState with { NeutralPopulation = currentPlanetState.NeutralPopulation + adjustmentAmount };
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                throw new InvalidOperationException(string.Format(InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString, ex.Message), ex);
             }
 
             return UpdatePlanetState(gameState, updatedPlanetState);
