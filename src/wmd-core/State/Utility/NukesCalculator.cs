@@ -104,6 +104,22 @@ namespace WMD.Game.State.Utility
         }
 
         /// <summary>
+        /// Calculates the amount by which the reputation changes for the player who launched nukes.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <param name="attackingPlayerIndex">The index of the player who launched nukes.</param>
+        /// <param name="numberOfSuccessfulHits">The number of launched nukes which successfully hit the target.</param>
+        /// <returns>The amount by which the reputation changes for the player who launched nukes.</returns>
+        public static int CalculateReputationChangeAmount(GameState gameState, int attackingPlayerIndex, int numberOfSuccessfulHits)
+        {
+            int currentReputation = gameState.Players[attackingPlayerIndex].State.ReputationPercentage;
+            int potentialChangeAmount = numberOfSuccessfulHits > 0
+                ? NukeConstants.ReputationChangeAmountForSuccessfulNukeHits
+                : NukeConstants.ReputationChangeAmountForNoSuccessfulNukeHits;
+            return ReputationCalculator.ClampReputationChangeAmount(potentialChangeAmount, currentReputation);
+        }
+
+        /// <summary>
         /// Calculates the total manufacturing price for the given quantity of nukes the current player will manufacture.
         /// </summary>
         /// <param name="gameState">The current <see cref="GameState"/>.</param>

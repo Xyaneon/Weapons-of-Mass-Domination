@@ -48,11 +48,21 @@ namespace WMD.Game.Commands
 
             int numberOfSuccessfulHits = NukesCalculator.CalculateNumberOfSuccessfulNukeHits(gameState, input.NumberOfNukesLaunched);
             long numberOfHenchmenDefenderLost = NukesCalculator.CalculateNumberOfHenchmenLostToNukes(gameState, input.TargetPlayerIndex, numberOfSuccessfulHits);
+            int reputationChangeAmount = NukesCalculator.CalculateReputationChangeAmount(gameState, gameState.CurrentPlayerIndex, numberOfSuccessfulHits);
 
             GameState updatedGameState = GameStateUpdater.AdjustNukesForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * input.NumberOfNukesLaunched);
             updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * numberOfHenchmenDefenderLost);
+            updatedGameState = GameStateUpdater.AdjustReputationForPlayer(updatedGameState, gameState.CurrentPlayerIndex, reputationChangeAmount);
 
-            return new LaunchNukesResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, input.NumberOfNukesLaunched, numberOfSuccessfulHits, numberOfHenchmenDefenderLost);
+            return new LaunchNukesResult(
+                updatedGameState,
+                gameState.CurrentPlayerIndex,
+                input.TargetPlayerIndex,
+                input.NumberOfNukesLaunched,
+                numberOfSuccessfulHits,
+                numberOfHenchmenDefenderLost,
+                reputationChangeAmount
+            );
         }
     }
 }
