@@ -12,32 +12,30 @@ namespace WMD.Game.Commands
     {
         private const decimal BaseMoneyStealAmount = 200;
 
-        static StealMoneyCommand()
-        {
-            _random = new Random();
-        }
+        static StealMoneyCommand() => _random = new Random();
 
         private static readonly Random _random;
 
-        public override bool CanExecuteForState([DisallowNull] GameState gameState)
-        {
-            return true;
-        }
+        public override bool CanExecuteForState([DisallowNull] GameState gameState) => true;
 
-        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input)
-        {
-            return true;
-        }
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input) => true;
 
         public override StealMoneyResult Execute([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input)
         {
-            decimal moneyStolenByPlayer = (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
-            decimal moneyStolenByHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + 20 * _random.NextDouble(), 2);
+            decimal moneyStolenByPlayer = CalculateMoneyStolenByPlayer();
+            decimal moneyStolenByHenchmen = CalculateMoneyStolenByHenchmen(gameState);
             decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
 
-            GameState updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(gameState, gameState.CurrentPlayerIndex, moneyStolen);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .AdjustMoneyForPlayer(gameState.CurrentPlayerIndex, moneyStolen)
+                .AndReturnUpdatedGameState();
 
             return new StealMoneyResult(updatedGameState, gameState.CurrentPlayerIndex, moneyStolen);
         }
+
+        private static decimal CalculateMoneyStolenByHenchmen(GameState gameState) =>
+            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
+
+        private static decimal CalculateMoneyStolenByPlayer() => (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
     }
 }

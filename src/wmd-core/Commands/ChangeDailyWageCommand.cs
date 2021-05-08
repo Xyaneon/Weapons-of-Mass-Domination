@@ -17,7 +17,9 @@ namespace WMD.Game.Commands
         public override ChangeDailyWageResult Execute([DisallowNull] GameState gameState, [DisallowNull] ChangeDailyWageInput input)
         {
             decimal oldDailyWage = gameState.CurrentPlayer.State.WorkforceState.DailyPayRate;
-            GameState updatedGameState = GameStateUpdater.SetDailyWageForPlayer(gameState, gameState.CurrentPlayerIndex, input.NewDailyWage);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .SetDailyWageForPlayer(gameState.CurrentPlayerIndex, input.NewDailyWage)
+                .AndReturnUpdatedGameState();
 
             return new ChangeDailyWageResult(updatedGameState, gameState.CurrentPlayerIndex, oldDailyWage, input.NewDailyWage);
         }

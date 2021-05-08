@@ -37,20 +37,18 @@ namespace WMD.Game.Commands
 
             decimal buildPrice = CalculateBuildPrice(gameState);
             PlayerState updatedPlayerState = gameState.CurrentPlayer.State with { SecretBase = new SecretBase() };
-            GameState updatedGameState = GameStateUpdater.UpdatePlayerState(gameState, gameState.CurrentPlayerIndex, updatedPlayerState);
-            updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, -1 * buildPrice);
+
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .UpdatePlayerState(gameState.CurrentPlayerIndex, updatedPlayerState)
+                .AdjustMoneyForPlayer(gameState.CurrentPlayerIndex, -1 * buildPrice)
+                .AndReturnUpdatedGameState();
 
             return new BuildSecretBaseResult(updatedGameState, gameState.CurrentPlayerIndex, buildPrice);
         }
 
-        private static bool CurrentPlayerDoesNotHaveEnoughMoney(GameState gameState)
-        {
-            return CalculateBuildPrice(gameState) > gameState.CurrentPlayer.State.Money;
-        }
+        private static bool CurrentPlayerDoesNotHaveEnoughMoney(GameState gameState) =>
+            CalculateBuildPrice(gameState) > gameState.CurrentPlayer.State.Money;
 
-        private static decimal CalculateBuildPrice(GameState gameState)
-        {
-            return SecretBase.SecretBaseBuildPrice;
-        }
+        private static decimal CalculateBuildPrice(GameState gameState) => SecretBase.SecretBaseBuildPrice;
     }
 }

@@ -39,7 +39,9 @@ namespace WMD.Game.Commands
             }
 
             AttackCalculationsResult calculationsResult = AttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
-            GameState updatedGameState = CreateUpdatedGameState(gameState, input, calculationsResult);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .AdjustPlayerStatesAfterAttack(gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult)
+                .AndReturnUpdatedGameState();
 
             return new AttackPlayerResult(
                 updatedGameState,
@@ -48,9 +50,6 @@ namespace WMD.Game.Commands
                 calculationsResult
             );
         }
-
-        private static GameState CreateUpdatedGameState(GameState gameState, AttackPlayerInput input, AttackCalculationsResult calculationsResult) =>
-            GameStateUpdater.AdjustPlayerStatesAfterAttack(gameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult);
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
             GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);
