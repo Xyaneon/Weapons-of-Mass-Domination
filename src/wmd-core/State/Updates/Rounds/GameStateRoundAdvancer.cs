@@ -11,16 +11,13 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static readonly IEnumerable<RoundUpdateResultOccurrencesCreator> _occurrencesCreators;
 
-        static GameStateRoundAdvancer()
+        static GameStateRoundAdvancer() => _occurrencesCreators = new List<RoundUpdateResultOccurrencesCreator>
         {
-            _occurrencesCreators = new List<RoundUpdateResultOccurrencesCreator>
-            {
-                new PlayerHenchmenPaidOccurrencesCreator(),
-                new PlayerHenchmenQuitOccurrencesCreator(),
-                new ReputationChangeOccurrencesCreator(),
-                new GovernmentInterventionOccurrencesCreator(),
-            };
-        }
+            new PlayerHenchmenPaidOccurrencesCreator(),
+            new PlayerHenchmenQuitOccurrencesCreator(),
+            new ReputationChangeOccurrencesCreator(),
+            new GovernmentInterventionOccurrencesCreator(),
+        };
 
         public static (GameState, RoundUpdateResult) AdvanceToNextRound(GameState gameState)
         {
