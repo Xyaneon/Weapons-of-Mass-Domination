@@ -12,11 +12,13 @@ namespace WMD.Game.Test.State.Data.Henchmen
         {
             const int expectedNumberOfHenchmen = 0;
             const decimal expectedDailyPayRate = 7;
+            const decimal expectedTotalDailyPay = expectedNumberOfHenchmen * expectedDailyPayRate;
 
             var subject = new WorkforceState();
 
             Assert.AreEqual(expectedNumberOfHenchmen, subject.NumberOfHenchmen);
             Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
+            Assert.AreEqual(expectedTotalDailyPay, subject.TotalDailyPay);
         }
 
         [TestMethod]
@@ -24,11 +26,13 @@ namespace WMD.Game.Test.State.Data.Henchmen
         {
             const int expectedNumberOfHenchmen = 5;
             const decimal expectedDailyPayRate = 3;
+            const decimal expectedTotalDailyPay = expectedNumberOfHenchmen * expectedDailyPayRate;
 
             var subject = new WorkforceState(expectedDailyPayRate, expectedNumberOfHenchmen);
 
             Assert.AreEqual(expectedNumberOfHenchmen, subject.NumberOfHenchmen);
             Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
+            Assert.AreEqual(expectedTotalDailyPay, subject.TotalDailyPay);
         }
 
         [TestMethod]

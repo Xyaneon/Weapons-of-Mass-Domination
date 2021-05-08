@@ -99,7 +99,16 @@ namespace WMD.Game.State.Utility
         /// <param name="gameState">The current <see cref="GameState"/>.</param>
         /// <returns>A collection of indices of all players other than the current player.</returns>
         public static IEnumerable<int> FindIndicesOfPlayersOtherThanCurrent([DisallowNull] GameState gameState) =>
-            Enumerable.Range(0, gameState.Players.Count).Where(index => index != gameState.CurrentPlayerIndex);
+            FindIndicesOfPlayersOtherThanGiven(gameState, gameState.CurrentPlayerIndex);
+        
+        /// <summary>
+        /// Returns a collection of indices of all players other than the one to exclude.
+        /// </summary>
+        /// <param name="gameState">The current <see cref="GameState"/>.</param>
+        /// <param name="indexToExclude">The index to exclude from the results.</param>
+        /// <returns>A collection of indices of all players other than <paramref name="indexToExclude"/>.</returns>
+        public static IEnumerable<int> FindIndicesOfPlayersOtherThanGiven([DisallowNull] GameState gameState, int indexToExclude) =>
+            Enumerable.Range(0, gameState.Players.Count).Where(index => index != indexToExclude);
 
         /// <summary>
         /// Returns a collection of indices of the players with the highest pay rate.

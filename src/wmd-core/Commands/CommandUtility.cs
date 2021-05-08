@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace WMD.Game.Commands
 {
@@ -15,23 +16,7 @@ namespace WMD.Game.Commands
         /// </summary>
         static CommandUtility()
         {
-            _allCommands = new List<IGameCommand>()
-            {
-                new AttackPlayerCommand(),
-                new BuildSecretBaseCommand(),
-                new DistributePropagandaCommand(),
-                new HireHenchmenCommand(),
-                new LaunchNukesCommand(),
-                new ManufactureNukesCommand(),
-                new PurchaseUnclaimedLandCommand(),
-                new ResearchNukesCommand(),
-                new ResignCommand(),
-                new SellLandCommand(),
-                new SkipTurnCommand(),
-                new StealMoneyCommand(),
-                new UpgradeSecretBaseCommand(),
-            }.AsReadOnly();
-
+            _allCommands = CreateInstanceOfEachGameCommand().ToList().AsReadOnly();
             _allEffectiveCommands = _allCommands.Where(command => IsAnEffectiveCommand(command)).ToList().AsReadOnly();
         }
 
@@ -66,6 +51,15 @@ namespace WMD.Game.Commands
             }
             return baseCommandType.GenericTypeArguments[0];
         }
+
+        private static IEnumerable<IGameCommand> CreateInstanceOfEachGameCommand() =>
+            FindAllIGameCommandTypes().Select(gameCommandType => (IGameCommand)Activator.CreateInstance(gameCommandType)!);
+
+        private static IEnumerable<Type> FindAllIGameCommandTypes() =>
+            Assembly.GetExecutingAssembly().GetTypes().Where(type => TypeIsIGameCommandImplementerWithEmptyConstructor(type));
+
+        private static bool TypeIsIGameCommandImplementerWithEmptyConstructor(Type type) =>
+            type.GetInterfaces().Contains(typeof(IGameCommand)) && type.GetConstructor(Type.EmptyTypes) != null;
 
         private static bool IsAnEffectiveCommand(IGameCommand command) =>
             command.GetType() != typeof(ResignCommand) && command.GetType() != typeof(SkipTurnCommand);
