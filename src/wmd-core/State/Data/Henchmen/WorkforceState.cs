@@ -88,6 +88,14 @@ namespace WMD.Game.State.Data.Henchmen
             }
         }
 
+        /// <summary>
+        /// Gets the total daily pay for the entire workforce.
+        /// </summary>
+        /// <remarks>
+        /// The value of this property depends on the current values of the <see cref="DailyPayRate"/> and <see cref="NumberOfHenchmen"/> properties.
+        /// </remarks>
+        public decimal TotalDailyPay { get => DailyPayRate * NumberOfHenchmen; }
+
         private decimal _dailyPayRate;
         private long _numberOfHenchmen;
     }
