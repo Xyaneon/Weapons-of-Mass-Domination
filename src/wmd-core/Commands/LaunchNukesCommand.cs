@@ -52,7 +52,15 @@ namespace WMD.Game.Commands
             GameState updatedGameState = GameStateUpdater.AdjustNukesForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * input.NumberOfNukesLaunched);
             updatedGameState = GameStateUpdater.AdjustHenchmenForPlayer(updatedGameState, input.TargetPlayerIndex, -1 * numberOfHenchmenDefenderLost);
 
-            return new LaunchNukesResult(updatedGameState, gameState.CurrentPlayerIndex, input.TargetPlayerIndex, input.NumberOfNukesLaunched, numberOfSuccessfulHits, numberOfHenchmenDefenderLost);
+            return new LaunchNukesResult(
+                updatedGameState,
+                gameState.CurrentPlayerIndex,
+                input.TargetPlayerIndex,
+                input.NumberOfNukesLaunched,
+                numberOfSuccessfulHits,
+                numberOfHenchmenDefenderLost,
+                0
+            );
         }
     }
 }

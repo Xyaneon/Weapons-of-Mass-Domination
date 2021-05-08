@@ -23,6 +23,7 @@ namespace WMD.Game.Commands
         /// <param name="nukesLaunched">The number of nukes launched.</param>
         /// <param name="successfulNukeHits">The number of successful nuke hits.</param>
         /// <param name="henchmenDefenderLost">The number of henchmen the defender lost.</param>
+        /// <param name="reputationChangeAmount">The amount by which the attacker's reputation changed.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="targetPlayerIndex"/> is less than zero.
         /// -or-
@@ -34,7 +35,14 @@ namespace WMD.Game.Commands
         /// -or-
         /// <paramref name="henchmenDefenderLost"/> is less than zero.
         /// </exception>
-        public LaunchNukesResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, int nukesLaunched, int successfulNukeHits, long henchmenDefenderLost)
+        public LaunchNukesResult(
+            GameState updatedGameState,
+            int playerIndex,
+            int targetPlayerIndex,
+            int nukesLaunched,
+            int successfulNukeHits,
+            long henchmenDefenderLost,
+            int reputationChangeAmount)
             : base(updatedGameState, playerIndex)
         {
             if (targetPlayerIndex < 0)
@@ -66,6 +74,7 @@ namespace WMD.Game.Commands
             SuccessfulNukeHits = successfulNukeHits;
             HenchmenDefenderLost = henchmenDefenderLost;
             TargetPlayerIndex = targetPlayerIndex;
+            ReputationChangeAmount = reputationChangeAmount;
         }
 
         /// <summary>
@@ -77,6 +86,11 @@ namespace WMD.Game.Commands
         /// Gets the number of henchmen the defender lost.
         /// </summary>
         public long HenchmenDefenderLost { get; init; }
+
+        /// <summary>
+        /// Gets the amount by which the attacker's reputation changed.
+        /// </summary>
+        public int ReputationChangeAmount { get; init; }
 
         /// <summary>
         /// Gets the number of nukes which successfully hit.
