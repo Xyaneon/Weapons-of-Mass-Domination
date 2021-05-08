@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Updates.Rounds
@@ -78,15 +79,7 @@ namespace WMD.Game.State.Updates.Rounds
         private static RoundUpdateResult CreateRoundUpdateResult(GameState gameState) =>
             new(gameState, gameState.CurrentRound, CreateRoundUpdateResultItemsCollection(gameState));
 
-        private static IEnumerable<RoundUpdateResultItem> CreateRoundUpdateResultItemsCollection(GameState gameState)
-        {
-            foreach (var occurrencesCreator in _occurrencesCreators)
-            {
-                foreach (var item in occurrencesCreator.CreateOccurrences(gameState))
-                {
-                    yield return item;
-                }
-            }
-        }
+        private static IEnumerable<RoundUpdateResultItem> CreateRoundUpdateResultItemsCollection(GameState gameState) =>
+            _occurrencesCreators.SelectMany(occurrenceCreator => occurrenceCreator.CreateOccurrences(gameState));
     }
 }
