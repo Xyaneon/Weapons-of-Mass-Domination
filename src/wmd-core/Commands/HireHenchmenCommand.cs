@@ -39,7 +39,9 @@ namespace WMD.Game.Commands
             }
 
             long henchmenHired = HenchmenCalculator.CalculateNumberOfHenchmenHired(gameState, input.OpenPositionsOffered);
-            GameState updatedGameState = GameStateUpdater.ConvertNeutralPopulationToPlayerHenchmen(gameState, gameState.CurrentPlayerIndex, henchmenHired);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .ConvertNeutralPopulationToPlayerHenchmen(gameState.CurrentPlayerIndex, henchmenHired)
+                .AndReturnUpdatedGameState();
 
             return new HireHenchmenResult(updatedGameState, gameState.CurrentPlayerIndex, henchmenHired);
         }

@@ -14,15 +14,11 @@ namespace WMD.Game.Commands
         private const string InvalidOperationException_InsufficientFunds = "The current player does not have enough money to distribute the requested amount of propaganda.";
         private const string InvalidOperationException_NoFunds = "The current player does not have any money to distribute propaganda.";
 
-        public override bool CanExecuteForState([DisallowNull] GameState gameState)
-        {
-            return !GameStateChecks.CurrentPlayerHasNoMoney(gameState);
-        }
+        public override bool CanExecuteForState([DisallowNull] GameState gameState) =>
+            !GameStateChecks.CurrentPlayerHasNoMoney(gameState);
 
-        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, DistributePropagandaInput input)
-        {
-            return CanExecuteForState(gameState) && !(CurrentPlayerHasInsufficientFunds(gameState, input));
-        }
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, DistributePropagandaInput input) =>
+            CanExecuteForState(gameState) && !CurrentPlayerHasInsufficientFunds(gameState, input);
 
         public override DistributePropagandaResult Execute([DisallowNull] GameState gameState, DistributePropagandaInput input)
         {
@@ -37,15 +33,15 @@ namespace WMD.Game.Commands
             }
 
             int reputationGained = ReputationCalculator.CalculateReputationGainedFromSpendingOnPropaganda(gameState, gameState.CurrentPlayerIndex, input.MoneyToSpend);
-            GameState updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(gameState, gameState.CurrentPlayerIndex, -1 * input.MoneyToSpend);
-            updatedGameState = GameStateUpdater.AdjustReputationForPlayer(updatedGameState, gameState.CurrentPlayerIndex, reputationGained);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .AdjustMoneyForPlayer(gameState.CurrentPlayerIndex, -1 * input.MoneyToSpend)
+                .AdjustReputationForPlayer(gameState.CurrentPlayerIndex, reputationGained)
+                .AndReturnUpdatedGameState();
 
             return new DistributePropagandaResult(updatedGameState, gameState.CurrentPlayerIndex, input.MoneyToSpend, reputationGained);
         }
 
-        private static bool CurrentPlayerHasInsufficientFunds(GameState gameState, DistributePropagandaInput input)
-        {
-            return input.MoneyToSpend > gameState.CurrentPlayer.State.Money;
-        }
+        private static bool CurrentPlayerHasInsufficientFunds(GameState gameState, DistributePropagandaInput input) =>
+            input.MoneyToSpend > gameState.CurrentPlayer.State.Money;
     }
 }

@@ -12,17 +12,13 @@ namespace WMD.Game.Commands
     /// </summary>
     public class ResearchNukesCommand : GameCommand<ResearchNukesInput, ResearchNukesResult>
     {
-        public override bool CanExecuteForState([DisallowNull] GameState gameState)
-        {
-            return GameStateChecks.CurrentPlayerHasASecretBase(gameState)
+        public override bool CanExecuteForState([DisallowNull] GameState gameState) =>
+            GameStateChecks.CurrentPlayerHasASecretBase(gameState)
                 && !CurrentPlayerHasInsufficientFunds(gameState)
                 && !GameStateChecks.CurrentPlayerHasCompletedNukesResearch(gameState);
-        }
 
-        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, ResearchNukesInput input)
-        {
-            return CanExecuteForState(gameState);
-        }
+        public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, ResearchNukesInput input) =>
+            CanExecuteForState(gameState);
 
         public override ResearchNukesResult Execute([DisallowNull] GameState gameState, ResearchNukesInput input)
         {
@@ -43,20 +39,16 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException("The current player does not have enough money for the nukes research.");
             }
 
-            GameState updatedGameState = GameStateUpdater.IncrementPlayerNukesResearchLevel(gameState, gameState.CurrentPlayerIndex);
-            updatedGameState = GameStateUpdater.AdjustMoneyForPlayer(updatedGameState, gameState.CurrentPlayerIndex, -1 * totalResearchCost);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .IncrementPlayerNukesResearchLevel(gameState.CurrentPlayerIndex)
+                .AdjustMoneyForPlayer(gameState.CurrentPlayerIndex, -1 * totalResearchCost)
+                .AndReturnUpdatedGameState();
 
             return new ResearchNukesResult(updatedGameState, gameState.CurrentPlayerIndex, updatedGameState.CurrentPlayer.State.ResearchState.NukeResearchLevel, totalResearchCost);
         }
 
-        private static decimal CalculateResearchPrice(GameState gameState)
-        {
-            return NukeConstants.NukeResearchLevelCost;
-        }
+        private static decimal CalculateResearchPrice(GameState gameState) => NukeConstants.NukeResearchLevelCost;
 
-        private static bool CurrentPlayerHasInsufficientFunds(GameState gameState)
-        {
-            return CalculateResearchPrice(gameState) > gameState.CurrentPlayer.State.Money;
-        }
+        private static bool CurrentPlayerHasInsufficientFunds(GameState gameState) => CalculateResearchPrice(gameState) > gameState.CurrentPlayer.State.Money;
     }
 }

@@ -32,8 +32,12 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static GameState ApplyGovernmentIntervention(GameState gameState, GovernmentIntervention intervention) => intervention switch
         {
-            GovernmentTakesBackMoney occurrence => GameStateUpdater.AdjustMoneyForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.AmountTaken),
-            GovernmentDenouncesPlayer occurrence => GameStateUpdater.AdjustReputationForPlayer(gameState, occurrence.PlayerIndex, -1 * occurrence.ReputationDecrease),
+            GovernmentTakesBackMoney occurrence => new GameStateUpdater(gameState)
+                .AdjustMoneyForPlayer(occurrence.PlayerIndex, -1 * occurrence.AmountTaken)
+                .AndReturnUpdatedGameState(),
+            GovernmentDenouncesPlayer occurrence => new GameStateUpdater(gameState)
+                .AdjustReputationForPlayer(occurrence.PlayerIndex, -1 * occurrence.ReputationDecrease)
+                .AndReturnUpdatedGameState(),
             _ => throw new UnsupportedArgumentSubclassException(typeof(GovernmentIntervention), intervention.GetType()),
         };
 
@@ -58,9 +62,15 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate) => roundUpdate switch
         {
-            PlayerHenchmenPaid playerHenchmenPaid => GameStateUpdater.AdjustMoneyForPlayer(gameState, playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount),
-            PlayerHenchmenQuit playerHenchmenQuit => GameStateUpdater.ConvertPlayerHenchmenToNeutralPopulation(gameState, playerHenchmenQuit.PlayerIndex, playerHenchmenQuit.NumberOfHenchmenQuit),
-            ReputationChange reputationChange => GameStateUpdater.AdjustReputationForPlayer(gameState, reputationChange.PlayerIndex, reputationChange.ReputationPercentageChanged),
+            PlayerHenchmenPaid playerHenchmenPaid => new GameStateUpdater(gameState)
+                .AdjustMoneyForPlayer(playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount)
+                .AndReturnUpdatedGameState(),
+            PlayerHenchmenQuit playerHenchmenQuit => new GameStateUpdater(gameState)
+                .ConvertPlayerHenchmenToNeutralPopulation(playerHenchmenQuit.PlayerIndex, playerHenchmenQuit.NumberOfHenchmenQuit)
+                .AndReturnUpdatedGameState(),
+            ReputationChange reputationChange => new GameStateUpdater(gameState)
+                .AdjustReputationForPlayer(reputationChange.PlayerIndex, reputationChange.ReputationPercentageChanged)
+                .AndReturnUpdatedGameState(),
             GovernmentIntervention governmentIntervention => ApplyGovernmentIntervention(gameState, governmentIntervention),
             _ => throw new UnsupportedArgumentSubclassException(typeof(RoundUpdateResultItem), roundUpdate.GetType()),
         };
