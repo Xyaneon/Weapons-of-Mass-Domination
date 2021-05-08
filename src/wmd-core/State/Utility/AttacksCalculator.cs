@@ -40,10 +40,10 @@ namespace WMD.Game.State.Utility
             AttackConstants.BasePercentageOfHenchmenDefenderLost + _random.NextDouble() * AttackConstants.MaxAdditionalPercentageOfHenchmenDefenderLost;
 
         private static int CalculateReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
-            ClampReputationChangeAmount(CalculatePotentialReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetAttackerReputation(gameState));
+            ReputationCalculator.ClampReputationChangeAmount(CalculatePotentialReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetAttackerReputation(gameState));
 
         private static int CalculateReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
-            ClampReputationChangeAmount(CalculatePotentialReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetDefenderReputation(gameState, input));
+            ReputationCalculator.ClampReputationChangeAmount(CalculatePotentialReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetDefenderReputation(gameState, input));
 
         private static int CalculatePotentialReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {
@@ -96,13 +96,6 @@ namespace WMD.Game.State.Utility
                 return -1 * AttackConstants.BaseReputationChangeAmountForDefender;
             }
         }
-
-        private static int ClampReputationChangeAmount(int potentialChangeAmount, int currentReputation) => potentialChangeAmount switch
-        {
-            _ when potentialChangeAmount < 0 => Math.Max(potentialChangeAmount, ReputationConstants.MinReputationPercentage - currentReputation),
-            _ when potentialChangeAmount > 0 => Math.Min(potentialChangeAmount, ReputationConstants.MaxReputationPercentage - currentReputation),
-            _ => 0,
-        };
 
         private static long GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 

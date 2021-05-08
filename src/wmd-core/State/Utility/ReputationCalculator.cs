@@ -96,6 +96,23 @@ namespace WMD.Game.State.Utility
             return Math.Min(actualReputationGained, maxReputationToBeGained);
         }
 
+        /// <summary>
+        /// Takes a potential change in reputation amount and returns an amount which would stay within the allowed bounds.
+        /// </summary>
+        /// <param name="potentialChangeAmount">The amount by which reputation could change if there was no limitation.</param>
+        /// <param name="currentReputation">The player's reputation before the change.</param>
+        /// <returns>
+        /// <paramref name="potentialChangeAmount"/> if the resulting total would stay within the bounds indicated by
+        /// <see cref="ReputationConstants.MinReputationPercentage"/> and <see cref="ReputationConstants.MaxReputationPercentage"/>;
+        /// otherwise, the largest possible value with the same sign which would give such a total.
+        /// </returns>
+        public static int ClampReputationChangeAmount(int potentialChangeAmount, int currentReputation) => potentialChangeAmount switch
+        {
+            _ when potentialChangeAmount < 0 => Math.Max(potentialChangeAmount, ReputationConstants.MinReputationPercentage - currentReputation),
+            _ when potentialChangeAmount > 0 => Math.Min(potentialChangeAmount, ReputationConstants.MaxReputationPercentage - currentReputation),
+            _ => 0,
+        };
+
         private static Random _random;
     }
 }

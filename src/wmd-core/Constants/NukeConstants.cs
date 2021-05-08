@@ -24,5 +24,15 @@
         /// The cost for gaining another level of nukes research.
         /// </summary>
         public const decimal NukeResearchLevelCost = 500;
+
+        /// <summary>
+        /// The amount by which a player's reputation changes for not successfully landing any hits with their nukes.
+        /// </summary>
+        public const int ReputationChangeAmountForNoSuccessfulNukeHits = -10;
+        
+        /// <summary>
+        /// The amount by which a player's reputation changes for successfully landing hits with their nukes.
+        /// </summary>
+        public const int ReputationChangeAmountForSuccessfulNukeHits = 10;
     }
 }
