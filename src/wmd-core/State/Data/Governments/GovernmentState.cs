@@ -26,7 +26,7 @@ namespace WMD.Game.State.Data.Governments
         /// <exception cref="ArgumentOutOfRangeException">
         /// The provided value is less than zero.
         /// </exception>
-        public int NumberOfSoldiers
+        public long NumberOfSoldiers
         {
             get => _numberOfSoldiers;
             init
@@ -39,6 +39,6 @@ namespace WMD.Game.State.Data.Governments
             }
         }
 
-        private int _numberOfSoldiers;
+        private long _numberOfSoldiers;
     }
 }
