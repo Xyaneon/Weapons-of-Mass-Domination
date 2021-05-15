@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.Constants;
 using WMD.Game.State.Data.Governments;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
@@ -13,8 +14,6 @@ namespace WMD.Game.State.Data
     public record GameState
     {
         private const int IndexNotFound = -1;
-        private const decimal LandBasePrice = 150;
-        private const decimal MaxLandPriceIncreaseFromScarcity = 1000;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameState"/> class.
@@ -24,7 +23,9 @@ namespace WMD.Game.State.Data
         public GameState([DisallowNull] IList<Player> players, [DisallowNull] Planet planet)
         {
             Players = new List<Player>(players).AsReadOnly();
-            Planet = planet;
+            long numberOfSoldiers = (long)Math.Floor(planet.NeutralPopulation * GovernmentConstants.InitialPercentageOfPlanetPopulationInGovernmentArmy);
+            Planet = planet with { NeutralPopulation = planet.NeutralPopulation - numberOfSoldiers };
+            GovernmentState = new GovernmentState() with { NumberOfSoldiers = numberOfSoldiers };
             CurrentRound = 1;
             CurrentPlayerIndex = 0;
         }
@@ -62,7 +63,7 @@ namespace WMD.Game.State.Data
         /// <summary>
         /// Gets the current price per square kilometer of unclaimed land.
         /// </summary>
-        public decimal UnclaimedLandPurchasePrice => LandBasePrice + LandPriceIncreaseFromScarcity;
+        public decimal UnclaimedLandPurchasePrice => LandConstants.LandBasePrice + LandPriceIncreaseFromScarcity;
 
         /// <summary>
         /// Determines whether the game has been won yet.
@@ -75,7 +76,13 @@ namespace WMD.Game.State.Data
             return winningPlayerIndex != IndexNotFound;
         }
 
-        private decimal LandPriceIncreaseFromScarcity => (decimal)Math.Round((double)MaxLandPriceIncreaseFromScarcity * Planet.PercentageOfLandClaimed, 2);
+        /// <summary>
+        /// Determines whether the government has been defeated.
+        /// </summary>
+        /// <returns><see langword="true"/> if there are no soldiers left in the government army; otherwise, <see langword="false"/>.</returns>
+        public bool GovernmentDefeated { get => GovernmentState.NumberOfSoldiers == 0; }
+
+        private decimal LandPriceIncreaseFromScarcity => (decimal)Math.Round((double)LandConstants.MaxLandPriceIncreaseFromScarcity * Planet.PercentageOfLandClaimed, 2);
 
         private int FindIndexOfLastRemainingPlayer()
         {
