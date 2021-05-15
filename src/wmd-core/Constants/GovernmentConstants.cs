@@ -23,7 +23,7 @@
         /// <summary>
         /// The initial percentage of the planet's population that starts in the government's army.
         /// </summary>
-        public const double InitialPercentageOfPlanetPopulationInGovernmentArmy = 0.1;
+        public const double InitialPercentageOfPlanetPopulationInGovernmentArmy = 0.01;
 
         /// <summary>
         /// The minimum reputation percentage a player must have before the government will issue interventions against them.
