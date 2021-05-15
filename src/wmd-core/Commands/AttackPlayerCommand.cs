@@ -56,6 +56,7 @@ namespace WMD.Game.Commands
                 updatedGameState,
                 gameState.CurrentPlayerIndex,
                 input.TargetPlayerIndex,
+                input.NumberOfAttackingHenchmen,
                 calculationsResult
             );
         }

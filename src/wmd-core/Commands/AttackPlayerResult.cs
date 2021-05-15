@@ -12,6 +12,7 @@ namespace WMD.Game.Commands
     {
         private const string ArgumentOutOfRangeException_henchmenAttackerLost = "The number of henchmen the attacker lost cannot be less than zero.";
         private const string ArgumentOutOfRangeException_henchmenDefenderLost = "The number of henchmen the defender lost cannot be less than zero.";
+        private const string ArgumentOutOfRangeException_numberOfAttackingHenchmen = "The number of henchmen used to attack cannot be less than one.";
         private const string ArgumentOutOfRangeException_targetPlayerIndex = "The index of the attacked player cannot be less than zero.";
 
         /// <summary>
@@ -20,12 +21,15 @@ namespace WMD.Game.Commands
         /// <param name="updatedGameState">The updated <see cref="GameState"/> resulting from this action.</param>
         /// <param name="playerIndex">The index of the <see cref="Player"/> whose action this is the result of.</param>
         /// <param name="targetPlayerIndex">The index of the player who was attacked.</param>
+        /// <param name="numberOfAttackingHenchmen">The number of henchmen used by the attacker.</param>
         /// <param name="henchmenAttackerLost">The number of henchmen the attacker lost.</param>
         /// <param name="henchmenDefenderLost">The number of henchmen the defender lost.</param>
         /// <param name="reputationChangeForAttacker">The amount by which the attacker's reputation changed because of the attack.</param>
         /// <param name="reputationChangeForDefender">The amount by which the defender's reputation changed because of the attack.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="targetPlayerIndex"/> is less than zero.
+        /// -or-
+        /// <paramref name="numberOfAttackingHenchmen"/> is less than one.
         /// -or-
         /// <paramref name="henchmenAttackerLost"/> is less than zero.
         /// -or-
@@ -35,6 +39,7 @@ namespace WMD.Game.Commands
             GameState updatedGameState,
             int playerIndex,
             int targetPlayerIndex,
+            long numberOfAttackingHenchmen,
             int henchmenAttackerLost,
             int henchmenDefenderLost,
             int reputationChangeForAttacker,
@@ -44,6 +49,11 @@ namespace WMD.Game.Commands
             if (targetPlayerIndex < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(targetPlayerIndex), targetPlayerIndex, ArgumentOutOfRangeException_targetPlayerIndex);
+            }
+
+            if (numberOfAttackingHenchmen < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(numberOfAttackingHenchmen), numberOfAttackingHenchmen, ArgumentOutOfRangeException_numberOfAttackingHenchmen);
             }
 
             if (henchmenAttackerLost < 0)
@@ -63,11 +73,12 @@ namespace WMD.Game.Commands
             TargetPlayerIndex = targetPlayerIndex;
         }
 
-        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, AttackCalculationsResult calculationsResult)
+        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, long numberOfAttackingHenchmen, AttackCalculationsResult calculationsResult)
             : this(
                   updatedGameState,
                   playerIndex,
                   targetPlayerIndex,
+                  numberOfAttackingHenchmen,
                   calculationsResult.HenchmenAttackerLost,
                   calculationsResult.HenchmenDefenderLost,
                   calculationsResult.ReputationChangeForAttacker,
@@ -84,6 +95,11 @@ namespace WMD.Game.Commands
         /// Gets the number of henchmen the defender lost.
         /// </summary>
         public int HenchmenDefenderLost { get; init; }
+
+        /// <summary>
+        /// Gets the number of henchmen the attacker used.
+        /// </summary>
+        public long NumberOfAttackingHenchmen { get; init; }
 
         /// <summary>
         /// Gets the amount by which the attacker's reputation changed because of the attack.
