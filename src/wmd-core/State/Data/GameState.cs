@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using WMD.Game.State.Data.Governments;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 
@@ -47,6 +48,11 @@ namespace WMD.Game.State.Data
         /// Gets the index of the current <see cref="Player"/> whose turn it is.
         /// </summary>
         public int CurrentPlayerIndex { get; init; }
+
+        /// <summary>
+        /// Gets or initializes the current government state.
+        /// </summary>
+        public GovernmentState GovernmentState { get; init; }
 
         /// <summary>
         /// Gets the <see cref="Planet"/> where this game is taking place.
