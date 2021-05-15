@@ -8,10 +8,7 @@ namespace WMD.Game.State.Utility
 {
     internal static class AttacksCalculator
     {
-        static AttacksCalculator()
-        {
-            _random = new Random();
-        }
+        static AttacksCalculator() => _random = new Random();
 
         private static readonly Random _random;
 
@@ -27,7 +24,7 @@ namespace WMD.Game.State.Utility
 
         private static int CalculateNumberOfHenchmenAttackerLost(GameState gameState, AttackPlayerInput input) =>
             GetDefenderNumberOfHenchmen(gameState, input) != 0
-                ? (int)Math.Round(GetAttackerNumberOfHenchmen(gameState) * CalculatePercentageOfHenchmenAttackerLost())
+                ? (int)Math.Round(input.NumberOfAttackingHenchmen * CalculatePercentageOfHenchmenAttackerLost())
                 : 0;
 
         private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input) =>
@@ -96,8 +93,6 @@ namespace WMD.Game.State.Utility
                 return -1 * AttackConstants.BaseReputationChangeAmountForDefender;
             }
         }
-
-        private static long GetAttackerNumberOfHenchmen(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
 
         private static long GetDefenderNumberOfHenchmen(GameState gameState, AttackPlayerInput input) => gameState.Players[input.TargetPlayerIndex].State.WorkforceState.NumberOfHenchmen;
 
