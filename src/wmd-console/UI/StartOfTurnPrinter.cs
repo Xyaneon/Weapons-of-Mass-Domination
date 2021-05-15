@@ -4,6 +4,7 @@ using System.ComponentModel;
 using WMD.Console.Miscellaneous;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Governments;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 using WMD.Game.State.Data.Research;
@@ -15,6 +16,8 @@ namespace WMD.Console.UI
     {
         private const string HeaderTextFormatString = "{0}'s turn (Day {1})";
         private const string HenchmenFormatString = "Henchmen: {0:N0}";
+        private const string GovernmentDefeated = "The government has been defeated.";
+        private const string GovernmentSummaryFormatString = "The government has {0:N0} soldiers in its army.";
         private const string LandFormatString = "Land: {0:N0} km²";
         private const string MoneyFormatString = "Money: {0:C}";
         private const string NoSecretBase = "You do not have your own secret base yet.";
@@ -79,6 +82,7 @@ namespace WMD.Console.UI
             System.Console.WriteLine();
 
             PrintPlanetSummary(gameState.Planet);
+            PrintGovernmentSummary(gameState.GovernmentState);
 
             System.Console.WriteLine();
         }
@@ -98,6 +102,12 @@ namespace WMD.Console.UI
             System.Console.WriteLine("║");
             System.Console.WriteLine(bottomLine);
         }
+
+        private static void PrintGovernmentSummary(GovernmentState governmentState) =>
+            System.Console.WriteLine(governmentState.NumberOfSoldiers != 0
+                ? string.Format(GovernmentSummaryFormatString, governmentState.NumberOfSoldiers)
+                : GovernmentDefeated
+            );
 
         private static void PrintNukeResearchLevel(ResearchState researchState) =>
             System.Console.WriteLine(NukeResearchFormatString, researchState.NukeResearchLevel, NukeResearchFlavorTextCreator.SelectResearchProgressFlavorText(researchState));

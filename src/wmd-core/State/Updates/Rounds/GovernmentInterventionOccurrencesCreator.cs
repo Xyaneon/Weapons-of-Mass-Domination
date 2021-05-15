@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WMD.Game.Constants;
 using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Updates.Rounds
 {
     internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResultOccurrencesCreator
     {
-        private const decimal BaseAmountOfMoneyTakenBack = 100;
-        private const int BaseAmountOfReputationLost = 5;
-        private const double BaseChanceOfGovernmentIntervention = 0.1;
-        private const int MinimumNoticeableReputationPercentage = 10;
-
         static GovernmentInterventionOccurrencesCreator() => _random = new Random();
 
         public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
             CreateRangeOfPlayerIndices(gameState)
-                .Where(playerIndex => gameState.Players[playerIndex].State.ReputationPercentage > MinimumNoticeableReputationPercentage)
+                .Where(playerIndex => gameState.Players[playerIndex].State.ReputationPercentage > GovernmentConstants.MinimumNoticeableReputationPercentage)
                 .SelectMany(playerIndex => CreateOccurrencesForPlayer(gameState, playerIndex));
 
         private static IEnumerable<RoundUpdateResultItem> CreateOccurrencesForPlayer(GameState gameState, int playerIndex)
@@ -39,26 +35,26 @@ namespace WMD.Game.State.Updates.Rounds
         }
 
         private static GovernmentDenouncesPlayer CreateDenouncesPlayerOccurrence(GameState gameState, int playerIndex) =>
-            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, BaseAmountOfReputationLost));
+            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, GovernmentConstants.BaseAmountOfReputationLost));
         
         private static GovernmentTakesBackMoney CreateTakesBackMoneyOccurrence(GameState gameState, int playerIndex) =>
-            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, BaseAmountOfMoneyTakenBack));
+            new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, GovernmentConstants.BaseAmountOfMoneyTakenBack));
 
         private static bool GovernmentDecidesToTakeIntervention(GameState gameState, int playerIndex)
         {
             int reputationPercentage = gameState.Players[playerIndex].State.ReputationPercentage;
 
-            if (reputationPercentage < MinimumNoticeableReputationPercentage)
+            if (reputationPercentage < GovernmentConstants.MinimumNoticeableReputationPercentage)
             {
                 return false;
             }
 
             double additionalChanceOfIntervention = Math.Min(
-                (reputationPercentage - MinimumNoticeableReputationPercentage) / 100.0,
-                1 - BaseChanceOfGovernmentIntervention
+                (reputationPercentage - GovernmentConstants.MinimumNoticeableReputationPercentage) / 100.0,
+                1 - GovernmentConstants.BaseChanceOfGovernmentIntervention
             );
 
-            return _random.NextDouble() < BaseChanceOfGovernmentIntervention + additionalChanceOfIntervention;
+            return _random.NextDouble() < GovernmentConstants.BaseChanceOfGovernmentIntervention + additionalChanceOfIntervention;
         }
 
         private static readonly Random _random;
