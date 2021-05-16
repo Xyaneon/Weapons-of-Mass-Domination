@@ -4,7 +4,7 @@ namespace WMD.Console.UI.Commands
 {
     class AttackPlayerResultPrinter : CommandResultPrinter<AttackPlayerResult>
     {
-        private const string PrintFormatString = "{0} attacked {1}; the former lost {2:N0} henchmen and the latter lost {3:N0} henchmen.";
+        private const string PrintFormatString = "{0} attacked {1} with {2:N0} henchmen; the former lost {3:N0} henchmen and the latter lost {4:N0} henchmen.";
         private const string PlayerGainedReputationFormatString = "{0} gained {1}% reputation.";
         private const string PlayerLostReputationFormatString = "{0} lost {1}% reputation.";
 
@@ -14,6 +14,7 @@ namespace WMD.Console.UI.Commands
                 PrintFormatString,
                 RetrieveNameOfPlayerWhoActed(result),
                 result.TargetPlayerName,
+                result.NumberOfAttackingHenchmen,
                 result.HenchmenAttackerLost,
                 result.HenchmenDefenderLost
             );
