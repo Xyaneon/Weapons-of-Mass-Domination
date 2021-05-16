@@ -113,6 +113,11 @@ namespace WMD.Console.UI
 );
         }
 
+        public static void PrintNoHenchmenSentToAttack()
+        {
+            System.Console.WriteLine("You apparently changed your mind.");
+        }
+
         public static void PrintNoLandToSell()
         {
             System.Console.WriteLine("You don't have any land to sell.");
