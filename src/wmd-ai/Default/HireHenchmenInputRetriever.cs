@@ -19,7 +19,7 @@ namespace WMD.AI.Default
 
         private static int CalculatePositionsToOffer(GameState gameState)
         {
-            if (gameState.CurrentPlayer.State.ReputationPercentage <= 0)
+            if (gameState.CurrentPlayer.State.ReputationPercentage <= 0 || gameState.CurrentPlayer.State.WorkforceState.DailyPayRate == 0m)
             {
                 return 0;
             }

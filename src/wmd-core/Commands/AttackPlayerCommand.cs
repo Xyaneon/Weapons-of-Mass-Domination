@@ -12,6 +12,7 @@ namespace WMD.Game.Commands
     public class AttackPlayerCommand : GameCommand<AttackPlayerInput, AttackPlayerResult>
     {
         private const string InvalidOperationException_playerAttackingThemselves = "A player cannot attack themselves.";
+        private const string InvalidOperationException_playerDoesNotHaveEnoughHenchmenForNumberOfHenchmenToUse = "The player does not have enough henchmen for the specified number of henchmen to use in the attack.";
         private const string InvalidOperationException_playerHasNoHenchmen = "A player cannot attack when they have no henchmen.";
         private const string InvalidOperationException_targetPlayerIndexOutsideBounds = "The target player index is outside the player list bounds.";
 
@@ -19,13 +20,21 @@ namespace WMD.Game.Commands
             GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState);
 
         public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input) =>
-            CanExecuteForState(gameState) && !CurrentPlayerIsAttackingThemselves(gameState, input) && TargetPlayerFound(gameState, input);
+            CanExecuteForState(gameState)
+                && CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(gameState, input)
+                && !CurrentPlayerIsAttackingThemselves(gameState, input)
+                && TargetPlayerFound(gameState, input);
 
         public override AttackPlayerResult Execute([DisallowNull] GameState gameState, [DisallowNull] AttackPlayerInput input)
         {
             if (!GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState))
             {
                 throw new InvalidOperationException(InvalidOperationException_playerHasNoHenchmen);
+            }
+
+            if(!CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(gameState, input))
+            {
+                throw new InvalidOperationException(InvalidOperationException_playerDoesNotHaveEnoughHenchmenForNumberOfHenchmenToUse);
             }
 
             if (CurrentPlayerIsAttackingThemselves(gameState, input))
@@ -47,9 +56,13 @@ namespace WMD.Game.Commands
                 updatedGameState,
                 gameState.CurrentPlayerIndex,
                 input.TargetPlayerIndex,
+                input.NumberOfAttackingHenchmen,
                 calculationsResult
             );
         }
+
+        private static bool CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(GameState gameState, AttackPlayerInput input) =>
+            gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen >= input.NumberOfAttackingHenchmen;
 
         private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
             GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);
