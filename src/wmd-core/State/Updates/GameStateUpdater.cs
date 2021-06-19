@@ -135,6 +135,7 @@ namespace WMD.Game.State.Updates
                 updatedGameState = AdjustHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
+                updatedGameState = HavePlayerGiveUpLand(updatedGameState, defenderIndex, -1 * calculationsResult.LandAreaChangeForDefender);
 
                 return updatedGameState;
             }
