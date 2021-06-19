@@ -46,9 +46,15 @@ namespace WMD.Game.State.Utility
         /// </returns>
         public static int ClampLandAreaChangeAmount([DisallowNull] GameState gameState, int playerIndex, int potentialAreaChange) => potentialAreaChange switch
         {
-            _ when potentialAreaChange < 0 => Math.Max(potentialAreaChange, Math.Min(gameState.Players[playerIndex].State.Land, 0)),
-            _ when potentialAreaChange > 0 => Math.Min(potentialAreaChange, gameState.Planet.UnclaimedLandArea),
+            _ when potentialAreaChange < 0 => ClampNegativeLandAreaChangeAmount(gameState, playerIndex, potentialAreaChange),
+            _ when potentialAreaChange > 0 => ClampPositiveLandAreaChangeAmount(gameState, playerIndex, potentialAreaChange),
             _ => 0,
         };
+
+        private static int ClampNegativeLandAreaChangeAmount(GameState gameState, int playerIndex, int potentialAreaChange) =>
+            Math.Max(potentialAreaChange, -1 * Math.Max(gameState.Players[playerIndex].State.Land, 0));
+
+        private static int ClampPositiveLandAreaChangeAmount(GameState gameState, int playerIndex, int potentialAreaChange) =>
+            Math.Min(potentialAreaChange, gameState.Planet.UnclaimedLandArea);
     }
 }

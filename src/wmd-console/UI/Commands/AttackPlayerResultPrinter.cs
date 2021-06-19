@@ -42,7 +42,7 @@ namespace WMD.Console.UI.Commands
 
             if(result.LandAreaChangeForDefender != 0)
             {
-                System.Console.WriteLine(PlayerLostLandAreaFormatString, result.TargetPlayerName, result.LandAreaChangeForDefender);
+                System.Console.WriteLine(PlayerLostLandAreaFormatString, result.TargetPlayerName, -1 * result.LandAreaChangeForDefender);
             }
         }
 
