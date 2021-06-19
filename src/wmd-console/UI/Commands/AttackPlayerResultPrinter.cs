@@ -5,6 +5,7 @@ namespace WMD.Console.UI.Commands
     class AttackPlayerResultPrinter : CommandResultPrinter<AttackPlayerResult>
     {
         private const string PrintFormatString = "{0} attacked {1} with {2:N0} henchmen; the former lost {3:N0} henchmen and the latter lost {4:N0} henchmen.";
+        private const string PlayerLostLandAreaFormatString = "{0} lost control of {1:N0}km² of land in the attack.";
         private const string PlayerGainedReputationFormatString = "{0} gained {1}% reputation.";
         private const string PlayerLostReputationFormatString = "{0} lost {1}% reputation.";
 
@@ -37,6 +38,11 @@ namespace WMD.Console.UI.Commands
             if (hasReputationChangesToPrint)
             {
                 System.Console.WriteLine();
+            }
+
+            if(result.LandAreaChangeForDefender != 0)
+            {
+                System.Console.WriteLine(PlayerLostLandAreaFormatString, result.TargetPlayerName, -1 * result.LandAreaChangeForDefender);
             }
         }
 

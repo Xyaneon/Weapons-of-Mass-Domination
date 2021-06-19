@@ -4,6 +4,7 @@
         int HenchmenAttackerLost,
         int HenchmenDefenderLost,
         int ReputationChangeForAttacker,
-        int ReputationChangeForDefender
+        int ReputationChangeForDefender,
+        int LandAreaChangeForDefender
     );
 }

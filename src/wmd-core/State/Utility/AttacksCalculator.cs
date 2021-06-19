@@ -14,21 +14,26 @@ namespace WMD.Game.State.Utility
 
         public static AttackCalculationsResult CalculateChangesResultingFromAttack([DisallowNull] GameState gameState, AttackPlayerInput input)
         {
+            double percentageOfHenchmenDefenderLost = CalculatePercentageOfHenchmenDefenderLost();
             int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, input);
-            int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input);
+            int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfHenchmenDefenderLost);
             int reputationChangeForAttacker = CalculateReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
             int reputationChangeForDefender = CalculateReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
+            int landAreaChangeForDefender = CalculateLandLostForDefender(gameState, input, percentageOfHenchmenDefenderLost);
 
-            return new(henchmenAttackerLost, henchmenDefenderLost, reputationChangeForAttacker, reputationChangeForDefender);
+            return new(henchmenAttackerLost, henchmenDefenderLost, reputationChangeForAttacker, reputationChangeForDefender, landAreaChangeForDefender);
         }
+
+        private static int CalculateLandLostForDefender(GameState gameState, AttackPlayerInput input, double percentageOfHenchmenDefenderLost) =>
+            LandAreaCalculator.ClampLandAreaChangeAmount(gameState, input.TargetPlayerIndex, CalculatePotentialLandLostForDefender(gameState, input, percentageOfHenchmenDefenderLost));
 
         private static int CalculateNumberOfHenchmenAttackerLost(GameState gameState, AttackPlayerInput input) =>
             GetDefenderNumberOfHenchmen(gameState, input) != 0
                 ? (int)Math.Round(input.NumberOfAttackingHenchmen * CalculatePercentageOfHenchmenAttackerLost())
                 : 0;
 
-        private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input) =>
-            (int)Math.Round(GetDefenderNumberOfHenchmen(gameState, input) * CalculatePercentageOfHenchmenDefenderLost());
+        private static int CalculateNumberOfHenchmenDefenderLost(GameState gameState, AttackPlayerInput input, double percentageOfHenchmenDefenderLost) =>
+            (int)Math.Round(GetDefenderNumberOfHenchmen(gameState, input) * percentageOfHenchmenDefenderLost);
 
         private static double CalculatePercentageOfHenchmenAttackerLost() =>
             AttackConstants.BasePercentageOfHenchmenAttackerLost + _random.NextDouble() * AttackConstants.MaxAdditionalPercentageOfHenchmenAttackerLost;
@@ -41,6 +46,9 @@ namespace WMD.Game.State.Utility
 
         private static int CalculateReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost) =>
             ReputationCalculator.ClampReputationChangeAmount(CalculatePotentialReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost), GetDefenderReputation(gameState, input));
+
+        private static int CalculatePotentialLandLostForDefender(GameState gameState, AttackPlayerInput input, double percentageOfHenchmenDefenderLost) =>
+            -1 * (int)Math.Floor(gameState.Players[input.TargetPlayerIndex].State.Land * percentageOfHenchmenDefenderLost);
 
         private static int CalculatePotentialReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {

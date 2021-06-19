@@ -24,6 +24,7 @@ namespace WMD.Game.Commands
         /// <param name="numberOfAttackingHenchmen">The number of henchmen used by the attacker.</param>
         /// <param name="henchmenAttackerLost">The number of henchmen the attacker lost.</param>
         /// <param name="henchmenDefenderLost">The number of henchmen the defender lost.</param>
+        /// <param name="landAreaChangeForDefender">The amount of land area lost by the defender.</param>
         /// <param name="reputationChangeForAttacker">The amount by which the attacker's reputation changed because of the attack.</param>
         /// <param name="reputationChangeForDefender">The amount by which the defender's reputation changed because of the attack.</param>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -42,6 +43,7 @@ namespace WMD.Game.Commands
             long numberOfAttackingHenchmen,
             int henchmenAttackerLost,
             int henchmenDefenderLost,
+            int landAreaChangeForDefender,
             int reputationChangeForAttacker,
             int reputationChangeForDefender
         ) : base(updatedGameState, playerIndex)
@@ -68,6 +70,7 @@ namespace WMD.Game.Commands
 
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
+            LandAreaChangeForDefender = landAreaChangeForDefender;
             ReputationChangeForAttacker = reputationChangeForAttacker;
             ReputationChangeForDefender = reputationChangeForDefender;
             TargetPlayerIndex = targetPlayerIndex;
@@ -81,6 +84,7 @@ namespace WMD.Game.Commands
                   numberOfAttackingHenchmen,
                   calculationsResult.HenchmenAttackerLost,
                   calculationsResult.HenchmenDefenderLost,
+                  calculationsResult.LandAreaChangeForDefender,
                   calculationsResult.ReputationChangeForAttacker,
                   calculationsResult.ReputationChangeForDefender
         )
@@ -95,6 +99,11 @@ namespace WMD.Game.Commands
         /// Gets the number of henchmen the defender lost.
         /// </summary>
         public int HenchmenDefenderLost { get; init; }
+
+        /// <summary>
+        /// Gets the land area that the defender lost.
+        /// </summary>
+        public int LandAreaChangeForDefender { get; init; }
 
         /// <summary>
         /// Gets the number of henchmen the attacker used.
