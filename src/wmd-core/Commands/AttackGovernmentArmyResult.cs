@@ -32,8 +32,8 @@ namespace WMD.Game.Commands
             GameState updatedGameState,
             int playerIndex,
             long numberOfAttackingHenchmen,
-            int henchmenAttackerLost,
-            int soldiersGovernmentArmyLost,
+            long henchmenAttackerLost,
+            long soldiersGovernmentArmyLost,
             int reputationChangeForAttacker
         ) : base(updatedGameState, playerIndex)
         {
@@ -61,7 +61,7 @@ namespace WMD.Game.Commands
         /// <summary>
         /// Gets the number of henchmen the attacker lost.
         /// </summary>
-        public int HenchmenAttackerLost { get; init; }
+        public long HenchmenAttackerLost { get; init; }
 
         /// <summary>
         /// Gets the number of henchmen the attacker used.
@@ -76,6 +76,6 @@ namespace WMD.Game.Commands
         /// <summary>
         /// Gets the number of soldiers the defending government army lost.
         /// </summary>
-        public int SoldiersGovernmentArmyLost { get; init; }
+        public long SoldiersGovernmentArmyLost { get; init; }
     }
 }

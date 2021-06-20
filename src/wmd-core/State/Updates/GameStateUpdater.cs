@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Governments;
 using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
@@ -22,6 +23,12 @@ namespace WMD.Game.State.Updates
         public GameStateUpdater AdjustPlayerStatesAfterAttack(int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
         {
             GameState = GameStateUpdaterHelper.AdjustPlayerStatesAfterAttack(GameState, attackerIndex, defenderIndex, calculationsResult);
+            return this;
+        }
+
+        public GameStateUpdater AdjustStateAfterPlayerAttackOnGovernmentArmy(int attackerIndex, PlayerOnGovernmentArmyAttackCalculationsResult calculationsResult)
+        {
+            GameState = GameStateUpdaterHelper.AdjustStateAfterPlayerAttackOnGovernmentArmy(GameState, attackerIndex, calculationsResult);
             return this;
         }
 
@@ -122,12 +129,13 @@ namespace WMD.Game.State.Updates
             private const string ArgumentOutOfRangeException_playerIndex_outOfBounds = "The player index is out of bounds.";
             private const string ArgumentOutOfRangeException_unclaimedLandToGive_cannotBeNegative = "The amount of unclaimed land to give to a player cannot be negative.";
             private const string ArgumentOutOfRangeException_unclaimedLandToGive_cannotExceedAmountLeft = "The amount of unclaimed land to give to a player cannot exceed the actual amount left.";
+            private const string InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString = "Planet state after population adjustment would be invalid: {0}";
+            private const string InvalidOperationException_numberOfSoldiers_wouldCreateInvalidGovernmentState_formatString = "Government state after army size adjustment would be invalid: {0}";
             private const string InvalidOperationException_playerDoesNotHaveASecretBaseToLevelUp = "The player does not have a secret base to level up.";
             private const string InvalidOperationException_playerHenchmenQuantity_cannotBeNegative = "The number of henchmen a player has cannot become negative.";
             private const string InvalidOperationException_playerNukesQuantity_cannotBeNegative = "The player cannot have a negative quantity of nukes.";
             private const string InvalidOperationException_playerNukesResearch_alreadyMaxedOut = "The player has already maxed out their nukes research.";
             private const string InvalidOperationException_reputationPercentage_wouldBeAboveMaximum = "The player cannot have a reputation percentage above 100%.";
-            private const string InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString = "Planet state after population adjustment would be invalid: {0}";
             private const string InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString = "Planet state after unclaimed land area adjustment would be invalid: {0}";
 
             public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
@@ -137,6 +145,15 @@ namespace WMD.Game.State.Updates
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
                 updatedGameState = HavePlayerGiveUpLand(updatedGameState, defenderIndex, -1 * calculationsResult.LandAreaChangeForDefender);
+
+                return updatedGameState;
+            }
+
+            public static GameState AdjustStateAfterPlayerAttackOnGovernmentArmy(GameState gameState, int attackerIndex, PlayerOnGovernmentArmyAttackCalculationsResult calculationsResult)
+            {
+                GameState updatedGameState = AdjustHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
+                updatedGameState = AdjustGovernmentArmySize(updatedGameState, -1 * calculationsResult.SoldiersGovernmentArmyLost);
+                updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
 
                 return updatedGameState;
             }
@@ -295,6 +312,23 @@ namespace WMD.Game.State.Updates
                 return UpdatePlanetState(gameState, updatedPlanetState);
             }
 
+            public static GameState AdjustGovernmentArmySize(GameState gameState, long adjustmentAmount)
+            {
+                var currentGovernmentState = gameState.GovernmentState;
+                GovernmentState updatedGovernmentState;
+
+                try
+                {
+                    updatedGovernmentState = currentGovernmentState with { NumberOfSoldiers = currentGovernmentState.NumberOfSoldiers + adjustmentAmount };
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    throw new InvalidOperationException(string.Format(InvalidOperationException_numberOfSoldiers_wouldCreateInvalidGovernmentState_formatString, ex.Message), ex);
+                }
+
+                return UpdateGovernmentState(gameState, updatedGovernmentState);
+            }
+
             public static GameState AdjustNeutralPopulation(GameState gameState, long adjustmentAmount)
             {
                 var currentPlanetState = gameState.Planet;
@@ -335,6 +369,9 @@ namespace WMD.Game.State.Updates
 
                 return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
             }
+
+            public static GameState UpdateGovernmentState(GameState gameState, GovernmentState governmentState) =>
+                gameState with { GovernmentState = governmentState };
 
             public static GameState UpdatePlanetState(GameState gameState, Planet planet) =>
                 gameState with { Planet = planet };

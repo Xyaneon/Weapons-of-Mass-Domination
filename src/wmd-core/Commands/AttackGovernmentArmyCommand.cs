@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMD.Game.State.Data;
+using WMD.Game.State.Updates;
 using WMD.Game.State.Utility;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.Commands
 {
@@ -36,7 +38,19 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_playerDoesNotHaveEnoughHenchmenForNumberOfHenchmenToUse);
             }
 
-            throw new NotImplementedException();
+            PlayerOnGovernmentArmyAttackCalculationsResult calculationResult = PlayerOnGovernmentArmyAttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
+            GameState updatedGameState = new GameStateUpdater(gameState)
+                .AdjustStateAfterPlayerAttackOnGovernmentArmy(gameState.CurrentPlayerIndex, calculationResult)
+                .AndReturnUpdatedGameState();
+
+            return new AttackGovernmentArmyResult(
+                updatedGameState,
+                gameState.CurrentPlayerIndex,
+                input.NumberOfAttackingHenchmen,
+                calculationResult.HenchmenAttackerLost,
+                calculationResult.SoldiersGovernmentArmyLost,
+                calculationResult.ReputationChangeForAttacker
+            );
         }
 
         private static bool CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(GameState gameState, AttackGovernmentArmyInput input) =>
