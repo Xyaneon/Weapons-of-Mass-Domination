@@ -1,8 +1,8 @@
 ﻿namespace WMD.Game.State.Utility.AttackCalculations
 {
     internal sealed record PlayerOnGovernmentArmyAttackCalculationsResult(
-        int HenchmenAttackerLost,
-        int SoldiersGovernmentArmyLost,
+        long HenchmenAttackerLost,
+        long SoldiersGovernmentArmyLost,
         int ReputationChangeForAttacker
     );
 }
