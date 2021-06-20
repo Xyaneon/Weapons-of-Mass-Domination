@@ -1,4 +1,4 @@
-﻿namespace WMD.Game.State.Utility
+﻿namespace WMD.Game.State.Utility.AttackCalculations
 {
     internal sealed record AttackCalculationsResult(
         int HenchmenAttackerLost,

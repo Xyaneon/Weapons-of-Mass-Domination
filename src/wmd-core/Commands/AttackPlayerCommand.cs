@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
 using WMD.Game.State.Utility;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.Commands
 {

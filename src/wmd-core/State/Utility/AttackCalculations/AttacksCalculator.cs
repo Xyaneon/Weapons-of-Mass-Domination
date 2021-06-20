@@ -4,7 +4,7 @@ using WMD.Game.Commands;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
 
-namespace WMD.Game.State.Utility
+namespace WMD.Game.State.Utility.AttackCalculations
 {
     internal static class AttacksCalculator
     {
@@ -14,12 +14,12 @@ namespace WMD.Game.State.Utility
 
         public static AttackCalculationsResult CalculateChangesResultingFromAttack([DisallowNull] GameState gameState, AttackPlayerInput input)
         {
-            double percentageOfHenchmenDefenderLost = CalculatePercentageOfHenchmenDefenderLost();
-            int henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, input);
-            int henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfHenchmenDefenderLost);
-            int reputationChangeForAttacker = CalculateReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
-            int reputationChangeForDefender = CalculateReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
-            int landAreaChangeForDefender = CalculateLandLostForDefender(gameState, input, percentageOfHenchmenDefenderLost);
+            var percentageOfHenchmenDefenderLost = CalculatePercentageOfHenchmenDefenderLost();
+            var henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, input);
+            var henchmenDefenderLost = CalculateNumberOfHenchmenDefenderLost(gameState, input, percentageOfHenchmenDefenderLost);
+            var reputationChangeForAttacker = CalculateReputationChangeForAttacker(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
+            var reputationChangeForDefender = CalculateReputationChangeForDefender(gameState, input, henchmenAttackerLost, henchmenDefenderLost);
+            var landAreaChangeForDefender = CalculateLandLostForDefender(gameState, input, percentageOfHenchmenDefenderLost);
 
             return new(henchmenAttackerLost, henchmenDefenderLost, reputationChangeForAttacker, reputationChangeForDefender, landAreaChangeForDefender);
         }
@@ -52,7 +52,7 @@ namespace WMD.Game.State.Utility
 
         private static int CalculatePotentialReputationChangeForAttacker(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {
-            long defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+            var defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
             if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {
@@ -78,7 +78,7 @@ namespace WMD.Game.State.Utility
 
         private static int CalculatePotentialReputationChangeForDefender(GameState gameState, AttackPlayerInput input, int henchmenAttackerLost, int henchmenDefenderLost)
         {
-            long defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
+            var defenderNumberOfHenchmenBeforeAttack = GetDefenderNumberOfHenchmen(gameState, input);
 
             if (defenderNumberOfHenchmenBeforeAttack <= 0)
             {

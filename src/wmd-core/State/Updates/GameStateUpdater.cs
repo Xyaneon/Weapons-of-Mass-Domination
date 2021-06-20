@@ -7,6 +7,7 @@ using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 using WMD.Game.State.Utility;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.State.Updates
 {
