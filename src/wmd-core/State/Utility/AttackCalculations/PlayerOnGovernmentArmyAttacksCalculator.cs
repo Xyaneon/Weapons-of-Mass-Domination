@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
 
@@ -25,12 +21,15 @@ namespace WMD.Game.State.Utility.AttackCalculations
         }
 
         private static int CalculateReputationChangeForAttacker(GameState gameState, AttackGovernmentArmyInput input) =>
-            ReputationCalculator.ClampReputationChangeAmount(5, gameState.CurrentPlayer.State.ReputationPercentage);
+            ReputationCalculator.ClampReputationChangeAmount(5 + _random.Next(0, 2), gameState.CurrentPlayer.State.ReputationPercentage);
 
         private static long CalculateHenchmenAttackerLost(GameState gameState, AttackGovernmentArmyInput input) =>
-            input.NumberOfAttackingHenchmen;
+            (long)Math.Ceiling((double)input.NumberOfAttackingHenchmen / 2);
 
-        private static long CalculateSoldiersGovernmentArmyLost(GameState gameState, AttackGovernmentArmyInput input) =>
-            input.NumberOfAttackingHenchmen;
+        private static long CalculateSoldiersGovernmentArmyLost(GameState gameState, AttackGovernmentArmyInput input)
+        {
+            long potentialSoldiersLost = input.NumberOfAttackingHenchmen / 10;
+            return Math.Min(potentialSoldiersLost, gameState.GovernmentState.NumberOfSoldiers);
+        }
     }
 }
