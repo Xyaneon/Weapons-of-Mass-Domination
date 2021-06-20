@@ -19,7 +19,7 @@ namespace WMD.Game.State.Updates
 
         public GameState AndReturnUpdatedGameState() => GameState;
 
-        public GameStateUpdater AdjustPlayerStatesAfterAttack(int attackerIndex, int defenderIndex, AttackCalculationsResult calculationsResult)
+        public GameStateUpdater AdjustPlayerStatesAfterAttack(int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
         {
             GameState = GameStateUpdaterHelper.AdjustPlayerStatesAfterAttack(GameState, attackerIndex, defenderIndex, calculationsResult);
             return this;
@@ -130,7 +130,7 @@ namespace WMD.Game.State.Updates
             private const string InvalidOperationException_neutralPopulation_wouldCreateInvalidPlanetState_formatString = "Planet state after population adjustment would be invalid: {0}";
             private const string InvalidOperationException_unclaimedLandAdjustment_wouldCreateInvalidPlanetState_formatString = "Planet state after unclaimed land area adjustment would be invalid: {0}";
 
-            public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, AttackCalculationsResult calculationsResult)
+            public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
             {
                 GameState updatedGameState = AdjustHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
                 updatedGameState = AdjustHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);

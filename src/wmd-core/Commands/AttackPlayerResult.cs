@@ -77,7 +77,7 @@ namespace WMD.Game.Commands
             TargetPlayerIndex = targetPlayerIndex;
         }
 
-        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, long numberOfAttackingHenchmen, AttackCalculationsResult calculationsResult)
+        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, long numberOfAttackingHenchmen, PlayerOnPlayerAttackCalculationsResult calculationsResult)
             : this(
                   updatedGameState,
                   playerIndex,

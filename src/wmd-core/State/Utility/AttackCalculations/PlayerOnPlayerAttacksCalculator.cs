@@ -6,13 +6,13 @@ using WMD.Game.State.Data;
 
 namespace WMD.Game.State.Utility.AttackCalculations
 {
-    internal static class AttacksCalculator
+    internal static class PlayerOnPlayerAttacksCalculator
     {
-        static AttacksCalculator() => _random = new Random();
+        static PlayerOnPlayerAttacksCalculator() => _random = new Random();
 
         private static readonly Random _random;
 
-        public static AttackCalculationsResult CalculateChangesResultingFromAttack([DisallowNull] GameState gameState, AttackPlayerInput input)
+        public static PlayerOnPlayerAttackCalculationsResult CalculateChangesResultingFromAttack([DisallowNull] GameState gameState, AttackPlayerInput input)
         {
             var percentageOfHenchmenDefenderLost = CalculatePercentageOfHenchmenDefenderLost();
             var henchmenAttackerLost = CalculateNumberOfHenchmenAttackerLost(gameState, input);

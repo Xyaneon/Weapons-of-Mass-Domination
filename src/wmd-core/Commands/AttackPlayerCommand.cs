@@ -48,7 +48,7 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            AttackCalculationsResult calculationsResult = AttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
+            PlayerOnPlayerAttackCalculationsResult calculationsResult = PlayerOnPlayerAttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
             GameState updatedGameState = new GameStateUpdater(gameState)
                 .AdjustPlayerStatesAfterAttack(gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult)
                 .AndReturnUpdatedGameState();
