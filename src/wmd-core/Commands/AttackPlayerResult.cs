@@ -71,6 +71,7 @@ namespace WMD.Game.Commands
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
             LandAreaChangeForDefender = landAreaChangeForDefender;
+            NumberOfAttackingHenchmen = numberOfAttackingHenchmen;
             ReputationChangeForAttacker = reputationChangeForAttacker;
             ReputationChangeForDefender = reputationChangeForDefender;
             TargetPlayerIndex = targetPlayerIndex;
