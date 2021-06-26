@@ -22,10 +22,9 @@ namespace WMD.AI.Default
 
         public AICommandSelection ChooseCommandAndInputForGameState([DisallowNull] GameState gameState)
         {
-            var validCommands = DetermineValidCommands(gameState);
-            IReadOnlyList<IGameCommand> validCommandsInRandomOrder = validCommands.OrderBy(_ => _random.Next()).ToList().AsReadOnly();
+            IReadOnlyList<IGameCommand> selectableCommandsList = DetermineValidCommandsInRandomOrder(gameState);
 
-            foreach (var command in validCommandsInRandomOrder)
+            foreach (var command in selectableCommandsList)
             {
                 if (TryGetValidInputForCommand(gameState, command, out var input))
                 {
@@ -38,6 +37,9 @@ namespace WMD.AI.Default
 
         private static IEnumerable<IGameCommand> DetermineValidCommands(GameState gameState) =>
             CommandUtility.GetAllEffectiveCommands().Where(command => command.CanExecuteForState(gameState));
+
+        private IReadOnlyList<IGameCommand> DetermineValidCommandsInRandomOrder(GameState gameState) =>
+            DetermineValidCommands(gameState).OrderBy(_ => _random.Next()).ToList().AsReadOnly();
 
         private static bool TryGetValidInputForCommand(GameState gameState, IGameCommand command, out CommandInput? input)
         {
