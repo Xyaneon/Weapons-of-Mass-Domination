@@ -10,6 +10,7 @@ namespace WMD.Console.UI.Commands
         public static ICommandResultPrinter CreateICommandResultPrinter(Type commandResultType) => commandResultType switch
         {
             _ when commandResultType == typeof(AttackPlayerResult) => new AttackPlayerResultPrinter(),
+            _ when commandResultType == typeof(AttackGovernmentArmyResult) => new AttackGovernmentArmyResultPrinter(),
             _ when commandResultType == typeof(BuildSecretBaseResult) => new BuildSecretBaseResultPrinter(),
             _ when commandResultType == typeof(ChangeDailyWageResult) => new ChangeDailyWageResultPrinter(),
             _ when commandResultType == typeof(DistributePropagandaResult) => new DistributePropagandaResultPrinter(),

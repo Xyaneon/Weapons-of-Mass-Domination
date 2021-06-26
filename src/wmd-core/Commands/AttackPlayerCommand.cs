@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
 using WMD.Game.State.Updates;
 using WMD.Game.State.Utility;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.Commands
 {
@@ -47,7 +48,7 @@ namespace WMD.Game.Commands
                 throw new InvalidOperationException(InvalidOperationException_targetPlayerIndexOutsideBounds);
             }
 
-            AttackCalculationsResult calculationsResult = AttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
+            PlayerOnPlayerAttackCalculationsResult calculationsResult = PlayerOnPlayerAttacksCalculator.CalculateChangesResultingFromAttack(gameState, input);
             GameState updatedGameState = new GameStateUpdater(gameState)
                 .AdjustPlayerStatesAfterAttack(gameState.CurrentPlayerIndex, input.TargetPlayerIndex, calculationsResult)
                 .AndReturnUpdatedGameState();

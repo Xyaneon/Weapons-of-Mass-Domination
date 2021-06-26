@@ -1,6 +1,6 @@
-﻿namespace WMD.Game.State.Utility
+﻿namespace WMD.Game.State.Utility.AttackCalculations
 {
-    internal sealed record AttackCalculationsResult(
+    internal sealed record PlayerOnPlayerAttackCalculationsResult(
         int HenchmenAttackerLost,
         int HenchmenDefenderLost,
         int ReputationChangeForAttacker,

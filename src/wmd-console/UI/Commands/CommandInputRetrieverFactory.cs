@@ -10,6 +10,7 @@ namespace WMD.Console.UI.Commands
         public static ICommandInputRetriever CreateICommandInputRetriever(Type commandInputType) => commandInputType switch
         {
             _ when commandInputType == typeof(AttackPlayerInput) => new AttackPlayerInputRetriever(),
+            _ when commandInputType == typeof(AttackGovernmentArmyInput) => new AttackGovernmentArmyInputRetriever(),
             _ when commandInputType == typeof(BuildSecretBaseInput) => new BuildSecretBaseInputRetriever(),
             _ when commandInputType == typeof(ChangeDailyWageInput) => new ChangeDailyWageInputRetriever(),
             _ when commandInputType == typeof(DistributePropagandaInput) => new DistributePropagandaInputRetriever(),

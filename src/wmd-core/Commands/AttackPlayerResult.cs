@@ -1,7 +1,7 @@
 ﻿using System;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Players;
-using WMD.Game.State.Utility;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.Commands
 {
@@ -71,12 +71,13 @@ namespace WMD.Game.Commands
             HenchmenAttackerLost = henchmenAttackerLost;
             HenchmenDefenderLost = henchmenDefenderLost;
             LandAreaChangeForDefender = landAreaChangeForDefender;
+            NumberOfAttackingHenchmen = numberOfAttackingHenchmen;
             ReputationChangeForAttacker = reputationChangeForAttacker;
             ReputationChangeForDefender = reputationChangeForDefender;
             TargetPlayerIndex = targetPlayerIndex;
         }
 
-        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, long numberOfAttackingHenchmen, AttackCalculationsResult calculationsResult)
+        internal AttackPlayerResult(GameState updatedGameState, int playerIndex, int targetPlayerIndex, long numberOfAttackingHenchmen, PlayerOnPlayerAttackCalculationsResult calculationsResult)
             : this(
                   updatedGameState,
                   playerIndex,

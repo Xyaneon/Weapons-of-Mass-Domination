@@ -15,6 +15,7 @@ namespace WMD.Console.UI.Menus
         private static class MenuItemLabels
         {
             public const string AttackPlayer = "Attack another player...";
+            public const string AttackGovernmentArmy = "Attack the government army...";
             public const string Back = "Back";
             public const string BuildSecretBase = "Build a secret base";
             public const string Cancel = "Cancel";
@@ -94,6 +95,7 @@ namespace WMD.Console.UI.Menus
                 CreateGameCommandsPageMenuItem(MenuPageTitles.Land, menu, landActionsPage, gameState, new PurchaseUnclaimedLandCommand(), new SellLandCommand()),
                 CreateGameCommandsPageMenuItem(MenuPageTitles.Henchmen, menu, henchmenActionsPage, gameState, new HireHenchmenCommand(), new ChangeDailyWageCommand()),
                 CreateGameCommandMenuItem(MenuItemLabels.AttackPlayer, menu, gameState, new AttackPlayerCommand()),
+                CreateGameCommandMenuItem(MenuItemLabels.AttackGovernmentArmy, menu, gameState, new AttackGovernmentArmyCommand()),
                 CreateGameCommandMenuItem(MenuItemLabels.DistributePropaganda, menu, gameState, new DistributePropagandaCommand()),
                 CreateGameCommandsPageMenuItem(MenuPageTitles.SecretBase, menu, secretBasePage, gameState, new BuildSecretBaseCommand(), new UpgradeSecretBaseCommand()),
                 CreateGameCommandsPageMenuItem(MenuPageTitles.Nukes, menu, nukePage, gameState, new ResearchNukesCommand(), new ManufactureNukesCommand(), new LaunchNukesCommand()),
