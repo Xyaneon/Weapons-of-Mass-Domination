@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Utility.AttackCalculations;
 
 namespace WMD.Game.State.Updates.Rounds
 {
@@ -40,10 +41,17 @@ namespace WMD.Game.State.Updates.Rounds
         }
 
         private static GovernmentAttacksPlayer CreateGovernmentAttacksPlayerOccurrence(GameState gameState, int playerIndex) =>
-            new GovernmentAttacksPlayer(gameState, playerIndex, CalculateNumberOfSoldiersUsedInGovernmentAttack(gameState, playerIndex));
+            new(gameState, playerIndex, CalculateCombatantsInGovernmentAttack(gameState, playerIndex));
 
-        private static long CalculateNumberOfSoldiersUsedInGovernmentAttack(GameState gameState, int playerIndex) =>
-            Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen);
+        private static AttackCombatantsChanges CalculateCombatantsInGovernmentAttack(GameState gameState, int playerIndex)
+        {
+            long governmentSoldiersSent = Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen);
+            long defendingPlayerHenchmen = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
+            long governmentSoldiersLost = 0;
+            long defendingPlayerHenchmenLost = 0;
+
+            return new AttackCombatantsChanges(governmentSoldiersSent, defendingPlayerHenchmen, governmentSoldiersLost, defendingPlayerHenchmenLost);
+        }
 
         private static GovernmentDenouncesPlayer CreateDenouncesPlayerOccurrence(GameState gameState, int playerIndex) =>
             new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, GovernmentConstants.BaseAmountOfReputationLost));
