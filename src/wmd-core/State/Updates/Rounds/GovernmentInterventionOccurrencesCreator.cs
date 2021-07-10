@@ -47,8 +47,8 @@ namespace WMD.Game.State.Updates.Rounds
         {
             long governmentSoldiersSent = Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen);
             long defendingPlayerHenchmen = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
-            long governmentSoldiersLost = 0;
-            long defendingPlayerHenchmenLost = 0;
+            long governmentSoldiersLost = Math.Min(governmentSoldiersSent, defendingPlayerHenchmen);
+            long defendingPlayerHenchmenLost = Math.Min(defendingPlayerHenchmen, governmentSoldiersSent / 5);
 
             return new AttackCombatantsChanges(governmentSoldiersSent, defendingPlayerHenchmen, governmentSoldiersLost, defendingPlayerHenchmenLost);
         }
