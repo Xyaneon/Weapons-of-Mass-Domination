@@ -30,11 +30,12 @@ namespace WMD.Game.State.Updates.Rounds
 
         private static GameState ApplyGovernmentIntervention(GameState gameState, GovernmentIntervention intervention) => intervention switch
         {
-            GovernmentTakesBackMoney occurrence => new GameStateUpdater(gameState)
-                .AdjustMoneyForPlayer(occurrence.PlayerIndex, -1 * occurrence.AmountTaken)
-                .AndReturnUpdatedGameState(),
+            GovernmentAttacksPlayer occurrence => throw new NotImplementedException(),
             GovernmentDenouncesPlayer occurrence => new GameStateUpdater(gameState)
                 .AdjustReputationForPlayer(occurrence.PlayerIndex, -1 * occurrence.ReputationDecrease)
+                .AndReturnUpdatedGameState(),
+            GovernmentTakesBackMoney occurrence => new GameStateUpdater(gameState)
+                .AdjustMoneyForPlayer(occurrence.PlayerIndex, -1 * occurrence.AmountTaken)
                 .AndReturnUpdatedGameState(),
             _ => throw new UnsupportedArgumentSubclassException(typeof(GovernmentIntervention), intervention.GetType()),
         };
