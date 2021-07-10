@@ -25,18 +25,29 @@ namespace WMD.Game.State.Updates.Rounds
             {
                 interventions.Enqueue(CreateTakesBackMoneyOccurrence(gameState, playerIndex));
             }
-            
+
             if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.ReputationPercentage > 0)
             {
                 interventions.Enqueue(CreateDenouncesPlayerOccurrence(gameState, playerIndex));
             }
 
+            if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen > 0)
+            {
+                interventions.Enqueue(CreateGovernmentAttacksPlayerOccurrence(gameState, playerIndex));
+            }
+
             return interventions;
         }
 
+        private static GovernmentAttacksPlayer CreateGovernmentAttacksPlayerOccurrence(GameState gameState, int playerIndex) =>
+            new GovernmentAttacksPlayer(gameState, playerIndex, CalculateNumberOfSoldiersUsedInGovernmentAttack(gameState, playerIndex));
+
+        private static long CalculateNumberOfSoldiersUsedInGovernmentAttack(GameState gameState, int playerIndex) =>
+            Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen);
+
         private static GovernmentDenouncesPlayer CreateDenouncesPlayerOccurrence(GameState gameState, int playerIndex) =>
             new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.ReputationPercentage, GovernmentConstants.BaseAmountOfReputationLost));
-        
+
         private static GovernmentTakesBackMoney CreateTakesBackMoneyOccurrence(GameState gameState, int playerIndex) =>
             new(gameState, playerIndex, Math.Min(gameState.Players[playerIndex].State.Money, GovernmentConstants.BaseAmountOfMoneyTakenBack));
 
@@ -56,6 +67,8 @@ namespace WMD.Game.State.Updates.Rounds
 
             return _random.NextDouble() < GovernmentConstants.BaseChanceOfGovernmentIntervention + additionalChanceOfIntervention;
         }
+
+        private static long Min(params long[] values) => values.Min();
 
         private static readonly Random _random;
     }
