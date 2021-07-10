@@ -57,29 +57,26 @@ namespace WMD.Console.UI
             _ => throw new ArgumentException($"Unrecognized {typeof(RoundUpdateResultItem).Name} subclass: {item.GetType().Name}."),
         };
 
-        private static string CreateGovernmentInterventionText(GameState gameState, GovernmentIntervention intervention)
+        private static string CreateGovernmentInterventionText(GameState gameState, GovernmentIntervention intervention) => intervention switch
         {
-            return intervention switch
-            {
-                GovernmentAttacksPlayer occurrence => string.Format(
-                    GovernmentAttacksPlayerFormatString,
-                    gameState.Players[occurrence.PlayerIndex].Identification.Name,
-                    occurrence.AttackCombatantsChanges.CombatantsLostByAttacker,
-                    occurrence.AttackCombatantsChanges.CombatantsLostByDefender
-                ),
-                GovernmentDenouncesPlayer occurrence => string.Format(
-                    GovernmentDenouncesPlayerFormatString,
-                    gameState.Players[occurrence.PlayerIndex].Identification.Name,
-                    occurrence.ReputationDecrease
-                ),
-                GovernmentTakesBackMoney occurrence => string.Format(
-                    GovernmentTakesBackMoneyFormatString,
-                    occurrence.AmountTaken,
-                    gameState.Players[occurrence.PlayerIndex].Identification.Name
-                ),
-                _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
-            };
-        }
+            GovernmentAttacksPlayer occurrence => string.Format(
+                GovernmentAttacksPlayerFormatString,
+                gameState.Players[occurrence.PlayerIndex].Identification.Name,
+                occurrence.AttackCombatantsChanges.CombatantsLostByAttacker,
+                occurrence.AttackCombatantsChanges.CombatantsLostByDefender
+            ),
+            GovernmentDenouncesPlayer occurrence => string.Format(
+                GovernmentDenouncesPlayerFormatString,
+                gameState.Players[occurrence.PlayerIndex].Identification.Name,
+                occurrence.ReputationDecrease
+            ),
+            GovernmentTakesBackMoney occurrence => string.Format(
+                GovernmentTakesBackMoneyFormatString,
+                occurrence.AmountTaken,
+                gameState.Players[occurrence.PlayerIndex].Identification.Name
+            ),
+            _ => throw new ArgumentException($"Unrecognized {typeof(GovernmentIntervention).Name} subclass: {intervention.GetType().Name}."),
+        };
 
         private static string CreateReputationChangeText(GameState gameState, ReputationChange reputationChange)
         {
