@@ -7,6 +7,7 @@ using WMD.Game.State.Data.Governments;
 using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
+using WMD.Game.State.Updates.Rounds;
 using WMD.Game.State.Utility;
 using WMD.Game.State.Utility.AttackCalculations;
 
@@ -23,6 +24,12 @@ namespace WMD.Game.State.Updates
         public GameStateUpdater AdjustPlayerStatesAfterAttack(int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
         {
             GameState = GameStateUpdaterHelper.AdjustPlayerStatesAfterAttack(GameState, attackerIndex, defenderIndex, calculationsResult);
+            return this;
+        }
+
+        public GameStateUpdater AdjustStateAfterGovernmentAttackOnPlayer(GovernmentAttacksPlayer governmentAttacksPlayer)
+        {
+            GameState = GameStateUpdaterHelper.AdjustStateAfterGovernmentAttackOnPlayer(GameState, governmentAttacksPlayer);
             return this;
         }
 
@@ -145,6 +152,14 @@ namespace WMD.Game.State.Updates
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
                 updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
                 updatedGameState = HavePlayerGiveUpLand(updatedGameState, defenderIndex, -1 * calculationsResult.LandAreaChangeForDefender);
+
+                return updatedGameState;
+            }
+
+            public static GameState AdjustStateAfterGovernmentAttackOnPlayer(GameState gameState, GovernmentAttacksPlayer governmentAttacksPlayer)
+            {
+                GameState updatedGameState = AdjustHenchmenForPlayer(gameState, governmentAttacksPlayer.PlayerIndex, -1 * governmentAttacksPlayer.AttackCombatantsChanges.CombatantsLostByDefender);
+                updatedGameState = AdjustGovernmentArmySize(updatedGameState, -1 * governmentAttacksPlayer.AttackCombatantsChanges.CombatantsLostByAttacker);
 
                 return updatedGameState;
             }
