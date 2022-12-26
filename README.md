@@ -29,7 +29,7 @@ of my friends still ask if I can make the game available to them again).
 ### :sparkles: Improvements and new features
 
 This new version of the game has the following improvements over the original:
-- [.NET 5](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) and [C# 9](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9)
+- [.NET 6](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6) and [C# 9](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9)
 - Separate assemblies (i.e., core game logic is separate from the command line app)
 - Some unit testing
 - Better game state management with OOP, commands, and immutable [`record`](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9#record-types) types
