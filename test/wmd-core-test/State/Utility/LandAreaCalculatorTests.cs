@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WMD.Game.State.Data;
@@ -14,12 +15,13 @@ namespace WMD.Game.Test.State.Utility
         [DataRow(0, 0)]
         [DataRow(1000, 6)]
         [DataRow(2000, 13)]
+        [DataRow(611295233673.91, 148940000)]
         public void CalculateMaximumLandAreaCurrentPlayerCouldPurchase_ShouldReturnExpectedAmountForGameState(
-            int playerMoney,
+            double playerMoney,
             int expectedSquareKilometersPlayerCouldPurchase
         )
         {
-            var playerState = new PlayerState() with { Money = playerMoney };
+            var playerState = new PlayerState() with { Money = Convert.ToDecimal(playerMoney) };
             var player = new Player(
                 new PlayerIdentification("Test player", PlayerColor.Red, true)
             ) with { State = playerState };
