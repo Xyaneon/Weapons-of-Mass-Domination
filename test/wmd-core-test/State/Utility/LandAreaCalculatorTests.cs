@@ -10,11 +10,16 @@ namespace WMD.Game.Test.State.Utility
     [TestClass]
     public class LandAreaCalculatorTests
     {
-        [TestMethod]
-        public void CalculateMaximumLandAreaCurrentPlayerCouldPurchase_ShouldReturnExpectedAmountForGameState()
+        [DataTestMethod]
+        [DataRow(0, 0)]
+        [DataRow(1000, 6)]
+        [DataRow(2000, 13)]
+        public void CalculateMaximumLandAreaCurrentPlayerCouldPurchase_ShouldReturnExpectedAmountForGameState(
+            int playerMoney,
+            int expectedSquareKilometersPlayerCouldPurchase
+        )
         {
-            int expectedSquareKilometersPlayerCouldPurchase = 6;
-            var playerState = new PlayerState() with { Money = 1000 };
+            var playerState = new PlayerState() with { Money = playerMoney };
             var player = new Player(
                 new PlayerIdentification("Test player", PlayerColor.Red, true)
             ) with { State = playerState };
@@ -23,7 +28,7 @@ namespace WMD.Game.Test.State.Utility
 
             int actual = LandAreaCalculator.CalculateMaximumLandAreaCurrentPlayerCouldPurchase(gameState);
 
-            Assert.AreEqual(expectedSquareKilometersPlayerCouldPurchase, actual);
+            Assert.AreEqual(expectedSquareKilometersPlayerCouldPurchase, actual, "Money: {0}", playerMoney);
         }
     }
 }
