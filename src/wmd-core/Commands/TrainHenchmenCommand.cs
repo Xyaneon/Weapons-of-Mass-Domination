@@ -8,9 +8,9 @@ using WMD.Game.State.Utility;
 namespace WMD.Game.Commands;
 
 /// <summary>
-/// The command for the current player training henchmen as soldiers.
+/// The command for the current player training henchmen in a specialty.
 /// </summary>
-public class TrainHenchmenAsSoldiersCommand : GameCommand<TrainHenchmenAsSoldiersInput, TrainHenchmenAsSoldiersResult>
+public class TrainHenchmenCommand : GameCommand<TrainHenchmenInput, TrainHenchmenResult>
 {
     private const string InvalidOperationException_NoUntrainedHenchmen = "The current player does not have any untrained henchmen.";
     private const string InvalidOperationException_NotEnoughUntrainedHenchmen = "The current player does not have enough untrained henchmen for the requested training amount.";
@@ -18,10 +18,10 @@ public class TrainHenchmenAsSoldiersCommand : GameCommand<TrainHenchmenAsSoldier
     public override bool CanExecuteForState([DisallowNull] GameState gameState) =>
         GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState);
 
-    public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] TrainHenchmenAsSoldiersInput input) =>
+    public override bool CanExecuteForStateAndInput([DisallowNull] GameState gameState, [DisallowNull] TrainHenchmenInput input) =>
         CanExecuteForState(gameState) && PlayerHasEnoughUntrainedHenchmenForTrainingAmount(gameState, input);
 
-    public override TrainHenchmenAsSoldiersResult Execute([DisallowNull] GameState gameState, [DisallowNull] TrainHenchmenAsSoldiersInput input)
+    public override TrainHenchmenResult Execute([DisallowNull] GameState gameState, [DisallowNull] TrainHenchmenInput input)
     {
         if (!GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState, HenchmenSpecialization.Untrained))
         {
@@ -34,12 +34,12 @@ public class TrainHenchmenAsSoldiersCommand : GameCommand<TrainHenchmenAsSoldier
         }
 
         GameState updatedGameState = new GameStateUpdater(gameState)
-            .TrainPlayerHenchmenAsSoldiers(gameState.CurrentPlayerIndex, input.NumberToTrain)
+            .TrainPlayerHenchmen(gameState.CurrentPlayerIndex, input.NumberToTrain, input.Specialization)
             .AndReturnUpdatedGameState();
 
-        return new TrainHenchmenAsSoldiersResult(updatedGameState, gameState.CurrentPlayerIndex, input.NumberToTrain);
+        return new TrainHenchmenResult(updatedGameState, gameState.CurrentPlayerIndex, input.NumberToTrain, input.Specialization);
     }
 
-    private static bool PlayerHasEnoughUntrainedHenchmenForTrainingAmount(GameState gameState, TrainHenchmenAsSoldiersInput input) =>
+    private static bool PlayerHasEnoughUntrainedHenchmenForTrainingAmount(GameState gameState, TrainHenchmenInput input) =>
         input.NumberToTrain <= gameState.CurrentPlayer.State.WorkforceState.GenericHenchmenCount;
 }

@@ -51,9 +51,9 @@ internal class GameStateUpdater
         return this;
     }
 
-    public GameStateUpdater TrainPlayerHenchmenAsSoldiers(int playerIndex, long numberOfSoldiers)
+    public GameStateUpdater TrainPlayerHenchmen(int playerIndex, long amount, HenchmenSpecialization specialization)
     {
-        GameState = GameStateUpdaterHelper.TrainGenericHenchmenIntoSoldiersForPlayer(GameState, playerIndex, numberOfSoldiers);
+        GameState = GameStateUpdaterHelper.TrainGenericHenchmenForPlayer(GameState, playerIndex, amount, specialization);
 
         return this;
     }
@@ -300,7 +300,7 @@ internal class GameStateUpdater
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState TrainGenericHenchmenIntoSoldiersForPlayer(GameState gameState, int playerIndex, long amount)
+        public static GameState TrainGenericHenchmenForPlayer(GameState gameState, int playerIndex, long amount, HenchmenSpecialization specialization)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -313,9 +313,13 @@ internal class GameStateUpdater
                 throw new InvalidOperationException(InvalidOperationException_playerGenericHenchmenQuantity_cannotBeNegative);
             }
 
-            var updatedWorkforceState = currentWorkforceState with {
-                GenericHenchmenCount = updatedHenchmenAmount,
-                SoldierCount = currentWorkforceState.SoldierCount + amount,
+            var updatedWorkforceState = specialization switch
+            {
+                HenchmenSpecialization.Soldier => currentWorkforceState with {
+                    GenericHenchmenCount = updatedHenchmenAmount,
+                    SoldierCount = currentWorkforceState.SoldierCount + amount,
+                },
+                _ => throw new ArgumentException($"Unsupported specialization value: {specialization}", nameof(specialization)),
             };
             var updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
 
