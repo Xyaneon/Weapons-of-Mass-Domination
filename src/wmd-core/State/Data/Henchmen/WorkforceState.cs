@@ -99,5 +99,4 @@ public record WorkforceState
     private decimal _dailyPayRate = DefaultDailyPayRate;
     private long _genericHenchmenCount;
     private long _soldierCount;
-    private long _totalHenchmenCount;
 }
