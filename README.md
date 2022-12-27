@@ -1,7 +1,7 @@
 # Weapons of Mass Domination
 A console game for evil geniuses. Try to take over the world! :earth_americas: :boom:
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/main/LICENSE)
 ![Workflow](https://github.com/Xyaneon/Weapons-of-Mass-Domination/actions/workflows/dotnet.yml/badge.svg)
 
 **:construction: This game is still under development.**
@@ -42,7 +42,7 @@ See [here][faq] for a list of frequently-asked questions about this project.
 
 ## :scroll: License
 
-This project is open-source and provided under the MIT license. You can view it in the [LICENSE](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/master/LICENSE) file.
+This project is open-source and provided under the MIT license. You can view it in the [LICENSE](https://github.com/Xyaneon/Weapons-of-Mass-Domination/blob/main/LICENSE) file.
 
 
 [faq]: https://github.com/Xyaneon/Weapons-of-Mass-Domination/issues?q=is%3Aissue+label%3A%22%3Aquestion%3A+faq%22
