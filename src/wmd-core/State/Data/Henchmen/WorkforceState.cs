@@ -9,7 +9,7 @@ namespace WMD.Game.State.Data.Henchmen;
 public record WorkforceState
 {
     private const string ArgumentOutOfRangeException_DailyPayRateLessThanZero = "The daily pay rate cannot be less than zero.";
-    private const string ArgumentOutOfRangeException_NumberOfHenchmenLessThanZero = "The number of henchmen cannot be less than zero.";
+    private const string ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero = "The number of henchmen cannot be less than zero.";
     private const string ArgumentOutOfRangeException_SoldierCountLessThanZero = "The number of soldiers cannot be less than zero.";
     
     private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
@@ -78,15 +78,15 @@ public record WorkforceState
     /// </exception>
     public long TotalHenchmenCount
     {
-        get => _numberOfHenchmen;
+        get => _totalHenchmenCount;
         init
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_NumberOfHenchmenLessThanZero);
+                throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero);
             }
 
-            _numberOfHenchmen = value;
+            _totalHenchmenCount = value;
         }
     }
 
@@ -119,6 +119,6 @@ public record WorkforceState
     public decimal TotalDailyPay { get => DailyPayRate * TotalHenchmenCount; }
 
     private decimal _dailyPayRate;
-    private long _numberOfHenchmen;
+    private long _totalHenchmenCount;
     private long _soldierCount;
 }
