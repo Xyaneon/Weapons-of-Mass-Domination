@@ -5,128 +5,127 @@ using WMD.Game.Commands;
 using WMD.Game.State.Data;
 using Xyaneon.Console.Menus;
 
-namespace WMD.Console.UI.Core
+namespace WMD.Console.UI.Core;
+
+static class UserInput
 {
-    static class UserInput
+    public static IGameCommand GetCommand(GameState gameState)
     {
-        public static IGameCommand GetCommand(GameState gameState)
+        Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu(gameState);
+        actionMenu.Run();
+        if (actionMenu.Result != null)
         {
-            Menu actionMenu = GameMenuFactory.CreatePlayerActionMenu(gameState);
-            actionMenu.Run();
-            if (actionMenu.Result != null)
+            var command = (IGameCommand)actionMenu.Result;
+            return command;
+        }
+        else
+        {
+            throw new InvalidOperationException($"No {typeof(IGameCommand).Name} result value found on action selection menu (this is a bug).");
+        }
+    }
+
+    public static bool GetConfirmation(string requestText)
+    {
+        while (true)
+        {
+            string? response = GetString($"{requestText} (Y[es]/n[o])")?.ToLower();
+            switch (response)
             {
-                var command = (IGameCommand)actionMenu.Result;
-                return command;
-            }
-            else
-            {
-                throw new InvalidOperationException($"No {typeof(IGameCommand).Name} result value found on action selection menu (this is a bug).");
+                case "y":
+                case "yes":
+                    return true;
+                case "n":
+                case "no":
+                    return false;
             }
         }
+    }
 
-        public static bool GetConfirmation(string requestText)
-        {
-            while (true)
-            {
-                string? response = GetString($"{requestText} (Y[es]/n[o])")?.ToLower();
-                switch (response)
-                {
-                    case "y":
-                    case "yes":
-                        return true;
-                    case "n":
-                    case "no":
-                        return false;
-                }
-            }
-        }
+    public static decimal GetDecimal(string requestText, DecimalRange range)
+    {
+        decimal number = 0.0M;
+        bool result = false;
 
-        public static decimal GetDecimal(string requestText, DecimalRange range)
-        {
-            decimal number = 0.0M;
-            bool result = false;
-
-            while (!result)
-            {
-                PrintPrompt(requestText);
-                string? input = System.Console.ReadLine();
-
-                result = decimal.TryParse(input, out number);
-                if (result && !range.ContainsValueInclusive(number))
-                {
-                    result = false;
-                }
-            }
-
-            return number;
-        }
-        
-        public static int GetInteger(string requestText, IntRange range)
-        {
-            int number = 0;
-            bool result = false;
-
-            while (!result)
-            {
-                PrintPrompt(requestText);
-                string? input = System.Console.ReadLine();
-
-                result = int.TryParse(input, out number);
-                if (result && !range.ContainsValueInclusive(number))
-                {
-                    result = false;
-                }
-            }
-
-            return number;
-        }
-
-        public static long GetLong(string requestText, LongRange range)
-        {
-            long number = 0;
-            bool result = false;
-
-            while (!result)
-            {
-                PrintPrompt(requestText);
-                string? input = System.Console.ReadLine();
-
-                result = long.TryParse(input, out number);
-                if (result && !range.ContainsValueInclusive(number))
-                {
-                    result = false;
-                }
-            }
-
-            return number;
-        }
-
-        public static string? GetString(string requestText)
+        while (!result)
         {
             PrintPrompt(requestText);
-            return System.Console.ReadLine();
+            string? input = System.Console.ReadLine();
+
+            result = decimal.TryParse(input, out number);
+            if (result && !range.ContainsValueInclusive(number))
+            {
+                result = false;
+            }
         }
 
-        public static int? GetAttackTargetPlayerIndex(GameState gameState)
+        return number;
+    }
+    
+    public static int GetInteger(string requestText, IntRange range)
+    {
+        int number = 0;
+        bool result = false;
+
+        while (!result)
         {
-            Menu playerSelectMenu = GameMenuFactory.CreateAttackTargetPlayerMenu(gameState);
-            playerSelectMenu.Run();
-            return (int?)playerSelectMenu.Result;
+            PrintPrompt(requestText);
+            string? input = System.Console.ReadLine();
+
+            result = int.TryParse(input, out number);
+            if (result && !range.ContainsValueInclusive(number))
+            {
+                result = false;
+            }
         }
 
-        public static void WaitForPlayerAcknowledgementOfRoundEnd()
+        return number;
+    }
+
+    public static long GetLong(string requestText, LongRange range)
+    {
+        long number = 0;
+        bool result = false;
+
+        while (!result)
         {
-            System.Console.ReadKey();
+            PrintPrompt(requestText);
+            string? input = System.Console.ReadLine();
+
+            result = long.TryParse(input, out number);
+            if (result && !range.ContainsValueInclusive(number))
+            {
+                result = false;
+            }
         }
 
-        public static void WaitForPlayerAcknowledgementOfTurnEnd()
-        {
-            System.Console.ReadKey();
-        }
+        return number;
+    }
 
-        private static void PrintPrompt(string requestText)
-        {
-            System.Console.Write($"{requestText}: >");
-        }
+    public static string? GetString(string requestText)
+    {
+        PrintPrompt(requestText);
+        return System.Console.ReadLine();
+    }
+
+    public static int? GetAttackTargetPlayerIndex(GameState gameState)
+    {
+        Menu playerSelectMenu = GameMenuFactory.CreateAttackTargetPlayerMenu(gameState);
+        playerSelectMenu.Run();
+        return (int?)playerSelectMenu.Result;
+    }
+
+    public static void WaitForPlayerAcknowledgementOfRoundEnd()
+    {
+        System.Console.ReadKey();
+    }
+
+    public static void WaitForPlayerAcknowledgementOfTurnEnd()
+    {
+        System.Console.ReadKey();
+    }
+
+    private static void PrintPrompt(string requestText)
+    {
+        System.Console.Write($"{requestText}: >");
     }
 }

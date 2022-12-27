@@ -8,61 +8,59 @@ using WMD.Game.State.Data.Players;
 using WMD.Game.State.Updates;
 using WMD.Game.State.Updates.Rounds;
 
-namespace WMD.Console
+namespace WMD.Console;
+
+class GameRunner
 {
-    class GameRunner
+    public GameRunner(GameState initialGameState)
     {
-        public GameRunner(GameState initialGameState)
+        CurrentGameState = initialGameState;
+        TurnRunners = CreateTurnRunners(initialGameState);
+    }
+
+    public GameState CurrentGameState { get; private set; }
+
+    public void Run()
+    {
+        string winningPlayerName;
+
+        int winningPlayerIndex;
+        if (CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
         {
-            CurrentGameState = initialGameState;
-            TurnRunners = CreateTurnRunners(initialGameState);
+            winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
+            PrintingUtility.PrintGameHasAlreadyBeenWon(winningPlayerName);
+            return;
         }
 
-        public GameState CurrentGameState { get; private set; }
-
-        public void Run()
+        while (!CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
         {
-            string winningPlayerName;
-
-
-            int winningPlayerIndex;
-            if (CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
+            CurrentGameState = TurnRunners[CurrentGameState.CurrentPlayerIndex].RunTurn(CurrentGameState);
+            if (!CurrentGameState.GameHasBeenWon(out _))
             {
-                winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
-                PrintingUtility.PrintGameHasAlreadyBeenWon(winningPlayerName);
-                return;
-            }
+                GameState gameState = CurrentGameState;
+                (GameState GameState, RoundUpdateResult? RoundUpdateResult) resultTuple = GameStateTurnAdvancer.AdvanceToNextTurn(gameState);
+                CurrentGameState = resultTuple.GameState;
 
-            while (!CurrentGameState.GameHasBeenWon(out winningPlayerIndex))
-            {
-                CurrentGameState = TurnRunners[CurrentGameState.CurrentPlayerIndex].RunTurn(CurrentGameState);
-                if (!CurrentGameState.GameHasBeenWon(out _))
+                if (resultTuple.RoundUpdateResult != null)
                 {
-                    GameState gameState = CurrentGameState;
-                    (GameState GameState, RoundUpdateResult? RoundUpdateResult) resultTuple = GameStateTurnAdvancer.AdvanceToNextTurn(gameState);
-                    CurrentGameState = resultTuple.GameState;
-
-                    if (resultTuple.RoundUpdateResult != null)
-                    {
-                        EndOfRoundPrinter.PrintEndOfRound(resultTuple.RoundUpdateResult);
-                        UserInput.WaitForPlayerAcknowledgementOfRoundEnd();
-                    }
+                    EndOfRoundPrinter.PrintEndOfRound(resultTuple.RoundUpdateResult);
+                    UserInput.WaitForPlayerAcknowledgementOfRoundEnd();
                 }
             }
-
-            winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
-            PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
         }
 
-        private IReadOnlyList<PlayerTurnRunner> TurnRunners { get; set; }
-
-        private static IReadOnlyList<PlayerTurnRunner> CreateTurnRunners(GameState gameState) =>
-            gameState.Players
-                .Select(player => CreateTurnRunnerForPlayer(player))
-                .ToList()
-                .AsReadOnly();
-
-        private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) =>
-            player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner(new CpuPlayerAI());
+        winningPlayerName = CurrentGameState.Players[winningPlayerIndex].Identification.Name;
+        PrintingUtility.CongratulateWinningPlayer(winningPlayerName);
     }
+
+    private IReadOnlyList<PlayerTurnRunner> TurnRunners { get; set; }
+
+    private static IReadOnlyList<PlayerTurnRunner> CreateTurnRunners(GameState gameState) =>
+        gameState.Players
+            .Select(player => CreateTurnRunnerForPlayer(player))
+            .ToList()
+            .AsReadOnly();
+
+    private static PlayerTurnRunner CreateTurnRunnerForPlayer(Player player) =>
+        player.Identification.IsHuman ? new HumanTurnRunner() : new CpuTurnRunner(new CpuPlayerAI());
 }

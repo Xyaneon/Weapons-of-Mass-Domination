@@ -1,9 +1,8 @@
 ﻿using WMD.Game.Commands;
 
-namespace WMD.Console.UI.Commands
+namespace WMD.Console.UI.Commands;
+
+interface ICommandResultPrinter
 {
-    interface ICommandResultPrinter
-    {
-        public void PrintCommandResult(CommandResult result);
-    }
+    public void PrintCommandResult(CommandResult result);
 }

@@ -1,18 +1,17 @@
 ﻿using WMD.Game.Commands;
 
-namespace WMD.Console.UI.Commands
-{
-    class SkipTurnResultPrinter : CommandResultPrinter<SkipTurnResult>
-    {
-        private const string PrintFormatString = "{0} skipped their turn and wasted a whole day.";
+namespace WMD.Console.UI.Commands;
 
-        public override void PrintCommandResult(SkipTurnResult result)
-        {
-            string formattedString = string.Format(
-                PrintFormatString,
-                RetrieveNameOfPlayerWhoActed(result)
-            );
-            System.Console.WriteLine(formattedString);
-        }
+class SkipTurnResultPrinter : CommandResultPrinter<SkipTurnResult>
+{
+    private const string PrintFormatString = "{0} skipped their turn and wasted a whole day.";
+
+    public override void PrintCommandResult(SkipTurnResult result)
+    {
+        string formattedString = string.Format(
+            PrintFormatString,
+            RetrieveNameOfPlayerWhoActed(result)
+        );
+        System.Console.WriteLine(formattedString);
     }
 }

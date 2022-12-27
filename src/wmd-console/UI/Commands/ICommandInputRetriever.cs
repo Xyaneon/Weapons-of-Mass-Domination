@@ -1,10 +1,9 @@
 ﻿using WMD.Game.Commands;
 using WMD.Game.State.Data;
 
-namespace WMD.Console.UI.Commands
+namespace WMD.Console.UI.Commands;
+
+interface ICommandInputRetriever
 {
-    interface ICommandInputRetriever
-    {
-        public CommandInput? GetCommandInput(GameState gameState);
-    }
+    public CommandInput? GetCommandInput(GameState gameState);
 }

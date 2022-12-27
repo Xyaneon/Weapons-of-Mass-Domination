@@ -1,13 +1,12 @@
 ﻿using WMD.Game.Commands;
 using WMD.Game.State.Data;
 
-namespace WMD.Console.UI.Commands
+namespace WMD.Console.UI.Commands;
+
+class StealMoneyInputRetriever : ICommandInputRetriever
 {
-    class StealMoneyInputRetriever : ICommandInputRetriever
+    public CommandInput? GetCommandInput(GameState gameState)
     {
-        public CommandInput? GetCommandInput(GameState gameState)
-        {
-            return new StealMoneyInput();
-        }
+        return new StealMoneyInput();
     }
 }

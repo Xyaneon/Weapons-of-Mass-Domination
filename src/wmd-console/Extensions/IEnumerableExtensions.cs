@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WMD.Console.Extensions
+namespace WMD.Console.Extensions;
+
+static class IEnumerableExtensions
 {
-    static class IEnumerableExtensions
+    public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
     {
-        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        foreach (T element in collection)
         {
-            foreach (T element in collection)
-            {
-                action(element);
-            }
+            action(element);
         }
     }
 }

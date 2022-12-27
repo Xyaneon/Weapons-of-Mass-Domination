@@ -1,29 +1,28 @@
 ﻿using System;
 
-namespace WMD.Console.Miscellaneous
+namespace WMD.Console.Miscellaneous;
+
+class IntRange
 {
-    class IntRange
+    private const string ArgumentException_minimumGreaterThanMaximum = "The range minimum cannot be greater than the range maximum.";
+
+    public IntRange(int minimum, int maximum)
     {
-        private const string ArgumentException_minimumGreaterThanMaximum = "The range minimum cannot be greater than the range maximum.";
-
-        public IntRange(int minimum, int maximum)
+        if (minimum > maximum)
         {
-            if (minimum > maximum)
-            {
-                throw new ArgumentException(ArgumentException_minimumGreaterThanMaximum);
-            }
-
-            Maximum = maximum;
-            Minimum = minimum;
+            throw new ArgumentException(ArgumentException_minimumGreaterThanMaximum);
         }
 
-        public int Maximum { get; }
+        Maximum = maximum;
+        Minimum = minimum;
+    }
 
-        public int Minimum { get; }
+    public int Maximum { get; }
 
-        public bool ContainsValueInclusive(int value)
-        {
-            return value >= Minimum && value <= Maximum;
-        }
+    public int Minimum { get; }
+
+    public bool ContainsValueInclusive(int value)
+    {
+        return value >= Minimum && value <= Maximum;
     }
 }

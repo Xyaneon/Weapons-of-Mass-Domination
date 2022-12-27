@@ -1,20 +1,19 @@
 ﻿using WMD.Game.Commands;
 
-namespace WMD.Console.UI.Commands
-{
-    class UpgradeSecretBaseResultPrinter : CommandResultPrinter<UpgradeSecretBaseResult>
-    {
-        private const string PrintFormatString = "{0} upgraded their secret base to Level {1:N0} for {2:C}.";
+namespace WMD.Console.UI.Commands;
 
-        public override void PrintCommandResult(UpgradeSecretBaseResult result)
-        {
-            string formattedString = string.Format(
-                PrintFormatString,
-                RetrieveNameOfPlayerWhoActed(result),
-                result.NewLevel,
-                result.UpgradePrice
-            );
-            System.Console.WriteLine(formattedString);
-        }
+class UpgradeSecretBaseResultPrinter : CommandResultPrinter<UpgradeSecretBaseResult>
+{
+    private const string PrintFormatString = "{0} upgraded their secret base to Level {1:N0} for {2:C}.";
+
+    public override void PrintCommandResult(UpgradeSecretBaseResult result)
+    {
+        string formattedString = string.Format(
+            PrintFormatString,
+            RetrieveNameOfPlayerWhoActed(result),
+            result.NewLevel,
+            result.UpgradePrice
+        );
+        System.Console.WriteLine(formattedString);
     }
 }

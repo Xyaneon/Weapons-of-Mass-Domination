@@ -1,10 +1,9 @@
 ﻿using WMD.Game.Commands;
 using WMD.Game.State.Data;
 
-namespace WMD.AI.Default
+namespace WMD.AI.Default;
+
+internal sealed class StealMoneyInputRetriever : ICommandInputRetriever
 {
-    internal sealed class StealMoneyInputRetriever : ICommandInputRetriever
-    {
-        public CommandInput? GetCommandInput(GameState gameState) => new StealMoneyInput();
-    }
+    public CommandInput? GetCommandInput(GameState gameState) => new StealMoneyInput();
 }

@@ -1,31 +1,30 @@
 ﻿using System;
 
-namespace WMD.Game.Commands
+namespace WMD.Game.Commands;
+
+/// <summary>
+/// Additional input data for purchasing unclaimed land.
+/// </summary>
+public record PurchaseUnclaimedLandInput : CommandInput
 {
     /// <summary>
-    /// Additional input data for purchasing unclaimed land.
+    /// Gets or initializes the amount of land to purchase in square kilometers.
     /// </summary>
-    public record PurchaseUnclaimedLandInput : CommandInput
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The provided value is less than zero.
+    /// </exception>
+    public int AreaToPurchase
     {
-        /// <summary>
-        /// Gets or initializes the amount of land to purchase in square kilometers.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// The provided value is less than zero.
-        /// </exception>
-        public int AreaToPurchase
+        get => _areaToPurchase;
+        init
         {
-            get => _areaToPurchase;
-            init
+            if (value < 0)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "The area of land to purchase cannot be negative.");
-                }
-                _areaToPurchase = value;
+                throw new ArgumentOutOfRangeException(nameof(value), value, "The area of land to purchase cannot be negative.");
             }
+            _areaToPurchase = value;
         }
-
-        private int _areaToPurchase;
     }
+
+    private int _areaToPurchase;
 }
