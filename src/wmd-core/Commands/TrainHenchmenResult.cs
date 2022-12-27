@@ -16,7 +16,7 @@ public record TrainHenchmenResult : CommandResult
     /// <param name="playerIndex">The index of the <see cref="Player"/> whose action this is the result of.</param>
     /// <param name="henchmenHired">The number of henchmen trained.</param>
     /// <param name="specialization">The specialization the henchmen were trained in.</param>
-    public TrainHenchmenResult(GameState updatedGameState, int playerIndex, long henchmenTrained, HenchmenSpecialization specialization) : base(updatedGameState, playerIndex)
+    public TrainHenchmenResult(GameState updatedGameState, int playerIndex, long henchmenTrained, Specialization specialization) : base(updatedGameState, playerIndex)
     {
         HenchmenTrained = henchmenTrained;
         Specialization = specialization;
@@ -30,5 +30,5 @@ public record TrainHenchmenResult : CommandResult
     /// <summary>
     /// Gets the specialization the henchmen were trained in.
     /// </summary>
-    public HenchmenSpecialization Specialization { get; init; }
+    public Specialization Specialization { get; init; }
 }

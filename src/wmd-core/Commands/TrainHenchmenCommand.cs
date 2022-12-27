@@ -23,7 +23,7 @@ public class TrainHenchmenCommand : GameCommand<TrainHenchmenInput, TrainHenchme
 
     public override TrainHenchmenResult Execute([DisallowNull] GameState gameState, [DisallowNull] TrainHenchmenInput input)
     {
-        if (!GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState, HenchmenSpecialization.Untrained))
+        if (!GameStateChecks.CurrentPlayerHasAnyHenchmen(gameState, Specialization.Untrained))
         {
             throw new InvalidOperationException(InvalidOperationException_NoUntrainedHenchmen);
         }

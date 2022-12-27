@@ -51,7 +51,7 @@ internal class GameStateUpdater
         return this;
     }
 
-    public GameStateUpdater TrainPlayerHenchmen(int playerIndex, long amount, HenchmenSpecialization specialization)
+    public GameStateUpdater TrainPlayerHenchmen(int playerIndex, long amount, Specialization specialization)
     {
         GameState = GameStateUpdaterHelper.TrainGenericHenchmenForPlayer(GameState, playerIndex, amount, specialization);
 
@@ -300,7 +300,7 @@ internal class GameStateUpdater
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState TrainGenericHenchmenForPlayer(GameState gameState, int playerIndex, long amount, HenchmenSpecialization specialization)
+        public static GameState TrainGenericHenchmenForPlayer(GameState gameState, int playerIndex, long amount, Specialization specialization)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
@@ -315,7 +315,7 @@ internal class GameStateUpdater
 
             var updatedWorkforceState = specialization switch
             {
-                HenchmenSpecialization.Soldier => currentWorkforceState with {
+                Specialization.Soldier => currentWorkforceState with {
                     GenericHenchmenCount = updatedHenchmenAmount,
                     SoldierCount = currentWorkforceState.SoldierCount + amount,
                 },

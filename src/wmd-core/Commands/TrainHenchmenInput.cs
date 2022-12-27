@@ -35,21 +35,21 @@ public record TrainHenchmenInput : CommandInput
     /// Gets or initializes the specialization to train the henchmen in.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// The provided value is not a valid <see cref="HenchmenSpecialization"/> value.
+    /// The provided value is not a valid <see cref="State.Data.Henchmen.Specialization"/> value.
     /// -or-
-    /// The provided value is <see cref="HenchmenSpecialization.Untrained"/>.
+    /// The provided value is <see cref="Specialization.Untrained"/>.
     /// </exception>
-    public HenchmenSpecialization Specialization
+    public Specialization Specialization
     {
         get => _specialization;
         init
         {
-            if (!Enum.IsDefined<HenchmenSpecialization>(value))
+            if (!Enum.IsDefined<Specialization>(value))
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_InvalidSpecializationValue);
             }
 
-            if (value == HenchmenSpecialization.Untrained)
+            if (value == Specialization.Untrained)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_UntrainedSpecializationValue);
             }
@@ -59,5 +59,5 @@ public record TrainHenchmenInput : CommandInput
     }
 
     private long _numberToTrain;
-    private HenchmenSpecialization _specialization;
+    private Specialization _specialization;
 }

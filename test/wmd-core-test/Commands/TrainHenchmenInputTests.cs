@@ -24,7 +24,7 @@ public class TrainHenchmenInputTests
     {
         var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
         {
-            _ = new TrainHenchmenInput { Specialization = (HenchmenSpecialization)(-1) };
+            _ = new TrainHenchmenInput { Specialization = (Specialization)(-1) };
         });
 
         Assert.IsTrue(actual.Message.Contains("The provided value is not a valid specialization value."));
@@ -35,7 +35,7 @@ public class TrainHenchmenInputTests
     {
         var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
         {
-            _ = new TrainHenchmenInput { Specialization = HenchmenSpecialization.Untrained };
+            _ = new TrainHenchmenInput { Specialization = Specialization.Untrained };
         });
 
         Assert.IsTrue(actual.Message.Contains("The provided value cannot be for the untrained specialization."));

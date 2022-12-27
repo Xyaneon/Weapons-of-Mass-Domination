@@ -50,10 +50,10 @@ public static class GameStateChecks
     /// <param name="gameState">The current <see cref="GameState"/>.</param>
     /// <param name="specialization">The specialization of henchmen to check for.</param>
     /// <returns><see langword="true"/> if the current player has any henchmen of the matching specialization; otherwise, <see langword="false"/>.</returns>
-    public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState, HenchmenSpecialization specialization) => specialization switch
+    public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState, Specialization specialization) => specialization switch
     {
-        HenchmenSpecialization.Untrained => gameState.CurrentPlayer.State.WorkforceState.GenericHenchmenCount > 0,
-        HenchmenSpecialization.Soldier => gameState.CurrentPlayer.State.WorkforceState.SoldierCount > 0,
+        Specialization.Untrained => gameState.CurrentPlayer.State.WorkforceState.GenericHenchmenCount > 0,
+        Specialization.Soldier => gameState.CurrentPlayer.State.WorkforceState.SoldierCount > 0,
         _ => throw new ArgumentOutOfRangeException(nameof(specialization), $"Unsupported specialization value: {specialization}"),
     };
 
