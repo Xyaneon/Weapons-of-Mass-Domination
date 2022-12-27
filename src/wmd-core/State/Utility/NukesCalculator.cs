@@ -29,7 +29,15 @@ namespace WMD.Game.State.Utility
         /// <remarks>This method does not take the current status of nuke manufacturing prerequisites for the current player into account; it assumes they are already met.</remarks>
         public static int CalculateMaximumNumberOfNukesCurrentPlayerCouldManufacture([DisallowNull] GameState gameState)
         {
-            return (int)Math.Floor(gameState.CurrentPlayer.State.Money / NukeConstants.ManufacturingPrice);
+            try
+            {
+                return (int)Math.Floor(gameState.CurrentPlayer.State.Money / NukeConstants.ManufacturingPrice);
+            }
+            catch (System.OverflowException)
+            {
+                return Int32.MaxValue;
+            }
+            
         }
 
         /// <summary>
