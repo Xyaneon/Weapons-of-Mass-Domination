@@ -35,7 +35,7 @@ namespace WMD.Game.State.Utility
             }
             catch (System.OverflowException)
             {
-                return Int32.MaxValue;
+                return Int32.MaxValue - gameState.CurrentPlayer.State.Nukes;
             }
             
         }
