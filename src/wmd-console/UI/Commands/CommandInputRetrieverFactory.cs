@@ -23,6 +23,7 @@ static class CommandInputRetrieverFactory
         _ when commandInputType == typeof(SellLandInput) => new SellLandInputRetriever(),
         _ when commandInputType == typeof(SkipTurnInput) => new SkipTurnInputRetriever(),
         _ when commandInputType == typeof(StealMoneyInput) => new StealMoneyInputRetriever(),
+        _ when commandInputType == typeof(TrainHenchmenInput) => new TrainHenchmenInputRetriever(),
         _ when commandInputType == typeof(UpgradeSecretBaseInput) => new UpgradeSecretBaseInputRetriever(),
         _ => throw new ArgumentException(ArgumentException_commandInputTypeNotRecognized, nameof(commandInputType))
     };

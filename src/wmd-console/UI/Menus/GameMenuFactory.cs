@@ -3,6 +3,7 @@ using System.Linq;
 using WMD.Console.Extensions;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Utility;
 using Xyaneon.Console.Menus;
 
@@ -31,14 +32,17 @@ static class GameMenuFactory
         public const string Research = "Research";
         public const string Resign = "Resign";
         public const string SellLand = "Sell land";
+        public const string SpecializationSoldiers = "Soldiers";
         public const string SkipTurn = "Skip turn";
         public const string StealMoney = "Steal money";
+        public const string TrainHenchmen = "Train henchmen...";
         public const string UpgradeSecretBase = "Upgrade your secret base";
     }
 
     private static class MenuPageTitles
     {
         public const string Actions = "Actions";
+        public const string ChooseSpecialization = "Choose a specialization";
         public const string ChooseTargetPlayer = "Choose a target player";
         public const string Henchmen = "Henchmen";
         public const string Land = "Land";
@@ -61,6 +65,21 @@ static class GameMenuFactory
         menuItems.Enqueue(new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null)));
 
         menu.AddPage(MenuPageTitles.ChooseTargetPlayer, menuItems.ToArray());
+
+        return menu;
+    }
+
+    public static Menu CreateTrainingSpecializationMenu(GameState gameState)
+    {
+        var menu = new Menu();
+        var menuItems = new Queue<MenuItem>();
+
+        var soldierMenuItem = new MenuItem(MenuItemLabels.SpecializationSoldiers, () => menu.SetResultAndClose(Specialization.Soldier));
+        menuItems.Enqueue(soldierMenuItem);
+
+        menuItems.Enqueue(new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null)));
+
+        menu.AddPage(MenuPageTitles.ChooseSpecialization, menuItems.ToArray());
 
         return menu;
     }
@@ -134,6 +153,7 @@ static class GameMenuFactory
         MenuPageTitles.Henchmen,
         menu,
         CreateGameCommandMenuItem(MenuItemLabels.HireHenchmen, menu, gameState, new HireHenchmenCommand()),
+        CreateGameCommandMenuItem(MenuItemLabels.TrainHenchmen, menu, gameState, new TrainHenchmenCommand()),
         CreateGameCommandMenuItem(MenuItemLabels.ChangeDailyWage, menu, gameState, new ChangeDailyWageCommand())
     );
     

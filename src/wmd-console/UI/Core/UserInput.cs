@@ -3,6 +3,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Console.UI.Menus;
 using WMD.Game.Commands;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Henchmen;
 using Xyaneon.Console.Menus;
 
 namespace WMD.Console.UI.Core;
@@ -112,6 +113,13 @@ static class UserInput
         Menu playerSelectMenu = GameMenuFactory.CreateAttackTargetPlayerMenu(gameState);
         playerSelectMenu.Run();
         return (int?)playerSelectMenu.Result;
+    }
+
+    public static Specialization? GetTrainingSpecialization(GameState gameState)
+    {
+        Menu specializationSelectMenu = GameMenuFactory.CreateTrainingSpecializationMenu(gameState);
+        specializationSelectMenu.Run();
+        return (Specialization?)specializationSelectMenu.Result;
     }
 
     public static void WaitForPlayerAcknowledgementOfRoundEnd()

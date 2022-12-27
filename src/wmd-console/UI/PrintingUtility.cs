@@ -117,6 +117,11 @@ static class PrintingUtility
     {
         System.Console.WriteLine("You apparently changed your mind.");
     }
+    
+    public static void PrintNoHenchmenTrained()
+    {
+        System.Console.WriteLine("You apparently changed your mind.");
+    }
 
     public static void PrintNoLandToSell()
     {
