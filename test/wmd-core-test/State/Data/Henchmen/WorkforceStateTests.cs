@@ -16,7 +16,7 @@ public class WorkforceStateTests
 
         var subject = new WorkforceState();
 
-        Assert.AreEqual(expectedNumberOfHenchmen, subject.NumberOfHenchmen);
+        Assert.AreEqual(expectedNumberOfHenchmen, subject.TotalHenchmenCount);
         Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
         Assert.AreEqual(expectedTotalDailyPay, subject.TotalDailyPay);
     }
@@ -30,7 +30,7 @@ public class WorkforceStateTests
 
         var subject = new WorkforceState(expectedDailyPayRate, expectedNumberOfHenchmen);
 
-        Assert.AreEqual(expectedNumberOfHenchmen, subject.NumberOfHenchmen);
+        Assert.AreEqual(expectedNumberOfHenchmen, subject.TotalHenchmenCount);
         Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
         Assert.AreEqual(expectedTotalDailyPay, subject.TotalDailyPay);
     }

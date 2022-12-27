@@ -41,7 +41,7 @@ public static class GameStateChecks
     /// <param name="gameState">The current <see cref="GameState"/>.</param>
     /// <returns><see langword="true"/> if the current player has any henchmen; otherwise, <see langword="false"/>.</returns>
     public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState) =>
-        gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
+        gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount > 0;
 
     /// <summary>
     /// Determines whether the current player has any nukes in their inventory.
@@ -144,7 +144,7 @@ public static class GameStateChecks
     /// <returns>A collection of indices of the players with the most henchmen.</returns>
     /// <remarks>The collection returned will be empty if all players have no henchmen.</remarks>
     public static IEnumerable<int> FindIndicesOfPlayersWithTheMostHenchmen([DisallowNull] GameState gameState) =>
-        FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => playerState.WorkforceState.NumberOfHenchmen);
+        FindIndicesOfPlayersWithLargestQuantity(gameState, playerState => playerState.WorkforceState.TotalHenchmenCount);
 
     /// <summary>
     /// Determines whether the planet's neutral population has been depleted.

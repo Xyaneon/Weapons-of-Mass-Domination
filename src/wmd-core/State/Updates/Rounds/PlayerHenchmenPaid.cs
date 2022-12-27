@@ -16,7 +16,7 @@ public record PlayerHenchmenPaid : RoundUpdateResultItem
     {
         var playerState = gameState.Players[playerIndex].State;
         DailyPayRate = playerState.WorkforceState.DailyPayRate;
-        NumberOfHenchmenPaid = playerState.WorkforceState.NumberOfHenchmen;
+        NumberOfHenchmenPaid = playerState.WorkforceState.TotalHenchmenCount;
         PlayerIndex = playerIndex;
     }
 

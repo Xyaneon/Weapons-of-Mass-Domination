@@ -69,7 +69,7 @@ public static class NukesCalculator
             return 0;
         }
 
-        long initialHenchmenCount = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
+        long initialHenchmenCount = gameState.Players[playerIndex].State.WorkforceState.TotalHenchmenCount;
         long newHenchmenCount = initialHenchmenCount;
         for (int i = 0; i < numberOfSuccessfulHits; i++)
         {

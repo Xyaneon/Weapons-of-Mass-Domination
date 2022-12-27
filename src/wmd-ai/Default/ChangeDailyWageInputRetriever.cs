@@ -35,7 +35,7 @@ internal sealed class ChangeDailyWageInputRetriever : ICommandInputRetriever
     private static decimal CalculateMaxAffordableDailyPayRate(GameState gameState)
     {
         PlayerState currentPlayerState = gameState.CurrentPlayer.State;
-        return Math.Max(Math.Round(currentPlayerState.Money / Math.Max(currentPlayerState.WorkforceState.NumberOfHenchmen, 1), 2, MidpointRounding.ToZero), 0.00m);
+        return Math.Max(Math.Round(currentPlayerState.Money / Math.Max(currentPlayerState.WorkforceState.TotalHenchmenCount, 1), 2, MidpointRounding.ToZero), 0.00m);
     }
 
     private static bool CannotAffordCurrentPayRate(GameState gameState)

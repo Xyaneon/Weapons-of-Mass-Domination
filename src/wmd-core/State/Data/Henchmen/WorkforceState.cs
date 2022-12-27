@@ -23,7 +23,7 @@ public record WorkforceState
     public WorkforceState()
     {
         DailyPayRate = DefaultDailyPayRate;
-        NumberOfHenchmen = 0;
+        TotalHenchmenCount = 0;
         SoldierCount = 0;
     }
 
@@ -44,7 +44,7 @@ public record WorkforceState
     public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long numberOfHenchmen = 0)
     {
         DailyPayRate = dailyPayRate;
-        NumberOfHenchmen = numberOfHenchmen;
+        TotalHenchmenCount = numberOfHenchmen;
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public record WorkforceState
     /// <exception cref="ArgumentOutOfRangeException">
     /// The value to initialize this property with is less than zero.
     /// </exception>
-    public long NumberOfHenchmen
+    public long TotalHenchmenCount
     {
         get => _numberOfHenchmen;
         init
@@ -114,9 +114,9 @@ public record WorkforceState
     /// Gets the total daily pay for the entire workforce.
     /// </summary>
     /// <remarks>
-    /// The value of this property depends on the current values of the <see cref="DailyPayRate"/> and <see cref="NumberOfHenchmen"/> properties.
+    /// The value of this property depends on the current values of the <see cref="DailyPayRate"/> and <see cref="TotalHenchmenCount"/> properties.
     /// </remarks>
-    public decimal TotalDailyPay { get => DailyPayRate * NumberOfHenchmen; }
+    public decimal TotalDailyPay { get => DailyPayRate * TotalHenchmenCount; }
 
     private decimal _dailyPayRate;
     private long _numberOfHenchmen;

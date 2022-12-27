@@ -118,7 +118,7 @@ static class StartOfTurnPrinter
         var stats = new List<string>(new string[]
         {
             string.Format(MoneyFormatString, state.Money),
-            string.Format(HenchmenFormatString, state.WorkforceState.NumberOfHenchmen),
+            string.Format(HenchmenFormatString, state.WorkforceState.TotalHenchmenCount),
             string.Format(LandFormatString, state.Land),
             string.Format(ReputationFormatString, state.ReputationPercentage),
         });

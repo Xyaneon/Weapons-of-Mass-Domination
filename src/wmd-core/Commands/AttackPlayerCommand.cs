@@ -63,7 +63,7 @@ public class AttackPlayerCommand : GameCommand<AttackPlayerInput, AttackPlayerRe
     }
 
     private static bool CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(GameState gameState, AttackPlayerInput input) =>
-        gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen >= input.NumberOfAttackingHenchmen;
+        gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount >= input.NumberOfAttackingHenchmen;
 
     private static bool CurrentPlayerIsAttackingThemselves(GameState gameState, AttackPlayerInput input) =>
         GameStateChecks.CurrentPlayerIsAttackingThemselves(gameState, input.TargetPlayerIndex);

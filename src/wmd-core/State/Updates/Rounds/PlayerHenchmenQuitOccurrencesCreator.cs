@@ -22,7 +22,7 @@ internal sealed class PlayerHenchmenQuitOccurrencesCreator : RoundUpdateResultOc
 
         long henchmenQuit = playerState switch
         {
-            _ when PlayerCannotPayTheirHenchmen(playerState) => playerState.WorkforceState.NumberOfHenchmen,
+            _ when PlayerCannotPayTheirHenchmen(playerState) => playerState.WorkforceState.TotalHenchmenCount,
             _ when PlayerHenchmenAreUnderpaid(playerState) => CalculateHenchmenQuitDueToUnderpay(playerState.WorkforceState),
             _ => 0,
         };
@@ -31,14 +31,14 @@ internal sealed class PlayerHenchmenQuitOccurrencesCreator : RoundUpdateResultOc
     }
 
     private static bool PlayerCannotPayTheirHenchmen(PlayerState playerState) =>
-        playerState.Money <= 0 && playerState.WorkforceState.NumberOfHenchmen > 0;
+        playerState.Money <= 0 && playerState.WorkforceState.TotalHenchmenCount > 0;
 
     private static bool PlayerHenchmenAreUnderpaid(PlayerState playerState) =>
-        playerState.WorkforceState.DailyPayRate < HenchmenConstants.MinimumDailyWage && playerState.WorkforceState.NumberOfHenchmen > 0;
+        playerState.WorkforceState.DailyPayRate < HenchmenConstants.MinimumDailyWage && playerState.WorkforceState.TotalHenchmenCount > 0;
 
     private static int CalculateHenchmenQuitDueToUnderpay(WorkforceState workforceState)
     {
         double underpayPercentage = 1 - (double)workforceState.DailyPayRate / (double)HenchmenConstants.MinimumDailyWage;
-        return (int)Math.Ceiling(workforceState.NumberOfHenchmen * underpayPercentage);
+        return (int)Math.Ceiling(workforceState.TotalHenchmenCount * underpayPercentage);
     }
 }

@@ -281,13 +281,13 @@ internal class GameStateUpdater
             var currentPlayerState = gameState.Players[playerIndex].State;
             var currentWorkforceState = currentPlayerState.WorkforceState;
 
-            var updatedHenchmenAmount = currentWorkforceState.NumberOfHenchmen + adjustmentAmount;
+            var updatedHenchmenAmount = currentWorkforceState.TotalHenchmenCount + adjustmentAmount;
             if (updatedHenchmenAmount < 0)
             {
                 throw new InvalidOperationException(InvalidOperationException_playerHenchmenQuantity_cannotBeNegative);
             }
 
-            var updatedWorkforceState = currentWorkforceState with { NumberOfHenchmen = updatedHenchmenAmount };
+            var updatedWorkforceState = currentWorkforceState with { TotalHenchmenCount = updatedHenchmenAmount };
             var updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
