@@ -12,15 +12,13 @@ namespace WMD.Game.Test.State.Utility
     public class NukesCalculatorTests
     {
         [DataTestMethod]
-        [DataRow(0, 0)]
-        [DataRow(1000, 1)]
-        [DataRow(2000, 2)]
+        [DynamicData(nameof(CalculateMaximumNumberOfNukesCurrentPlayerCouldManufactureData))]
         public void CalculateMaximumNumberOfNukesCurrentPlayerCouldManufacture_ShouldReturnExpectedAmountForGameState(
-            double playerMoney,
+            decimal playerMoney,
             int expectedNukesPlayerCouldPurchase
         )
         {
-            var playerState = new PlayerState() with { Money = Convert.ToDecimal(playerMoney) };
+            var playerState = new PlayerState() with { Money = playerMoney };
             var player = new Player(
                 new PlayerIdentification("Test player", PlayerColor.Red, true)
             ) with { State = playerState };
@@ -31,5 +29,13 @@ namespace WMD.Game.Test.State.Utility
 
             Assert.AreEqual(expectedNukesPlayerCouldPurchase, actual, "Money: {0}", playerMoney);
         }
+
+        public static IEnumerable<Object[]> CalculateMaximumNumberOfNukesCurrentPlayerCouldManufactureData =>
+            new [] {
+                new Object[] { 0m, 0 },
+                new Object[] { 1000m, 1 },
+                new Object[] { 2000m, 2 },
+                new Object[] { 2338310951653.58m, Int32.MaxValue },
+            };
     }
 }
