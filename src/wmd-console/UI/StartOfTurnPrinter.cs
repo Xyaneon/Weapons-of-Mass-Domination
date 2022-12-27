@@ -30,7 +30,7 @@ static class StartOfTurnPrinter
     private const string SecretBaseLevelFormatString = "Your secret base is at Level {0:N0}.";
     private const string SoldiersFormatString = "- Soldiers : {0:N0}";
     private const string StatsSeparator = " | ";
-    private const string TotalHenchmenFormatString = "You have {0:N0} total henchmen, including:";
+    private const string TotalHenchmenFormatString = "You have {0:N0} total henchmen, each paid {1:C} per day ({2:C} total). This includes:";
     private const string UntrainedHenchmenFormatString = "- Untrained: {0:N0}";
 
     private static class NukeResearchFlavorTextCreator
@@ -149,7 +149,7 @@ static class StartOfTurnPrinter
             return;
         }
 
-        System.Console.WriteLine(TotalHenchmenFormatString, workforce.TotalHenchmenCount);
+        System.Console.WriteLine(TotalHenchmenFormatString, workforce.TotalHenchmenCount, workforce.DailyPayRate, workforce.TotalDailyPay);
         System.Console.WriteLine(UntrainedHenchmenFormatString, workforce.GenericHenchmenCount);
         if (workforce.SoldierCount > 0)
         {
