@@ -15,40 +15,6 @@ public record WorkforceState
     private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="WorkforceState"/> class.
-    /// </summary>
-    /// <remarks>
-    /// This will set the value of the <see cref="DailyPayRate"/> property to <see cref="HenchmenConstants.MinimumDailyWage"/> by default.
-    /// </remarks>
-    public WorkforceState()
-    {
-        DailyPayRate = DefaultDailyPayRate;
-        GenericHenchmenCount = 0;
-        SoldierCount = 0;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WorkforceState"/> class.
-    /// </summary>
-    /// <param name="dailyPayRate">
-    /// The daily pay rate of each henchman.
-    /// </param>
-    /// <param name="genericHenchmenCount">
-    /// The number of henchmen in this workforce.
-    /// </param>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// <paramref name="dailyPayRate"/> is less than zero.
-    /// -or-
-    /// <paramref name="genericHenchmenCount"/> is less than zero.
-    /// </exception>
-    public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long genericHenchmenCount = 0)
-    {
-        DailyPayRate = dailyPayRate;
-        GenericHenchmenCount = genericHenchmenCount;
-        SoldierCount = 0;
-    }
-
-    /// <summary>
     /// Gets the daily pay rate of each henchman.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
@@ -130,7 +96,7 @@ public record WorkforceState
     /// </remarks>
     public decimal TotalDailyPay { get => DailyPayRate * TotalHenchmenCount; }
 
-    private decimal _dailyPayRate;
+    private decimal _dailyPayRate = DefaultDailyPayRate;
     private long _genericHenchmenCount;
     private long _soldierCount;
     private long _totalHenchmenCount;

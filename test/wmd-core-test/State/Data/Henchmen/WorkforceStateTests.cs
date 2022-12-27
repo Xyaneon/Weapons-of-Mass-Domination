@@ -14,7 +14,7 @@ public class WorkforceStateTests
         const decimal expectedDailyPayRate = 7;
         const decimal expectedTotalDailyPay = expectedGenericHenchmenCount * expectedDailyPayRate;
 
-        var subject = new WorkforceState();
+        var subject = new WorkforceState {};
 
         Assert.AreEqual(expectedGenericHenchmenCount, subject.TotalHenchmenCount);
         Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
@@ -28,7 +28,10 @@ public class WorkforceStateTests
         const decimal expectedDailyPayRate = 3;
         const decimal expectedTotalDailyPay = expectedGenericHenchmenCount * expectedDailyPayRate;
 
-        var subject = new WorkforceState(expectedDailyPayRate, expectedGenericHenchmenCount);
+        var subject = new WorkforceState {
+            DailyPayRate = expectedDailyPayRate,
+            GenericHenchmenCount = expectedGenericHenchmenCount,
+        };
 
         Assert.AreEqual(expectedGenericHenchmenCount, subject.TotalHenchmenCount);
         Assert.AreEqual(expectedDailyPayRate, subject.DailyPayRate);
@@ -43,7 +46,7 @@ public class WorkforceStateTests
         const string expectedMessage = "The daily pay rate cannot be less than zero.";
 
         var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(
-            () => new WorkforceState(dailyPayRate, genericHenchmenCount)
+            () => new WorkforceState { DailyPayRate = dailyPayRate, GenericHenchmenCount = genericHenchmenCount }
         );
         
         Assert.IsTrue(actual.Message.Contains(expectedMessage));
@@ -57,7 +60,7 @@ public class WorkforceStateTests
         const string expectedMessage = "The number of generic henchmen cannot be less than zero.";
 
         var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(
-            () => new WorkforceState(dailyPayRate, genericHenchmenCount)
+            () => new WorkforceState { DailyPayRate = dailyPayRate, GenericHenchmenCount = genericHenchmenCount }
         );
 
         Assert.IsTrue(actual.Message.Contains(expectedMessage));

@@ -12,7 +12,7 @@ public class PlayerStateTests
     public void DefaultConstructor_ShouldSetPropertiesToExpectedValues()
     {
         var expectedResearchState = new ResearchState();
-        var expectedWorkforceState = new WorkforceState();
+        var expectedWorkforceState = new WorkforceState {};
 
         var actual = new PlayerState();
 
