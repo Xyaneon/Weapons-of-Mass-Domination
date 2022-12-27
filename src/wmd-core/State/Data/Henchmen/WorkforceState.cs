@@ -9,8 +9,9 @@ namespace WMD.Game.State.Data.Henchmen;
 public record WorkforceState
 {
     private const string ArgumentOutOfRangeException_DailyPayRateLessThanZero = "The daily pay rate cannot be less than zero.";
-    private const string ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero = "The number of henchmen cannot be less than zero.";
+    private const string ArgumentOutOfRangeException_GenericHenchmenCountLessThanZero = "The number of generic henchmen cannot be less than zero.";
     private const string ArgumentOutOfRangeException_SoldierCountLessThanZero = "The number of soldiers cannot be less than zero.";
+    private const string ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero = "The number of henchmen cannot be less than zero.";
     
     private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
 
@@ -23,8 +24,9 @@ public record WorkforceState
     public WorkforceState()
     {
         DailyPayRate = DefaultDailyPayRate;
-        TotalHenchmenCount = 0;
+        GenericHenchmenCount = 0;
         SoldierCount = 0;
+        TotalHenchmenCount = 0;
     }
 
     /// <summary>
@@ -44,6 +46,8 @@ public record WorkforceState
     public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long numberOfHenchmen = 0)
     {
         DailyPayRate = dailyPayRate;
+        GenericHenchmenCount = 0;
+        SoldierCount = 0;
         TotalHenchmenCount = numberOfHenchmen;
     }
 
@@ -91,6 +95,29 @@ public record WorkforceState
     }
 
     /// <summary>
+    /// Gets the number of generic henchmen in this workforce.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The value to initialize this property with is less than zero.
+    /// </exception>
+    /// <remarks>
+    /// These are the henchmen a player has who have not been specialized yet.
+    /// </remarks>
+    public long GenericHenchmenCount
+    {
+        get => _genericHenchmenCount;
+        init
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_GenericHenchmenCountLessThanZero);
+            }
+
+            _genericHenchmenCount = value;
+        }
+    }
+
+    /// <summary>
     /// Gets the number of soldiers in this workforce.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
@@ -119,6 +146,7 @@ public record WorkforceState
     public decimal TotalDailyPay { get => DailyPayRate * TotalHenchmenCount; }
 
     private decimal _dailyPayRate;
-    private long _totalHenchmenCount;
+    private long _genericHenchmenCount;
     private long _soldierCount;
+    private long _totalHenchmenCount;
 }
