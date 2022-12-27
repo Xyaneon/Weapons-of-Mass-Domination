@@ -1,25 +1,24 @@
-﻿namespace WMD.Game.State.Data.Players
+﻿namespace WMD.Game.State.Data.Players;
+
+/// <summary>
+/// Indicates a player's color.
+/// </summary>
+public enum PlayerColor
 {
     /// <summary>
-    /// Indicates a player's color.
+    /// Indicates that the player's color is red.
     /// </summary>
-    public enum PlayerColor
-    {
-        /// <summary>
-        /// Indicates that the player's color is red.
-        /// </summary>
-        Red,
-        /// <summary>
-        /// Indicates that the player's color is blue.
-        /// </summary>
-        Blue,
-        /// <summary>
-        /// Indicates that the player's color is green.
-        /// </summary>
-        Green,
-        /// <summary>
-        /// Indicates that the player's color is yellow.
-        /// </summary>
-        Yellow
-    }
+    Red,
+    /// <summary>
+    /// Indicates that the player's color is blue.
+    /// </summary>
+    Blue,
+    /// <summary>
+    /// Indicates that the player's color is green.
+    /// </summary>
+    Green,
+    /// <summary>
+    /// Indicates that the player's color is yellow.
+    /// </summary>
+    Yellow
 }
