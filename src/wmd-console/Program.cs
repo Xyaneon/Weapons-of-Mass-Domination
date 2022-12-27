@@ -2,17 +2,16 @@
 using WMD.Console.UI.Menus;
 using Xyaneon.Console.Menus;
 
-namespace WMD.Console
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            PrintingUtility.SetOutputEncoding();
-            PrintingUtility.PrintTitle();
+namespace WMD.Console;
 
-            Menu mainMenu = GameMenuFactory.CreateMainMenu();
-            mainMenu.Run();
-        }
+class Program
+{
+    static void Main(string[] args)
+    {
+        PrintingUtility.SetOutputEncoding();
+        PrintingUtility.PrintTitle();
+
+        Menu mainMenu = GameMenuFactory.CreateMainMenu();
+        mainMenu.Run();
     }
 }
