@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Players;
 
 namespace WMD.Game.State.Utility;
@@ -36,12 +37,25 @@ public static class GameStateChecks
         gameState.CurrentPlayer.State.SecretBase != null;
 
     /// <summary>
-    /// Determines whether the current player has any henchmen.
+    /// Determines whether the current player has any henchmen, regardless of specialization.
     /// </summary>
     /// <param name="gameState">The current <see cref="GameState"/>.</param>
     /// <returns><see langword="true"/> if the current player has any henchmen; otherwise, <see langword="false"/>.</returns>
     public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState) =>
         gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount > 0;
+
+    /// <summary>
+    /// Determines whether the current player has any henchmen of a given specialization.
+    /// </summary>
+    /// <param name="gameState">The current <see cref="GameState"/>.</param>
+    /// <param name="specialization">The specialization of henchmen to check for.</param>
+    /// <returns><see langword="true"/> if the current player has any henchmen of the matching specialization; otherwise, <see langword="false"/>.</returns>
+    public static bool CurrentPlayerHasAnyHenchmen([DisallowNull] GameState gameState, HenchmenSpecialization specialization) => specialization switch
+    {
+        HenchmenSpecialization.Untrained => gameState.CurrentPlayer.State.WorkforceState.GenericHenchmenCount > 0,
+        HenchmenSpecialization.Soldier => gameState.CurrentPlayer.State.WorkforceState.SoldierCount > 0,
+        _ => throw new ArgumentOutOfRangeException(nameof(specialization), $"Unsupported specialization value: {specialization}"),
+    };
 
     /// <summary>
     /// Determines whether the current player has any nukes in their inventory.
@@ -100,7 +114,7 @@ public static class GameStateChecks
     /// <returns>A collection of indices of all players other than the current player.</returns>
     public static IEnumerable<int> FindIndicesOfPlayersOtherThanCurrent([DisallowNull] GameState gameState) =>
         FindIndicesOfPlayersOtherThanGiven(gameState, gameState.CurrentPlayerIndex);
-    
+
     /// <summary>
     /// Returns a collection of indices of all players other than the one to exclude.
     /// </summary>
