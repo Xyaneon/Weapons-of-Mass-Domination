@@ -83,7 +83,7 @@ internal class GameStateUpdater
 
     public GameStateUpdater AdjustHenchmenForPlayer(int playerIndex, long adjustmentAmount)
     {
-        GameState = GameStateUpdaterHelper.AdjustHenchmenForPlayer(GameState, playerIndex, adjustmentAmount);
+        GameState = GameStateUpdaterHelper.AdjustGenericHenchmenForPlayer(GameState, playerIndex, adjustmentAmount);
         return this;
     }
 
@@ -147,8 +147,8 @@ internal class GameStateUpdater
 
         public static GameState AdjustPlayerStatesAfterAttack(GameState gameState, int attackerIndex, int defenderIndex, PlayerOnPlayerAttackCalculationsResult calculationsResult)
         {
-            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
-            updatedGameState = AdjustHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);
+            GameState updatedGameState = AdjustGenericHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
+            updatedGameState = AdjustGenericHenchmenForPlayer(updatedGameState, defenderIndex, -1 * calculationsResult.HenchmenDefenderLost);
             updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
             updatedGameState = AdjustReputationForPlayer(updatedGameState, defenderIndex, calculationsResult.ReputationChangeForDefender);
             updatedGameState = HavePlayerGiveUpLand(updatedGameState, defenderIndex, -1 * calculationsResult.LandAreaChangeForDefender);
@@ -158,7 +158,7 @@ internal class GameStateUpdater
 
         public static GameState AdjustStateAfterGovernmentAttackOnPlayer(GameState gameState, GovernmentAttacksPlayer governmentAttacksPlayer)
         {
-            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, governmentAttacksPlayer.PlayerIndex, -1 * governmentAttacksPlayer.AttackCombatantsChanges.CombatantsLostByDefender);
+            GameState updatedGameState = AdjustGenericHenchmenForPlayer(gameState, governmentAttacksPlayer.PlayerIndex, -1 * governmentAttacksPlayer.AttackCombatantsChanges.CombatantsLostByDefender);
             updatedGameState = AdjustGovernmentArmySize(updatedGameState, -1 * governmentAttacksPlayer.AttackCombatantsChanges.CombatantsLostByAttacker);
 
             return updatedGameState;
@@ -166,7 +166,7 @@ internal class GameStateUpdater
 
         public static GameState AdjustStateAfterPlayerAttackOnGovernmentArmy(GameState gameState, int attackerIndex, PlayerOnGovernmentArmyAttackCalculationsResult calculationsResult)
         {
-            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
+            GameState updatedGameState = AdjustGenericHenchmenForPlayer(gameState, attackerIndex, -1 * calculationsResult.HenchmenAttackerLost);
             updatedGameState = AdjustGovernmentArmySize(updatedGameState, -1 * calculationsResult.SoldiersGovernmentArmyLost);
             updatedGameState = AdjustReputationForPlayer(updatedGameState, attackerIndex, calculationsResult.ReputationChangeForAttacker);
 
@@ -175,7 +175,7 @@ internal class GameStateUpdater
 
         public static GameState ConvertNeutralPopulationToPlayerHenchmen(GameState gameState, int playerIndex, long numberOfHenchmen)
         {
-            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, numberOfHenchmen);
+            GameState updatedGameState = AdjustGenericHenchmenForPlayer(gameState, playerIndex, numberOfHenchmen);
             updatedGameState = AdjustNeutralPopulation(updatedGameState, -1 * numberOfHenchmen);
 
             return updatedGameState;
@@ -183,7 +183,7 @@ internal class GameStateUpdater
 
         public static GameState ConvertPlayerHenchmenToNeutralPopulation(GameState gameState, int playerIndex, long numberOfHenchmen)
         {
-            GameState updatedGameState = AdjustHenchmenForPlayer(gameState, playerIndex, -1 * numberOfHenchmen);
+            GameState updatedGameState = AdjustGenericHenchmenForPlayer(gameState, playerIndex, -1 * numberOfHenchmen);
             updatedGameState = AdjustNeutralPopulation(updatedGameState, numberOfHenchmen);
 
             return updatedGameState;
@@ -274,20 +274,20 @@ internal class GameStateUpdater
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);
         }
 
-        public static GameState AdjustHenchmenForPlayer(GameState gameState, int playerIndex, long adjustmentAmount)
+        public static GameState AdjustGenericHenchmenForPlayer(GameState gameState, int playerIndex, long adjustmentAmount)
         {
             ThrowIfPlayerIndexIsOutOfBounds(gameState, nameof(playerIndex), playerIndex);
 
             var currentPlayerState = gameState.Players[playerIndex].State;
             var currentWorkforceState = currentPlayerState.WorkforceState;
 
-            var updatedHenchmenAmount = currentWorkforceState.TotalHenchmenCount + adjustmentAmount;
+            var updatedHenchmenAmount = currentWorkforceState.GenericHenchmenCount + adjustmentAmount;
             if (updatedHenchmenAmount < 0)
             {
                 throw new InvalidOperationException(InvalidOperationException_playerHenchmenQuantity_cannotBeNegative);
             }
 
-            var updatedWorkforceState = currentWorkforceState with { TotalHenchmenCount = updatedHenchmenAmount };
+            var updatedWorkforceState = currentWorkforceState with { GenericHenchmenCount = updatedHenchmenAmount };
             var updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
 
             return UpdatePlayerState(gameState, playerIndex, updatedPlayerState);

@@ -11,7 +11,6 @@ public record WorkforceState
     private const string ArgumentOutOfRangeException_DailyPayRateLessThanZero = "The daily pay rate cannot be less than zero.";
     private const string ArgumentOutOfRangeException_GenericHenchmenCountLessThanZero = "The number of generic henchmen cannot be less than zero.";
     private const string ArgumentOutOfRangeException_SoldierCountLessThanZero = "The number of soldiers cannot be less than zero.";
-    private const string ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero = "The number of henchmen cannot be less than zero.";
     
     private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
 
@@ -26,7 +25,6 @@ public record WorkforceState
         DailyPayRate = DefaultDailyPayRate;
         GenericHenchmenCount = 0;
         SoldierCount = 0;
-        TotalHenchmenCount = 0;
     }
 
     /// <summary>
@@ -35,20 +33,19 @@ public record WorkforceState
     /// <param name="dailyPayRate">
     /// The daily pay rate of each henchman.
     /// </param>
-    /// <param name="numberOfHenchmen">
+    /// <param name="genericHenchmenCount">
     /// The number of henchmen in this workforce.
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException">
     /// <paramref name="dailyPayRate"/> is less than zero.
     /// -or-
-    /// <paramref name="numberOfHenchmen"/> is less than zero.
+    /// <paramref name="genericHenchmenCount"/> is less than zero.
     /// </exception>
-    public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long numberOfHenchmen = 0)
+    public WorkforceState(decimal dailyPayRate = DefaultDailyPayRate, long genericHenchmenCount = 0)
     {
         DailyPayRate = dailyPayRate;
-        GenericHenchmenCount = 0;
+        GenericHenchmenCount = genericHenchmenCount;
         SoldierCount = 0;
-        TotalHenchmenCount = numberOfHenchmen;
     }
 
     /// <summary>
@@ -77,21 +74,9 @@ public record WorkforceState
     /// <summary>
     /// Gets the number of henchmen in this workforce.
     /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// The value to initialize this property with is less than zero.
-    /// </exception>
     public long TotalHenchmenCount
     {
-        get => _totalHenchmenCount;
-        init
-        {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_TotalHenchmenCountLessThanZero);
-            }
-
-            _totalHenchmenCount = value;
-        }
+        get => _genericHenchmenCount + _soldierCount;
     }
 
     /// <summary>
