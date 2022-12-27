@@ -56,6 +56,11 @@ public interface IGameCommand
     /// <returns>
     /// A new object describing the results of running the command.
     /// </returns>
+    /// <remarks>
+    /// This method may throw an exception if it is called with a <paramref name="gameState"/>
+    /// and/or <paramref name="input"/> for which either the <see cref="CanExecuteForState"/>
+    /// or <see cref="CanExecuteForStateAndInput"/> would return <see langword="false"/>.
+    /// </remarks>
     object Execute([DisallowNull] GameState gameState, [DisallowNull] object input);
 }
 
@@ -101,5 +106,10 @@ public interface IGameCommand<TInput, TOutput> : IGameCommand
     /// <returns>
     /// A new object describing the results of running the command.
     /// </returns>
+    /// <remarks>
+    /// This method may throw an exception if it is called with a <paramref name="gameState"/>
+    /// and/or <paramref name="input"/> for which either the <see cref="IGameCommand.CanExecuteForState(GameState)"/>
+    /// or <see cref="CanExecuteForStateAndInput"/> would return <see langword="false"/>.
+    /// </remarks>
     TOutput Execute([DisallowNull] GameState gameState, [DisallowNull] TInput input);
 }
