@@ -22,7 +22,7 @@ class ChangeDailyWageInputRetriever : ICommandInputRetriever
             return null;
         }
 
-        long currentNumberOfHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
+        long currentNumberOfHenchmen = gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount;
 
         var confirmationPrompt = string.Format(ConfirmationPromptFormatString, newDailyWage, currentNumberOfHenchmen, currentNumberOfHenchmen * newDailyWage);
         return UserInput.GetConfirmation(confirmationPrompt)

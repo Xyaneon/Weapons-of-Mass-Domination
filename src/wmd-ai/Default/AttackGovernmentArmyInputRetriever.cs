@@ -19,7 +19,7 @@ internal sealed class AttackGovernmentArmyInputRetriever : ICommandInputRetrieve
     }
 
     private static long CalculateHenchmenToAttackWith(GameState gameState) =>
-        Math.Max(gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen / 2, 1);
+        Math.Max(gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount / 2, 1);
 
-    private static bool HasHenchmenToAttackWith(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen > 0;
+    private static bool HasHenchmenToAttackWith(GameState gameState) => gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount > 0;
 }

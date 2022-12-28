@@ -11,7 +11,7 @@ class AttackPlayerInputRetriever : ICommandInputRetriever
 
     public CommandInput? GetCommandInput(GameState gameState)
     {
-        long maximumAllowedHenchmen = gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen;
+        long maximumAllowedHenchmen = gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount;
         if (maximumAllowedHenchmen == 0)
         {
             return null;

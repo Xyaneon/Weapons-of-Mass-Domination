@@ -50,5 +50,5 @@ public class AttackGovernmentArmyCommand : GameCommand<AttackGovernmentArmyInput
     }
 
     private static bool CurrentPlayerHasEnoughHenchmenForNumberRequestedInAttack(GameState gameState, AttackGovernmentArmyInput input) =>
-        gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen >= input.NumberOfAttackingHenchmen;
+        gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount >= input.NumberOfAttackingHenchmen;
 }

@@ -5,6 +5,7 @@ using WMD.Console.Miscellaneous;
 using WMD.Game.Constants;
 using WMD.Game.State.Data;
 using WMD.Game.State.Data.Governments;
+using WMD.Game.State.Data.Henchmen;
 using WMD.Game.State.Data.Planets;
 using WMD.Game.State.Data.Players;
 using WMD.Game.State.Data.Research;
@@ -15,11 +16,11 @@ namespace WMD.Console.UI;
 static class StartOfTurnPrinter
 {
     private const string HeaderTextFormatString = "{0}'s turn (Day {1})";
-    private const string HenchmenFormatString = "Henchmen: {0:N0}";
     private const string GovernmentDefeated = "The government has been defeated.";
     private const string GovernmentSummaryFormatString = "The government has {0:N0} soldiers in its army.";
     private const string LandFormatString = "Land: {0:N0} km²";
     private const string MoneyFormatString = "Money: {0:C}";
+    private const string NoHenchmen = "You have no henchmen.";
     private const string NoSecretBase = "You do not have your own secret base yet.";
     private const string NukesFormatString = "Nukes: {0:N0}";
     private const string NukeResearchFormatString = "Your nuke research is at Level {0:N0} ({1}).";
@@ -27,7 +28,10 @@ static class StartOfTurnPrinter
     private const string RealWorldComparisonFormatString = "You control a land area comparable to {0}.";
     private const string ReputationFormatString = "Reputation: {0:N0}%";
     private const string SecretBaseLevelFormatString = "Your secret base is at Level {0:N0}.";
+    private const string SoldiersFormatString = "- Soldiers : {0:N0}";
     private const string StatsSeparator = " | ";
+    private const string TotalHenchmenFormatString = "You have {0:N0} total henchmen, each paid {1:C} per day ({2:C} total). This includes:";
+    private const string UntrainedHenchmenFormatString = "- Untrained: {0:N0}";
 
     private static class NukeResearchFlavorTextCreator
     {
@@ -73,6 +77,7 @@ static class StartOfTurnPrinter
 
         PrintPlayerStats(currentPlayer);
         PrintRealWorldLocationComparison(currentPlayer.State.Land);
+        PrintWorkforceStats(currentPlayer.State.WorkforceState);
         PrintSecretBaseInfo(currentPlayer.State.SecretBase);
         if (currentPlayer.State.SecretBase != null)
         {
@@ -118,7 +123,6 @@ static class StartOfTurnPrinter
         var stats = new List<string>(new string[]
         {
             string.Format(MoneyFormatString, state.Money),
-            string.Format(HenchmenFormatString, state.WorkforceState.NumberOfHenchmen),
             string.Format(LandFormatString, state.Land),
             string.Format(ReputationFormatString, state.ReputationPercentage),
         });
@@ -136,6 +140,22 @@ static class StartOfTurnPrinter
 
     private static void PrintSecretBaseInfo(SecretBase? secretBase) =>
         System.Console.WriteLine(secretBase != null ? string.Format(SecretBaseLevelFormatString, secretBase.Level) : NoSecretBase);
+    
+    private static void PrintWorkforceStats(WorkforceState workforce)
+    {
+        if (workforce.TotalHenchmenCount <= 0)
+        {
+            System.Console.WriteLine(NoHenchmen);
+            return;
+        }
+
+        System.Console.WriteLine(TotalHenchmenFormatString, workforce.TotalHenchmenCount, workforce.DailyPayRate, workforce.TotalDailyPay);
+        System.Console.WriteLine(UntrainedHenchmenFormatString, workforce.GenericHenchmenCount);
+        if (workforce.SoldierCount > 0)
+        {
+            System.Console.WriteLine(SoldiersFormatString, workforce.SoldierCount);
+        }
+    }
 
     private static void PrintPlanetSummary(Planet planet) =>
         System.Console.WriteLine(PlanetSummaryFormatString, planet.UnclaimedLandArea, planet.NeutralPopulation, planet.Name, planet.PercentageOfLandStillUnclaimed);

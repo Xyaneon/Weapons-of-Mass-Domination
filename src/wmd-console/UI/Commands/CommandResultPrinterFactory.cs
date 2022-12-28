@@ -23,6 +23,7 @@ class CommandResultPrinterFactory
         _ when commandResultType == typeof(SellLandResult) => new SellLandResultPrinter(),
         _ when commandResultType == typeof(SkipTurnResult) => new SkipTurnResultPrinter(),
         _ when commandResultType == typeof(StealMoneyResult) => new StealMoneyResultPrinter(),
+        _ when commandResultType == typeof(TrainHenchmenResult) => new TrainHenchmenResultPrinter(),
         _ when commandResultType == typeof(UpgradeSecretBaseResult) => new UpgradeSecretBaseResultPrinter(),
         _ => throw new ArgumentException(ArgumentException_commandResultTypeNotRecognized, nameof(commandResultType))
     };

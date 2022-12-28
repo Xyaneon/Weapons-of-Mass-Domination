@@ -8,6 +8,6 @@ internal sealed class PlayerHenchmenPaidOccurrencesCreator : RoundUpdateResultOc
 {
     public override IEnumerable<RoundUpdateResultItem> CreateOccurrences(GameState gameState) =>
         CreateRangeOfPlayerIndices(gameState)
-            .Where(index => gameState.Players[index].State.WorkforceState.NumberOfHenchmen > 0)
+            .Where(index => gameState.Players[index].State.WorkforceState.TotalHenchmenCount > 0)
             .Select(index => new PlayerHenchmenPaid(gameState, index));
 }

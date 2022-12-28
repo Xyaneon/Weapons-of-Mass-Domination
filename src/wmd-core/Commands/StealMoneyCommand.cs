@@ -34,7 +34,7 @@ public class StealMoneyCommand : GameCommand<StealMoneyInput, StealMoneyResult>
     }
 
     private static decimal CalculateMoneyStolenByHenchmen(GameState gameState) =>
-        gameState.CurrentPlayer.State.WorkforceState.NumberOfHenchmen * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
+        gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
 
     private static decimal CalculateMoneyStolenByPlayer() => (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
 }

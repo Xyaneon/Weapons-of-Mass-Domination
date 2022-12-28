@@ -32,7 +32,7 @@ internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResu
             interventions.Enqueue(CreateDenouncesPlayerOccurrence(gameState, playerIndex));
         }
 
-        if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen > 0)
+        if (GovernmentDecidesToTakeIntervention(gameState, playerIndex) && gameState.Players[playerIndex].State.WorkforceState.TotalHenchmenCount > 0)
         {
             interventions.Enqueue(CreateGovernmentAttacksPlayerOccurrence(gameState, playerIndex));
         }
@@ -45,8 +45,8 @@ internal sealed class GovernmentInterventionOccurrencesCreator : RoundUpdateResu
 
     private static AttackCombatantsChanges CalculateCombatantsInGovernmentAttack(GameState gameState, int playerIndex)
     {
-        long governmentSoldiersSent = Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen);
-        long defendingPlayerHenchmen = gameState.Players[playerIndex].State.WorkforceState.NumberOfHenchmen;
+        long governmentSoldiersSent = Min(gameState.GovernmentState.NumberOfSoldiers, 100, gameState.Players[playerIndex].State.WorkforceState.TotalHenchmenCount);
+        long defendingPlayerHenchmen = gameState.Players[playerIndex].State.WorkforceState.TotalHenchmenCount;
         long governmentSoldiersLost = Math.Min(governmentSoldiersSent, defendingPlayerHenchmen);
         long defendingPlayerHenchmenLost = Math.Min(defendingPlayerHenchmen, governmentSoldiersSent / 5);
 
