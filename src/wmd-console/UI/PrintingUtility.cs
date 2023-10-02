@@ -1,4 +1,5 @@
-﻿using WMD.Game.State.Data;
+﻿using System.Runtime.InteropServices;
+using WMD.Game.State.Data;
 
 namespace WMD.Console.UI;
 
@@ -155,7 +156,9 @@ static class PrintingUtility
 
     public static void SetOutputEncoding()
     {
-        System.Console.OutputEncoding = System.Text.Encoding.Unicode;
+        System.Console.OutputEncoding = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? System.Text.Encoding.Unicode
+            : System.Text.Encoding.UTF8; // System.Text.Encoding.GetEncoding(28591);
     }
 
     public static void PrintTitle()
