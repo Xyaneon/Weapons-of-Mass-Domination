@@ -158,7 +158,7 @@ static class PrintingUtility
     {
         System.Console.OutputEncoding = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? System.Text.Encoding.Unicode
-            : System.Text.Encoding.UTF8; // System.Text.Encoding.GetEncoding(28591);
+            : System.Text.Encoding.UTF8;
     }
 
     public static void PrintTitle()
