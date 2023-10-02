@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Xyaneon.Console.Menus;
 
@@ -93,8 +94,12 @@ public class Menu
 
         NavigateTo(Pages.First());
 
-        bool cursorWasVisible = System.Console.CursorVisible;
-        System.Console.CursorVisible = false;
+        bool cursorWasVisible = true;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            cursorWasVisible = System.Console.CursorVisible;
+            System.Console.CursorVisible = false;
+        }
 
         while (!HasClosed)
         {
@@ -138,7 +143,11 @@ public class Menu
                 }
             }
         }
-        System.Console.CursorVisible = cursorWasVisible;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            System.Console.CursorVisible = cursorWasVisible;
+        }
     }
 
     public void SetResultAndClose(object? result)
