@@ -14,4 +14,8 @@ public enum Specialization
     /// Indicates that the player's henchmen are soldiers.
     /// </summary>
     Soldier,
+    /// <summary>
+    /// Indicates that the player's henchmen are thieves.
+    /// </summary>
+    Thief,
 }

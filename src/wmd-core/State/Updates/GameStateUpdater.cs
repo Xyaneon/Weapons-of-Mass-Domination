@@ -319,6 +319,10 @@ internal class GameStateUpdater
                     GenericHenchmenCount = updatedHenchmenAmount,
                     SoldierCount = currentWorkforceState.SoldierCount + amount,
                 },
+                Specialization.Thief => currentWorkforceState with {
+                    GenericHenchmenCount = updatedHenchmenAmount,
+                    ThiefCount = currentWorkforceState.ThiefCount + amount,
+                },
                 _ => throw new ArgumentException($"Unsupported specialization value: {specialization}", nameof(specialization)),
             };
             var updatedPlayerState = currentPlayerState with { WorkforceState = updatedWorkforceState };
