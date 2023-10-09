@@ -33,6 +33,7 @@ static class GameMenuFactory
         public const string Resign = "Resign";
         public const string SellLand = "Sell land";
         public const string SpecializationSoldiers = "Soldiers";
+        public const string SpecializationThieves = "Thieves";
         public const string SkipTurn = "Skip turn";
         public const string StealMoney = "Steal money";
         public const string TrainHenchmen = "Train henchmen...";
@@ -76,6 +77,8 @@ static class GameMenuFactory
 
         var soldierMenuItem = new MenuItem(MenuItemLabels.SpecializationSoldiers, () => menu.SetResultAndClose(Specialization.Soldier));
         menuItems.Enqueue(soldierMenuItem);
+        var thiefMenuItem = new MenuItem(MenuItemLabels.SpecializationThieves, () => menu.SetResultAndClose(Specialization.Thief));
+        menuItems.Enqueue(thiefMenuItem);
 
         menuItems.Enqueue(new MenuItem(MenuItemLabels.Cancel, () => menu.SetResultAndClose(null)));
 
