@@ -26,7 +26,7 @@ public static class ThiefCalculator
     {
         decimal payRate = gameState.Players[playerIndex].State.WorkforceState.DailyPayRate;
         long numberOfThieves = gameState.Players[playerIndex].State.WorkforceState.ThiefCount;
-        decimal amountStolenByEachThief = Math.Max(payRate + Math.Round((decimal) -1 + _random.Next() * 3, 2), 0);
+        decimal amountStolenByEachThief = Math.Max(payRate + Math.Round(-1 + (decimal) (_random.NextDouble() * 3), 2), 0);
 
         return numberOfThieves * amountStolenByEachThief;
     }
