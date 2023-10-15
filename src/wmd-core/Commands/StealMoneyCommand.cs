@@ -22,9 +22,7 @@ public class StealMoneyCommand : GameCommand<StealMoneyInput, StealMoneyResult>
 
     public override StealMoneyResult Execute([DisallowNull] GameState gameState, [DisallowNull] StealMoneyInput input)
     {
-        decimal moneyStolenByPlayer = CalculateMoneyStolenByPlayer();
-        decimal moneyStolenByHenchmen = CalculateMoneyStolenByHenchmen(gameState);
-        decimal moneyStolen = moneyStolenByPlayer + moneyStolenByHenchmen;
+        decimal moneyStolen = CalculateMoneyStolenByPlayer();
 
         GameState updatedGameState = new GameStateUpdater(gameState)
             .AdjustMoneyForPlayer(gameState.CurrentPlayerIndex, moneyStolen)
@@ -32,9 +30,6 @@ public class StealMoneyCommand : GameCommand<StealMoneyInput, StealMoneyResult>
 
         return new StealMoneyResult(updatedGameState, gameState.CurrentPlayerIndex, moneyStolen);
     }
-
-    private static decimal CalculateMoneyStolenByHenchmen(GameState gameState) =>
-        gameState.CurrentPlayer.State.WorkforceState.TotalHenchmenCount * (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
 
     private static decimal CalculateMoneyStolenByPlayer() => (decimal)Math.Round((double)BaseMoneyStealAmount - 10 + (20 * _random.NextDouble()), 2);
 }

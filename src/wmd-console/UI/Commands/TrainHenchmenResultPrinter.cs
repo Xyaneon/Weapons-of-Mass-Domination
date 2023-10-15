@@ -22,6 +22,7 @@ class TrainHenchmenResultPrinter : CommandResultPrinter<TrainHenchmenResult>
     {
         Specialization.Untrained => "untrained",
         Specialization.Soldier => "soldier",
+        Specialization.Thief => "thief",
         _ => throw new InvalidEnumArgumentException(nameof(specialization), (int)specialization, typeof(Specialization)),
     };
 }

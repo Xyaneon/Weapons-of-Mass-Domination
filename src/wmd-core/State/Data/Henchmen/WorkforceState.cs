@@ -11,6 +11,7 @@ public record WorkforceState
     private const string ArgumentOutOfRangeException_DailyPayRateLessThanZero = "The daily pay rate cannot be less than zero.";
     private const string ArgumentOutOfRangeException_GenericHenchmenCountLessThanZero = "The number of generic henchmen cannot be less than zero.";
     private const string ArgumentOutOfRangeException_SoldierCountLessThanZero = "The number of soldiers cannot be less than zero.";
+    private const string ArgumentOutOfRangeException_ThiefCountLessThanZero = "The number of thieves cannot be less than zero.";
     
     private const decimal DefaultDailyPayRate = HenchmenConstants.MinimumDailyWage;
 
@@ -42,7 +43,7 @@ public record WorkforceState
     /// </summary>
     public long TotalHenchmenCount
     {
-        get => _genericHenchmenCount + _soldierCount;
+        get => _genericHenchmenCount + _soldierCount + _thiefCount;
     }
 
     /// <summary>
@@ -89,6 +90,26 @@ public record WorkforceState
     }
 
     /// <summary>
+    /// Gets the number of thieves in this workforce.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The value to initialize this property with is less than zero.
+    /// </exception>
+    public long ThiefCount
+    {
+        get => _thiefCount;
+        init
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), value, ArgumentOutOfRangeException_ThiefCountLessThanZero);
+            }
+
+            _thiefCount = value;
+        }
+    }
+
+    /// <summary>
     /// Gets the total daily pay for the entire workforce.
     /// </summary>
     /// <remarks>
@@ -99,4 +120,5 @@ public record WorkforceState
     private decimal _dailyPayRate = DefaultDailyPayRate;
     private long _genericHenchmenCount;
     private long _soldierCount;
+    private long _thiefCount;
 }

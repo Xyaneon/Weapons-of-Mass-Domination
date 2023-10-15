@@ -30,6 +30,7 @@ static class StartOfTurnPrinter
     private const string SecretBaseLevelFormatString = "Your secret base is at Level {0:N0}.";
     private const string SoldiersFormatString = "- Soldiers : {0:N0}";
     private const string StatsSeparator = " | ";
+    private const string ThievesFormatString = "- Thieves : {0:N0}";
     private const string TotalHenchmenFormatString = "You have {0:N0} total henchmen, each paid {1:C} per day ({2:C} total). This includes:";
     private const string UntrainedHenchmenFormatString = "- Untrained: {0:N0}";
 
@@ -154,6 +155,10 @@ static class StartOfTurnPrinter
         if (workforce.SoldierCount > 0)
         {
             System.Console.WriteLine(SoldiersFormatString, workforce.SoldierCount);
+        }
+        if (workforce.ThiefCount > 0)
+        {
+            System.Console.WriteLine(ThievesFormatString, workforce.ThiefCount);
         }
     }
 
