@@ -3,15 +3,15 @@ namespace WMD.Game.State.Updates.Rounds;
 /// <summary>
 /// An occurrence of a player earning money from their thieves.
 /// </summary>
-public record MoneyEarnedFromThieves : RoundUpdateResultItem
+public record PlayerEarnedMoneyFromThieves : RoundUpdateResultItem
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="MoneyEarnedFromThieves"/>
+    /// Initializes a new instance of the <see cref="PlayerEarnedMoneyFromThieves"/>
     /// class.
     /// </summary>
     /// <param name="playerIndex">The index of the player who earned money from their thieves.</param>
     /// <param name="amount">The total amount of money the player earned from their thieves this turn.</param>
-    public MoneyEarnedFromThieves(int playerIndex, decimal amount)
+    public PlayerEarnedMoneyFromThieves(int playerIndex, decimal amount)
     {
         PlayerIndex = playerIndex;
         Amount = amount;
