@@ -17,6 +17,8 @@ public static class EndOfRoundPrinter
     private const string PlayerHenchmenPaidFormatString = "{0} paid each of their {1:N0} henchmen their daily pay of {2:C}, for a total of {3:C}.";
     private const string PlayerHenchmenQuitFormatString = "{0:N0} of {1}'s henchmen quit.";
     private const string PlayerLostReputationFormatString = "{0} lost {1}% reputation due to time.";
+    private const string PlayerThievesStoleMoneyFormatString = "{0}'s thieves stole {1:C}.";
+
 
     public static void PrintEndOfRound(RoundUpdateResult roundUpdate)
     {
@@ -50,6 +52,11 @@ public static class EndOfRoundPrinter
 
     private static string CreateEndOfRoundItemText(GameState gameState, RoundUpdateResultItem item) => item switch
     {
+        PlayerEarnedMoneyFromThieves playerEarnedMoneyFromThieves => string.Format(
+            PlayerThievesStoleMoneyFormatString,
+            gameState.Players[playerEarnedMoneyFromThieves.PlayerIndex].Identification.Name,
+            playerEarnedMoneyFromThieves.Amount
+        ),
         PlayerHenchmenPaid playerHenchmenPaid => string.Format(
             PlayerHenchmenPaidFormatString,
             gameState.Players[playerHenchmenPaid.PlayerIndex].Identification.Name,

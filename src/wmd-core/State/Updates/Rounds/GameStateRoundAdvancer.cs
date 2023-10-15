@@ -13,6 +13,7 @@ internal static class GameStateRoundAdvancer
 
     static GameStateRoundAdvancer() => _occurrencesCreators = new List<RoundUpdateResultOccurrencesCreator>
     {
+        new PlayerThievesEarnedMoneyOccurrencesCreator(),
         new PlayerHenchmenPaidOccurrencesCreator(),
         new PlayerHenchmenQuitOccurrencesCreator(),
         new ReputationChangeOccurrencesCreator(),
@@ -63,6 +64,9 @@ internal static class GameStateRoundAdvancer
 
     private static GameState ApplyRoundUpdateItem(GameState gameState, RoundUpdateResultItem roundUpdate) => roundUpdate switch
     {
+        PlayerEarnedMoneyFromThieves playerEarnedMoneyFromThieves => new GameStateUpdater(gameState)
+            .AdjustMoneyForPlayer(playerEarnedMoneyFromThieves.PlayerIndex, playerEarnedMoneyFromThieves.Amount)
+            .AndReturnUpdatedGameState(),
         PlayerHenchmenPaid playerHenchmenPaid => new GameStateUpdater(gameState)
             .AdjustMoneyForPlayer(playerHenchmenPaid.PlayerIndex, -1 * playerHenchmenPaid.TotalPaidAmount)
             .AndReturnUpdatedGameState(),
