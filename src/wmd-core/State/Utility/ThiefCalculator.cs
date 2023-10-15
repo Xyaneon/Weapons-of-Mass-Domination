@@ -17,14 +17,15 @@ public static class ThiefCalculator
     }
 
     /// <summary>
-    /// Calculates the amount of money the current player will make this turn from their thieves.
+    /// Calculates the amount of money the player will make this turn from their thieves.
     /// </summary>
     /// <param name="gameState">The current <see cref="GameState"/>.</param>
-    /// <returns>The amount of money the current player will make this turn from their thieves.</returns>
-    public static decimal CalculateMoneyStolenByThieves([DisallowNull] GameState gameState)
+    /// <param name="playerIndex">The index of the player whose thieves stole money.</param>
+    /// <returns>The amount of money the player will make this turn from their thieves.</returns>
+    public static decimal CalculateMoneyStolenByThieves([DisallowNull] GameState gameState, int playerIndex)
     {
-        decimal payRate = gameState.CurrentPlayer.State.WorkforceState.DailyPayRate;
-        long numberOfThieves = gameState.CurrentPlayer.State.WorkforceState.ThiefCount;
+        decimal payRate = gameState.Players[playerIndex].State.WorkforceState.DailyPayRate;
+        long numberOfThieves = gameState.Players[playerIndex].State.WorkforceState.ThiefCount;
         decimal amountStolenByEachThief = Math.Max(payRate + Math.Round((decimal) -1 + _random.Next() * 3, 2), 0);
 
         return numberOfThieves * amountStolenByEachThief;
