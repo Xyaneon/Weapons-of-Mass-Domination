@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using WMD.Game.State.Data;
+using WMD.Game.State.Data.Players;
 
 namespace WMD.Game.State.Utility;
 
@@ -24,9 +25,12 @@ public static class ThiefCalculator
     /// <returns>The amount of money the player will make this turn from their thieves.</returns>
     public static decimal CalculateMoneyStolenByThieves([DisallowNull] GameState gameState, int playerIndex)
     {
-        decimal payRate = gameState.Players[playerIndex].State.WorkforceState.DailyPayRate;
-        long numberOfThieves = gameState.Players[playerIndex].State.WorkforceState.ThiefCount;
-        decimal amountStolenByEachThief = Math.Max(payRate + Math.Round(-1 + (decimal) (_random.NextDouble() * 3), 2), 0);
+        PlayerState playerState = gameState.Players[playerIndex].State;
+        decimal payRate = playerState.WorkforceState.DailyPayRate;
+        long numberOfThieves = playerState.WorkforceState.ThiefCount;
+        int secretBaseLevel = playerState.SecretBase?.Level ?? 0;
+
+        decimal amountStolenByEachThief = Math.Max(payRate / 2 + Math.Round((decimal) (_random.NextDouble() * (50 + 10 * secretBaseLevel)), 2), 0);
 
         return numberOfThieves * amountStolenByEachThief;
     }
