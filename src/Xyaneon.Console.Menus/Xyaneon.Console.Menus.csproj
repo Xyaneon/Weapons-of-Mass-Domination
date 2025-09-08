@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Xyaneon.Console.Menus</RootNamespace>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
